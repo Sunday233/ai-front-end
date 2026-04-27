@@ -15,6 +15,21 @@ tags: workflow, element-extraction, analysis, critical
 
 ## 2.1 文字、图片、布局、层级（必记）
 
+### 截图模式字段降级（必守）
+
+当输入仅为普通截图时，必须按以下规则降级记录：
+
+1. **直接可见**：可从截图明确读取的内容，标注为“精确”。
+2. **比例推导**：可由对比推导的值，标注为“估算”。
+3. **证据不足**：无法可靠判断的字段（如字体家族、精确字重、复杂阴影参数），标注为“待确认”。
+4. **禁止伪精确**：严禁将“估算”或“待确认”写成精确值。
+
+推荐记录格式：
+
+- 字号：`16px（估算）`
+- 字重：`待确认`
+- 区域间距：`24px（估算）`
+
 ### 文字
 
 区域内每一处可见文案都要记录。
@@ -93,6 +108,7 @@ tags: workflow, element-extraction, analysis, critical
 | 间距 | padding, gap（含方向） | padding: 12px; gap: 4px |
 | 对齐 | align-items, justifyContent | flex-start, space-between |
 | 特殊效果 | 如 background_blur | backdrop-filter: blur(17.5px) |
+| 证据等级（截图模式） | 精确 / 估算 / 待确认 | 字号 16px（估算） |
 
 ## 2.3 元素层级与嵌套（层级必准确）
 
@@ -153,6 +169,8 @@ tags: workflow, element-extraction, analysis, critical
 - [ ] **底部或折叠区域**
 - [ ] 小图标、小按钮、Tab 文字
 - [ ] 占位图/占位图标尺寸与比例
+- [ ] 截图模式下已标注“精确 / 估算 / 待确认”，无伪精确值
+- [ ] 多状态截图差异（default / hover / active / disabled）已单独记录
 
 ## 相关规则
 

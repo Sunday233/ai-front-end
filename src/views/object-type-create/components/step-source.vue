@@ -1,32 +1,40 @@
 <template>
   <div class="stepWrap">
-    <div class="sourceRow">
-      <div
-        :class="['sourceCard', props.form.mode === 'new-schema' ? 'sourceCardActive' : '']"
-        @click="onSelectMode('new-schema')"
-      >
-        <div class="sourceTitle">+ 新建基础库</div>
-        <p>内含不存在数据集，为此对象类型创建一个全新的数据集并进行后续操作。</p>
-      </div>
-      <div
-        :class="['sourceCard', props.form.mode === 'new-table' ? 'sourceCardActive' : '']"
-        @click="onSelectMode('new-table')"
-      >
-        <div class="sourceTitle">新增数据集</div>
-        <p>选择一个已存在数据集作为此对象类型的来源。</p>
+    <div class="sourceSelectRow">
+      <span class="rowLabel">数据源：</span>
+      <div class="sourceRow">
+        <div
+          :class="['sourceCard', props.form.mode === 'new-schema' ? 'sourceCardActive' : '']"
+          @click="onSelectMode('new-schema')"
+        >
+          <div class="sourceTitle">+ 新建基础库</div>
+          <p>内含不存在数据集，为此对象类型创建一个全新的数据集并进行后续操作。</p>
+        </div>
+        <div
+          :class="['sourceCard', props.form.mode === 'new-table' ? 'sourceCardActive' : '']"
+          @click="onSelectMode('new-table')"
+        >
+          <div class="sourceTitle">新增数据集</div>
+          <p>选择一个已存在数据集作为此对象类型的来源。</p>
+        </div>
       </div>
     </div>
 
-    <a-form layout="vertical" class="formWrap">
+    <a-form :label-col="{style: {width: '82px'}}" class="formWrap" layout="horizontal">
       <a-form-item label="数据集名称">
         <a-input v-model:value="dataSourceNameModel" placeholder="请输入数据集名称" />
       </a-form-item>
       <a-form-item label="保存位置">
-        <a-select
-          v-model:value="savePathModel"
-          :options="pathOptions"
-          placeholder="请选择保存位置"
-        />
+        <div class="savePathRow">
+          <a-select
+            v-model:value="savePathModel"
+            :options="pathOptions"
+            class="savePathSelect"
+            placeholder="请选择保存位置"
+          />
+          <a-button class="pathButton" title="目录定位" type="text">↗</a-button>
+          <a-button class="pathButton" title="目录切换" type="text">↘</a-button>
+        </div>
       </a-form-item>
     </a-form>
   </div>
@@ -97,7 +105,19 @@ const onSelectMode = (mode: DataSourceMode) => {
   gap: 16px;
 }
 
+.sourceSelectRow {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.rowLabel {
+  color: var(--shell-subtitle);
+  line-height: 38px;
+}
+
 .sourceRow {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
@@ -129,6 +149,20 @@ const onSelectMode = (mode: DataSourceMode) => {
 }
 
 .formWrap {
-  max-width: 580px;
+  max-width: 640px;
+}
+
+.savePathRow {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.savePathSelect {
+  width: 100%;
+}
+
+.pathButton {
+  color: var(--shell-subtitle);
 }
 </style>

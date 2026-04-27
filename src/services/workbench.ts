@@ -55,5 +55,7 @@ export const getWorkbenchList = async (
   return {
     recent: filteredRecent,
     favorites: [],
+    recentTotal: 23,
+    favoriteTotal: 0,
   };
 };

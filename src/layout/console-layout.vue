@@ -17,12 +17,18 @@
             :class="['menuItem', {'menuItemActive': isActive(item.path)}]"
             @click="onNavigate(item.path)"
           >
-            <span>{{ item.label }}</span>
+            <span class="menuItemMain">
+              <span class="menuIcon">{{ item.icon }}</span>
+              <span>{{ item.label }}</span>
+            </span>
             <span v-if="item.count" class="countBadge">{{ item.count }}</span>
           </div>
 
           <div v-for="child in group.children" :key="child.key" class="menuChild">
-            <span>{{ child.label }}</span>
+            <span class="menuItemMain">
+              <span class="menuIcon">{{ child.icon }}</span>
+              <span>{{ child.label }}</span>
+            </span>
             <span v-if="child.count" class="countBadge">{{ child.count }}</span>
           </div>
         </div>
@@ -51,6 +57,7 @@ import {useRoute, useRouter} from 'vue-router';
 interface MenuItem {
   key: string;
   label: string;
+  icon: string;
   path?: string;
   count?: number;
 }
@@ -70,15 +77,18 @@ const menuGroups: MenuGroup[] = [
     items: [
       {
         key: 'workbench',
+        icon: '⌂',
         label: '工作台',
         path: '/workbench',
       },
       {
         key: 'share',
+        icon: '◈',
         label: '分享管理',
       },
       {
         key: 'logs',
+        icon: '▤',
         label: '操作日志',
       },
     ],
@@ -89,27 +99,32 @@ const menuGroups: MenuGroup[] = [
     items: [
       {
         key: 'object-types',
+        icon: '⌬',
         label: '对象类型',
         path: '/object-type/list',
         count: 1234,
       },
       {
         key: 'common-attrs',
+        icon: '⇄',
         label: '共享属性',
         count: 1234,
       },
       {
         key: 'relation-types',
+        icon: '◫',
         label: '链接类型',
         count: 1234,
       },
       {
         key: 'action-types',
+        icon: '◰',
         label: '动作类型',
         count: 1234,
       },
       {
         key: 'object-groups',
+        icon: '▣',
         label: '对象类型组',
         count: 1234,
       },
@@ -117,6 +132,7 @@ const menuGroups: MenuGroup[] = [
     children: [
       {
         key: 'object-attrs',
+        icon: '◇',
         label: '属性',
       },
     ],
@@ -126,20 +142,24 @@ const menuGroups: MenuGroup[] = [
     items: [
       {
         key: 'values',
+        icon: '[-]',
         label: '值类型',
         count: 1234,
       },
       {
         key: 'functions',
+        icon: 'ƒ',
         label: '函数',
         count: 1234,
       },
       {
         key: 'agent',
+        icon: '⎔',
         label: '智能体管理',
       },
       {
         key: 'cleanup',
+        icon: '◍',
         label: '数据清理',
       },
     ],
@@ -241,6 +261,19 @@ const onRefresh = () => {
   cursor: pointer;
 }
 
+.menuItemMain {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.menuIcon {
+  width: 14px;
+  color: var(--shell-subtitle);
+  font-size: 12px;
+  text-align: center;
+}
+
 .menuItem:hover {
   background: var(--shell-hover-bg);
 }
@@ -248,6 +281,10 @@ const onRefresh = () => {
 .menuItemActive {
   color: var(--ant-color-primary);
   background: var(--shell-active-bg);
+}
+
+.menuItemActive .menuIcon {
+  color: var(--ant-color-primary);
 }
 
 .menuChild {
