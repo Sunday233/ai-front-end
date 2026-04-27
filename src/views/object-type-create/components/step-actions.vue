@@ -1,12 +1,16 @@
 <template>
   <div class="stepWrap">
-    <a-form layout="vertical" class="formWrap">
+    <a-form :label-col="{style: {width: '186px'}}" class="formWrap" layout="horizontal">
       <a-form-item label="选择生成的操作类型">
-        <a-checkbox-group v-model:value="actionsModel" :options="actionOptions" />
+        <a-checkbox-group v-model:value="actionsModel" class="actionGroup">
+          <a-checkbox v-for="item in actionOptions" :key="item.value" :value="item.value">
+            {{ item.label }}
+          </a-checkbox>
+        </a-checkbox-group>
       </a-form-item>
 
       <a-form-item label="配置可执行操作的用户/用户组">
-        <a-select v-model:value="actorGroupModel" :options="groupOptions" />
+        <a-select v-model:value="actorGroupModel" :options="groupOptions" class="groupSelect" />
       </a-form-item>
     </a-form>
   </div>
@@ -85,6 +89,16 @@ const groupOptions = [
 
 .formWrap {
   width: 100%;
-  max-width: 520px;
+  max-width: 760px;
+}
+
+.actionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupSelect {
+  max-width: 340px;
 }
 </style>

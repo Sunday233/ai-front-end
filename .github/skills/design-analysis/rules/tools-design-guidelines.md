@@ -67,6 +67,24 @@ get_screenshot(fileKey, nodeId)
 get_design_context(fileKey, nodeId)
 ```
 
+### 普通截图（PNG/JPG/JPEG/WEBP）
+
+**工具**：图片查看工具（IDE 图片预览、浏览器预览或等效工具）
+
+**可用能力**：
+- 读取截图像素尺寸（宽、高）
+- 识别可见文案与主要视觉元素
+- 提取区域划分与相对布局关系
+- 对多状态截图做差异比对（default / hover / active / disabled）
+
+**使用步骤**：
+1. 从 `docs/ui/` 收集同一功能 slug 的截图，按状态分组。
+2. 以截图像素尺寸建立坐标基准（左上角为原点）。
+3. 按「从上到下、从左到右、从外到里」扫描并记录四类重中之重。
+4. 对无法可靠读取的字段标注为“待确认”，禁止伪精确。
+
+**建议**：截图命名和多状态组织优先遵循 `docs/ui/README.md`。
+
 ## 扫描顺序
 
 **按「从上到下、再从左到右」扫描**：
@@ -99,6 +117,7 @@ get_design_context(fileKey, nodeId)
 2. **顶层 frame**：确认顶层 frame，确保获取的是正确的设计稿区域
 3. **节点 ID**：记录重要节点的 ID，便于后续获取详细信息
 4. **截图对比**：使用截图与实现页面对比时，确保截图区域与实现页面区域一致
+5. **截图模式禁忌**：仅凭视觉无法确认的字体家族、字重、精确间距等字段，必须标注“待确认”，不可猜测填充
 
 ## 相关规则
 
@@ -106,3 +125,4 @@ get_design_context(fileKey, nodeId)
 - `workflow-layout-map.md` - 第一步：建立布局 Map（使用这些工具）
 - `workflow-element-extraction.md` - 第二步：区域与元素提取（使用这些工具）
 - `ui-verification` 技能的 `tools-design-guidelines.md`（类似内容，用于验收阶段）
+- `docs/ui/README.md` - 普通截图命名与多状态输入规范

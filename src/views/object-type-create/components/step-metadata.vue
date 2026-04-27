@@ -1,6 +1,11 @@
 <template>
   <div class="stepWrap">
-    <a-form layout="vertical" class="formWrap">
+    <div class="targetRow">
+      <span class="targetLabel">目标：</span>
+      <span class="targetIcon">◉</span>
+    </div>
+
+    <a-form :label-col="{style: {width: '92px'}}" class="formWrap" layout="horizontal">
       <a-form-item label="对象类型名称">
         <a-input v-model:value="objectTypeNameModel" placeholder="请输入对象类型名称" />
       </a-form-item>
@@ -88,6 +93,30 @@ const groupOptions = [
 <style scoped lang="scss">
 .stepWrap {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.targetRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.targetLabel {
+  color: var(--shell-subtitle);
+}
+
+.targetIcon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  color: var(--ant-color-primary);
+  font-size: 12px;
+  border: 1px solid var(--shell-border);
+  border-radius: 4px;
 }
 
 .formWrap {

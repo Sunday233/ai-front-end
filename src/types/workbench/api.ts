@@ -8,4 +8,6 @@ export interface GetWorkbenchListParams {
 export interface GetWorkbenchListResponse {
   recent: WorkbenchCard[];
   favorites: WorkbenchCard[];
+  recentTotal: number;
+  favoriteTotal: number;
 }

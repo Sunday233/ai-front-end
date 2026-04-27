@@ -13,10 +13,13 @@
           allow-clear
           placeholder="请输入类型名称进行检索"
           @press-enter="onQuery"
-        />
-        <a-button @click="onQuery">查询</a-button>
-        <a-button @click="onReset">重置</a-button>
-        <a-button @click="onRefresh">刷新</a-button>
+        >
+          <template #prefix>
+            <span class="searchPrefix">⌕</span>
+          </template>
+        </a-input>
+        <a-button class="iconButton" @click="onRefresh" title="刷新">↻</a-button>
+        <a-button class="iconButton" @click="onOpenSettings" title="列表设置">⚙</a-button>
         <a-button type="primary" @click="onCreate">+ 新建</a-button>
       </div>
 
@@ -37,6 +40,13 @@
             </span>
           </template>
 
+          <template v-if="column.dataIndex === 'name'">
+            <span class="nameCell">
+              <span class="nameIcon">▣</span>
+              <span>{{ record.name }}</span>
+            </span>
+          </template>
+
           <template v-if="column.dataIndex === 'visibility'">
             <a-tag :color="record.visibility === 'public' ? 'blue' : 'red'">
               {{ visibilityTextMap[record.visibility] }}
@@ -54,17 +64,34 @@
           :current="pagination.current"
           :page-size="pagination.pageSize"
           :total="pagination.total"
-          show-less-items
-          show-quick-jumper
+          :show-less-items="false"
           @change="onPageChange"
         />
+        <div class="pagerToolBar">
+          <a-select
+            v-model:value="pagination.pageSize"
+            :options="pageSizeOptions"
+            class="pageSizeSelect"
+            @change="onPageSizeChange"
+          />
+          <span class="jumpLabel">前往</span>
+          <a-input-number
+            v-model:value="quickPage"
+            :controls="false"
+            :max="maxPage"
+            :min="1"
+            class="jumpInput"
+          />
+          <span class="jumpLabel">页</span>
+          <a-button @click="onQuickGo">确定</a-button>
+        </div>
       </div>
     </a-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref} from 'vue';
+import {computed, onMounted, reactive, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
 import {message, type TableColumnsType} from 'ant-design-vue';
 
@@ -76,6 +103,7 @@ const router = useRouter();
 const loading = ref(false);
 const tableData = ref<ObjectTypeItem[]>([]);
 const selectedRowKeys = ref<string[]>([]);
+const quickPage = ref<number | null>(1);
 
 const filters = reactive({
   keyword: '',
@@ -86,6 +114,28 @@ const pagination = reactive({
   pageSize: 10,
   total: 0,
 });
+
+const maxPage = computed(() => {
+  if (pagination.total === 0) {
+    return 1;
+  }
+  return Math.ceil(pagination.total / pagination.pageSize);
+});
+
+const pageSizeOptions = [
+  {
+    label: '10 条/页',
+    value: 10,
+  },
+  {
+    label: '20 条/页',
+    value: 20,
+  },
+  {
+    label: '50 条/页',
+    value: 50,
+  },
+];
 
 const statusTextMap: Record<ObjectTypeItem['status'], string> = {
   active: '活跃',
@@ -157,14 +207,12 @@ const onQuery = () => {
   void loadData();
 };
 
-const onReset = () => {
-  filters.keyword = '';
-  pagination.current = 1;
+const onRefresh = () => {
   void loadData();
 };
 
-const onRefresh = () => {
-  void loadData();
+const onOpenSettings = () => {
+  message.info('列表设置能力待接入');
 };
 
 const onCreate = () => {
@@ -174,6 +222,25 @@ const onCreate = () => {
 const onPageChange = (page: number, pageSize: number) => {
   pagination.current = page;
   pagination.pageSize = pageSize;
+  quickPage.value = page;
+  void loadData();
+};
+
+const onPageSizeChange = (value: string | number) => {
+  pagination.pageSize = Number(value);
+  pagination.current = 1;
+  quickPage.value = 1;
+  void loadData();
+};
+
+const onQuickGo = () => {
+  const rawPage = quickPage.value ?? pagination.current;
+  const targetPage = Math.min(Math.max(rawPage, 1), maxPage.value);
+  quickPage.value = targetPage;
+  if (targetPage === pagination.current) {
+    return;
+  }
+  pagination.current = targetPage;
   void loadData();
 };
 
@@ -182,8 +249,20 @@ const onCheck = (recordId: string) => {
 };
 
 onMounted(() => {
+  quickPage.value = pagination.current;
   void loadData();
 });
+
+watch(
+  () => filters.keyword,
+  (keyword, previousKeyword) => {
+    if (previousKeyword.trim().length > 0 && keyword.trim().length === 0) {
+      pagination.current = 1;
+      quickPage.value = 1;
+      void loadData();
+    }
+  }
+);
 </script>
 
 <style scoped lang="scss">
@@ -226,12 +305,33 @@ onMounted(() => {
 }
 
 .searchInput {
-  max-width: 360px;
+  max-width: 380px;
+}
+
+.searchPrefix {
+  color: var(--shell-subtitle);
+  font-size: 12px;
+}
+
+.iconButton {
+  width: 32px;
+  padding: 0;
 }
 
 .dataTable {
   border: 1px solid var(--shell-border);
   border-radius: 8px;
+}
+
+.nameCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nameIcon {
+  color: var(--ant-color-primary);
+  font-size: 12px;
 }
 
 .statusCell {
@@ -256,7 +356,28 @@ onMounted(() => {
 
 .paginationRow {
   display: flex;
+  gap: 12px;
+  align-items: center;
   justify-content: flex-end;
   margin-top: 14px;
+}
+
+.pagerToolBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pageSizeSelect {
+  width: 110px;
+}
+
+.jumpLabel {
+  color: var(--shell-subtitle);
+  font-size: 12px;
+}
+
+.jumpInput {
+  width: 70px;
 }
 </style>
