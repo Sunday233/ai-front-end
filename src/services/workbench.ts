@@ -11,7 +11,10 @@ const mockRecentCards: WorkbenchCard[] = [
     relationCaseCount: 167,
     appCount: 10,
     description: '这里是对象类型的描述信息，例如这个标记了DCH研发智能体。',
-    tags: ['对象组1', '对象组1'],
+    tags: [
+      {name: '对象组1', count: 23},
+      {name: '对象组1', count: 23},
+    ],
     color: 'blue',
   },
   {
@@ -20,7 +23,10 @@ const mockRecentCards: WorkbenchCard[] = [
     relationCaseCount: 167,
     appCount: 10,
     description: '这里是对象类型的描述信息，例如这个标记了DCH研发智能体。',
-    tags: ['对象组1', '对象组1'],
+    tags: [
+      {name: '对象组1', count: 23},
+      {name: '对象组1', count: 23},
+    ],
     color: 'green',
   },
   {
@@ -29,7 +35,10 @@ const mockRecentCards: WorkbenchCard[] = [
     relationCaseCount: 167,
     appCount: 10,
     description: '这里是对象类型的描述信息，例如这个标记了阿尔法实验室。',
-    tags: ['对象组1', '对象组1'],
+    tags: [
+      {name: '对象组1', count: 23},
+      {name: '对象组1', count: 23},
+    ],
     color: 'blue',
   },
 ];

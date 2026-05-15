@@ -1,20 +1,20 @@
 # 对象管理 - UI 分析清单
 
 > **文档说明**：对象管理模块截图模式分析结果，供前端实现与 UI 验收参照。  
-> **设计稿路径/链接**：`docs/ui/workbench.png`、`docs/ui/object-list.png`、`docs/ui/object-create-step1.png`、`docs/ui/object-create-step2.png`、`docs/ui/object-create-step3.png`、`docs/ui/object-create-step4.png`  
+> **设计稿路径/链接**：`docs/ui/workbench-main-default.png`、`docs/ui/object-type-list-main-default.png`、`docs/ui/object-type-create-step1.png`、`docs/ui/object-type-create-step2.png`、`docs/ui/object-type-create-step3.png`、`docs/ui/object-type-create-step4.png`  
 > **输入模式**：截图模式（无结构化节点）  
-> **分析日期**：2026-04-27
+> **分析日期**：2026-05-09
 
 ## 输入资产清单（截图模式必填）
 
 | 文件 | 状态 | 用途 |
 |------|------|------|
-| docs/ui/workbench.png | default | 工作台默认态（最近浏览 + 收藏空态） |
-| docs/ui/object-list.png | default | 对象类型列表默认态（表格有数据） |
-| docs/ui/object-create-step1.png | step-1 | 创建对象类型：选择数据源 |
-| docs/ui/object-create-step2.png | step-2 | 创建对象类型：元数据配置 |
-| docs/ui/object-create-step3.png | step-3 | 创建对象类型：属性配置 |
-| docs/ui/object-create-step4.png | step-4 | 创建对象类型：动作配置 |
+| docs/ui/workbench-main-default.png | default | 工作台默认态（最近浏览 + 收藏空态） |
+| docs/ui/object-type-list-main-default.png | default | 对象类型列表默认态（表格有数据） |
+| docs/ui/object-type-create-step1.png | step-1 | 创建对象类型：选择数据源 |
+| docs/ui/object-type-create-step2.png | step-2 | 创建对象类型：元数据配置 |
+| docs/ui/object-type-create-step3.png | step-3 | 创建对象类型：属性配置 |
+| docs/ui/object-type-create-step4.png | step-4 | 创建对象类型：动作配置 |
 
 ## 一、设计稿整体分析
 
@@ -41,21 +41,21 @@
 
 | 区域 | x | y | w | h | 包含子元素（文字/图片/布局/层级） | 截图来源 | 证据等级 |
 |------|---|---|---|---|----------------------------------|----------|----------|
-| 左侧导航栏 | 0 | 0 | 约 196 | 全高 | 品牌、租户、菜单分组、徽标计数 | workbench.png | 估算 |
-| 顶部面包屑 | 约 210 | 0 | 右侧全宽 | 约 50 | 返回首页 / 智能体管理 Matrix / 工作台 | workbench.png | 估算 |
-| 工具栏 | 约 210 | 约 52 | 右侧内容宽 | 约 56 | 搜索框、分支选择、查询/重置、新建按钮 | workbench.png | 估算 |
-| 最近浏览区 | 约 210 | 约 112 | 右侧内容宽 | 约 214 | 区块标题、3 张卡片、标签 | workbench.png | 估算 |
-| 收藏区 | 约 210 | 约 336 | 右侧内容宽 | 约 340 | 标题、查看全部、空状态图文 | workbench.png | 估算 |
+| 左侧导航栏 | 0 | 0 | 约 196 | 全高 | 品牌、租户、菜单分组、徽标计数 | workbench-main-default.png | 估算 |
+| 顶部面包屑 | 约 210 | 0 | 右侧全宽 | 约 50 | 返回首页 / 智能体管理 Matrix / 工作台 | workbench-main-default.png | 估算 |
+| 工具栏 | 约 210 | 约 52 | 右侧内容宽 | 约 56 | 搜索框、分支选择、查询/重置、新建按钮 | workbench-main-default.png | 估算 |
+| 最近浏览区 | 约 210 | 约 112 | 右侧内容宽 | 约 214 | 区块标题、3 张卡片、标签 | workbench-main-default.png | 估算 |
+| 收藏区 | 约 210 | 约 336 | 右侧内容宽 | 约 340 | 标题、查看全部、空状态图文 | workbench-main-default.png | 估算 |
 
 #### 对象类型列表
 
 | 区域 | x | y | w | h | 包含子元素（文字/图片/布局/层级） | 截图来源 | 证据等级 |
 |------|---|---|---|---|----------------------------------|----------|----------|
-| 左侧导航栏 | 0 | 0 | 约 140 | 全高 | 分组菜单、对象类型激活态 | object-list.png | 估算 |
-| 页面标题区 | 约 150 | 约 26 | 主内容宽 | 约 26 | “对象类型列表”+ 数量徽标 | object-list.png | 估算 |
-| 筛选工具栏 | 约 150 | 约 58 | 主内容宽 | 约 38 | 搜索框、刷新、设置、新建 | object-list.png | 估算 |
-| 表格区 | 约 150 | 约 94 | 主内容宽 | 约 342 | 表头、复选框、状态点、可见性标签、操作列 | object-list.png | 估算 |
-| 分页区 | 约 330 | 约 445 | 约 430 | 约 30 | 上/下页、页码、页容量、前往页、确定 | object-list.png | 估算 |
+| 左侧导航栏 | 0 | 0 | 约 140 | 全高 | 分组菜单、对象类型激活态 | object-type-list-main-default.png | 估算 |
+| 页面标题区 | 约 150 | 约 26 | 主内容宽 | 约 26 | “对象类型列表”+ 数量徽标 | object-type-list-main-default.png | 估算 |
+| 筛选工具栏 | 约 150 | 约 58 | 主内容宽 | 约 38 | 搜索框、刷新、设置、新建 | object-type-list-main-default.png | 估算 |
+| 表格区 | 约 150 | 约 94 | 主内容宽 | 约 342 | 表头、复选框、状态点、可见性标签、操作列 | object-type-list-main-default.png | 估算 |
+| 分页区 | 约 330 | 约 445 | 约 430 | 约 30 | 上/下页、页码、页容量、前往页、确定 | object-type-list-main-default.png | 估算 |
 
 #### 创建对象类型（四步共性）
 
@@ -236,11 +236,11 @@
 |------|--------|------|
 | 页面背景 | `#f3f5f8`（估算） | 主背景浅灰 |
 | 容器背景 | `#ffffff`（估算） | 卡片/工具栏背景 |
-| 主色 | `#1677ff`（估算） | 按钮、激活态、链接 |
+| 主色 | `#0B66FD`（估算） | 按钮、激活态、链接 |
 | 辅助文本 | `#4e5969`（估算） | 描述文案 |
 | 边框 | `#e5e8ef`（估算） | 卡片、输入框边框 |
-| 状态绿 | `#52c41a`（估算） | 活跃状态点 |
-| 状态蓝 | `#2f54eb`（估算） | 建设中状态点 |
+| 状态绿 | `#24C366`（估算） | 活跃状态点 |
+| 状态蓝 | `#0B66FD`（估算） | 建设中状态点 |
 
 ### 字体规范
 
@@ -301,7 +301,7 @@
 - [x] 布局关系已覆盖（导航/头部/主内容/分页/步骤表单）
 - [x] 层级结构已记录（容器-区块-元素）
 - [x] 截图模式已标注证据等级（精确/估算/待确认）
-- [x] PRD 与截图命名差异已在备注中收敛
+- [x] PRD 与截图命名已按同前缀规则对齐
 
 ## 七、实现建议
 
@@ -343,8 +343,9 @@
 ## 九、备注
 
 - 命名映射说明：
-	- `object-type-list.md` 对应 `docs/ui/object-list.png`（语义近似映射）
-	- `object-type-create.md` 对应 `docs/ui/object-create-step1~4.png`
+	- `workbench.md` 对应 `docs/ui/workbench-main-default.png`（同前缀配对）
+	- `object-type-list.md` 对应 `docs/ui/object-type-list-main-default.png`（同前缀配对）
+	- `object-type-create.md` 对应 `docs/ui/object-type-create-step1~4.png`（同前缀配对）
 - 截图为桌面态，不包含移动端设计基线。
 - 若后续补充 hover/active 截图，需更新第四章交互状态与第十章待确认项。
 
@@ -354,7 +355,7 @@
 |------|------|--------|----------|----------------|
 | 全局 | 字体家族 | 待确认 | 待确认 | 与设计源确认是否统一为 PingFang SC |
 | 左侧导航 | 业务图标资源 | 字符占位图标 | 待确认 | 等待设计提供标准 iconfont 或资源切图 |
-| 工作台卡片 | 标签后缀计数胶囊 | 当前未展示 | 待确认 | 如需 1:1 还原可补充小计数徽标 |
+| 工作台卡片 | 标签后缀计数胶囊 | 已展示（示例值 23） | 精确 | 本轮重实现已补齐标签后计数展示 |
 | 工作台右上装饰 | 云纹形态与透明度 | 放射渐变近似 | 估算 | 有设计节点后替换为精确参数 |
 | 列表页 | 表头/行高精确值 | 约 52px / 56px | 估算 | 需在结构化设计源中复核 |
 | 创建页 Step3 | 类型下拉图标样式 | 默认组件图标 | 估算 | 如需一致外观可替换专用图标资源 |

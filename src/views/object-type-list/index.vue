@@ -347,11 +347,11 @@ watch(
 }
 
 .dotActive {
-  background: #52c41a;
+  background: var(--shell-status-active);
 }
 
 .dotBuilding {
-  background: #2f54eb;
+  background: var(--shell-status-building);
 }
 
 .paginationRow {

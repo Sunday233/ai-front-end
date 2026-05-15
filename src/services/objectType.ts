@@ -8,7 +8,7 @@ import type {
 } from '@/types/object-type/api';
 import type {ObjectTypeItem} from '@/types/object-type/model';
 
-const mockObjectTypeList: ObjectTypeItem[] = [
+const mockSeedObjectTypeList: ObjectTypeItem[] = [
   {id: '1', name: 'T恤衫', status: 'active', visibility: 'public', date: '2024-11-24'},
   {id: '2', name: '沙滩拖鞋', status: 'active', visibility: 'private', date: '2024-10-11'},
   {id: '3', name: '手机壳', status: 'active', visibility: 'public', date: '2024-09-17'},
@@ -21,6 +21,20 @@ const mockObjectTypeList: ObjectTypeItem[] = [
   {id: '10', name: '泳衣', status: 'active', visibility: 'public', date: '2024-02-16'},
   {id: '11', name: '太阳眼镜', status: 'active', visibility: 'public', date: '2024-01-24'},
 ];
+
+const MOCK_TOTAL = 1223;
+
+const mockObjectTypeList: ObjectTypeItem[] = [...mockSeedObjectTypeList];
+
+for (let index = mockSeedObjectTypeList.length + 1; index <= MOCK_TOTAL; index += 1) {
+  const seed = mockSeedObjectTypeList[(index - 1) % mockSeedObjectTypeList.length];
+  mockObjectTypeList.push({
+    ...seed,
+    id: String(index),
+    name: `${seed.name}${index}`,
+    date: dayjs('2024-01-01').add(index, 'day').format('YYYY-MM-DD'),
+  });
+}
 
 const wait = (duration = 140) =>
   new Promise<void>((resolve) => {

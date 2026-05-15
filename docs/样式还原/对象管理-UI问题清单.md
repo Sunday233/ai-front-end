@@ -3,12 +3,12 @@
 ## 验收基线
 
 1. 设计稿截图：
-	- `docs/ui/workbench.png`
-	- `docs/ui/object-list.png`
-	- `docs/ui/object-create-step1.png`
-	- `docs/ui/object-create-step2.png`
-	- `docs/ui/object-create-step3.png`
-	- `docs/ui/object-create-step4.png`
+	- `docs/ui/workbench-main-default.png`
+	- `docs/ui/object-type-list-main-default.png`
+	- `docs/ui/object-type-create-step1.png`
+	- `docs/ui/object-type-create-step2.png`
+	- `docs/ui/object-type-create-step3.png`
+	- `docs/ui/object-type-create-step4.png`
 2. 分析清单：`docs/样式还原/对象管理-UI分析清单.md`
 3. 实际页面：
 	- `/workbench`
@@ -20,23 +20,17 @@
 
 1. P0（阻断）：0
 2. P1（高优）：0
-3. P2（优化）：3
+3. P2（优化）：2
 
 ## 问题明细
 
 1. P2-01
-	- 页面：工作台
-	- 差异：卡片标签区仅展示“对象组1”文本，设计稿标签后还带小计数胶囊。
-	- 影响：不影响业务流程，细节还原度略低。
-	- 处理建议：后续为标签补充可选计数徽标（如 `23`）。
-
-2. P2-02
 	- 页面：全局左侧导航
 	- 差异：当前使用字符占位图标，设计稿为定制图标资源。
 	- 影响：信息结构正确，但图标风格一致性不足。
 	- 处理建议：接入统一 iconfont 或设计切图后替换占位图标。
 
-3. P2-03
+2. P2-02
 	- 页面：创建对象类型 Step3
 	- 差异：属性类型下拉图标与细节样式使用默认组件视觉，和设计稿专用图标存在差异。
 	- 影响：交互完整，视觉精细度偏差。
@@ -44,4 +38,4 @@
 
 ## 结论
 
-本轮 UI 验收通过，P0/P1 已清零；现存差异均为可延期优化项，可进入上线就绪状态（本轮不含部署）。
+本轮 UI 验收通过，P0/P1 已清零；PRD 与 UI 资产命名已按同前缀规则对齐，现存差异均为可延期优化项，可进入上线就绪状态（本轮不含部署）。

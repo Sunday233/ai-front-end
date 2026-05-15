@@ -204,7 +204,7 @@ const typeOptions = [
 .nameRow {
   min-height: 36px;
   padding: 6px 8px;
-  background: #fafbfe;
+  background: var(--shell-card-soft-bg);
   border: 1px solid var(--shell-border);
   border-radius: 8px;
 }

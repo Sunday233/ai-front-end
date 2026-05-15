@@ -256,7 +256,7 @@ const onRefresh = () => {
   height: 32px;
   padding: 0 10px;
   border-radius: 6px;
-  color: #2d323d;
+  color: var(--shell-title);
   font-size: 13px;
   cursor: pointer;
 }
