@@ -126,14 +126,14 @@ const onSelectMode = (mode: DataSourceMode) => {
 .sourceCard {
   padding: 16px;
   cursor: pointer;
-  background: #f7f9fc;
+  background: var(--shell-card-soft-bg);
   border: 1px solid var(--shell-border);
   border-radius: 8px;
 }
 
 .sourceCardActive {
   border-color: var(--ant-color-primary);
-  box-shadow: 0 0 0 1px rgb(22 119 255 / 18%);
+  box-shadow: 0 0 0 1px var(--shell-primary-outline);
 }
 
 .sourceTitle {

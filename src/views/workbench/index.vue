@@ -58,7 +58,14 @@
           </div>
           <p class="cardDescription">{{ card.description }}</p>
           <div class="cardTags">
-            <a-tag v-for="tag in card.tags" :key="`${card.id}-${tag}`" color="blue">{{ tag }}</a-tag>
+            <div
+              v-for="(tag, index) in card.tags"
+              :key="`${card.id}-${tag.name}-${index}`"
+              class="tagItem"
+            >
+              <a-tag color="blue">{{ tag.name }}</a-tag>
+              <span class="tagCount">{{ tag.count }}</span>
+            </div>
           </div>
         </a-card>
       </div>
@@ -214,7 +221,7 @@ onMounted(() => {
   right: 18px;
   width: 92px;
   height: 52px;
-  background: radial-gradient(circle at 50% 50%, rgb(71 141 255 / 20%), transparent 64%);
+  background: radial-gradient(circle at 50% 50%, var(--shell-primary-glow), transparent 64%);
   pointer-events: none;
 }
 
@@ -296,7 +303,7 @@ onMounted(() => {
 
 .recentCard {
   min-height: 172px;
-  background: #fafcff;
+  background: var(--shell-card-soft-bg);
 }
 
 .recentGrid {
@@ -318,11 +325,19 @@ onMounted(() => {
 }
 
 .cardIconBlue {
-  background: linear-gradient(135deg, #3f87ff, #2b6de8);
+  background: linear-gradient(
+    135deg,
+    var(--shell-gradient-blue-start),
+    var(--shell-gradient-blue-end)
+  );
 }
 
 .cardIconGreen {
-  background: linear-gradient(135deg, #54d59f, #20a56d);
+  background: linear-gradient(
+    135deg,
+    var(--shell-gradient-green-start),
+    var(--shell-gradient-green-end)
+  );
 }
 
 .cardTitle {
@@ -344,8 +359,26 @@ onMounted(() => {
 
 .cardTags {
   display: flex;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
+}
+
+.tagItem {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.tagCount {
+  min-width: 20px;
+  padding: 0 4px;
+  color: var(--shell-subtitle);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  background: var(--shell-badge-bg);
+  border-radius: 8px;
 }
 
 .emptyWrap {

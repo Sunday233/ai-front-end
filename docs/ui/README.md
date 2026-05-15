@@ -49,10 +49,19 @@
 
 创建对象类型（4 步，4 张截图）：
 
-- `object-type-create-step-01-basic-info.png`
-- `object-type-create-step-02-field-config.png`
-- `object-type-create-step-03-rule-config.png`
-- `object-type-create-step-04-confirm-submit.png`
+- `object-type-create-step1.png`
+- `object-type-create-step2.png`
+- `object-type-create-step3.png`
+- `object-type-create-step4.png`
+
+## 当前仓库已对齐资产（2026-05-09）
+
+- `workbench-main-default.png`
+- `object-type-list-main-default.png`
+- `object-type-create-step1.png`
+- `object-type-create-step2.png`
+- `object-type-create-step3.png`
+- `object-type-create-step4.png`
 
 ## 配对失败策略
 

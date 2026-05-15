@@ -1,4 +1,5 @@
 :root {
+  --shell-primary: #0b66fd;
   --shell-bg: #f3f5f8;
   --shell-sider-bg: #ffffff;
   --shell-border: #e5e8ef;
@@ -8,6 +9,15 @@
   --shell-hover-bg: #f2f5fa;
   --shell-active-bg: #e8f2ff;
   --shell-badge-bg: #f0f2f5;
+  --shell-card-soft-bg: #fafbfe;
+  --shell-primary-glow: rgb(11 102 253 / 20%);
+  --shell-primary-outline: rgb(11 102 253 / 18%);
+  --shell-gradient-blue-start: #4096ff;
+  --shell-gradient-blue-end: #0b66fd;
+  --shell-gradient-green-start: #4ace82;
+  --shell-gradient-green-end: #24c366;
+  --shell-status-active: #24c366;
+  --shell-status-building: #0b66fd;
   --shell-card-shadow: 0 8px 20px rgb(15 34 68 / 6%);
   --shell-radius: 8px;
   --shentu-cn-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
