@@ -14,7 +14,7 @@ tags: tools, design, pencil, figma, mcp
 验收时：用 **Cursor Browser**（优先）或 **Playwright MCP**（无 Browser 时）获取实际页面截图/快照，再根据设计稿来源选择：
 
 - 设计稿为 `.pen` 时，用 **Pencil MCP** 获取设计稿截图或节点信息
-- 设计稿为 Figma 链接时，用 **Figma MCP** 获取对应截图或节点信息
+- 设计稿为 Figma 链接时，用 **mcp-figma-toolkit** 获取对应截图或节点信息
 - 二者与实现页比对得出结论
 
 ### 设计稿为 .pen（Pencil 设计稿）
@@ -32,7 +32,7 @@ tags: tools, design, pencil, figma, mcp
 
 ### 设计稿为 Figma 链接
 
-**工具**：**Figma MCP**
+**工具**：**mcp-figma-toolkit**
 
 **操作**：
 - 从链接中解析 file key / node id
@@ -40,9 +40,14 @@ tags: tools, design, pencil, figma, mcp
 - 获取截图或布局/样式信息
 - 与实现页的截图或快照对应比对
 
+**前置要求**：
+- 工作区存在 `.vscode/mcp.json` 且配置 `servers.figma.command = "mcp-figma-toolkit"`
+- 本机已安装 `mcp-figma-toolkit`
+- Figma Desktop 已导入并运行 `MCP Figma Toolkit` 插件
+
 **工具说明**：
 - **Figma 链接**：如 `https://www.figma.com/design/<fileKey>/<fileName>?node-id=...`
-- **Figma MCP**：用于 Figma 设计稿，可从链接中解析 file key / node id，获取指定 frame 或节点的截图与布局/节点信息（如 `get_screenshot`、`get_design_context` 等）
+- **mcp-figma-toolkit**：用于 Figma 设计稿，可从链接中解析 file key / node id，获取指定 frame 或节点的截图与布局/节点信息（如 `get_screenshot`、`get_design_context` 等）
 
 ### 设计稿为其它静态图片
 

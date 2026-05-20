@@ -1,6 +1,6 @@
 ---
 name: ui-verification
-description: 通用 UI 验收技能。支持按 sprint/PRD 批量验收，优先使用 PRD 的 figma_links，缺失时使用 screenshots，并按 PRD 分类产出问题清单与反思。
+description: 通用 UI 验收技能。支持按 sprint/PRD 批量验收，优先使用 PRD 的 figma_links 调用 mcp-figma-toolkit，缺失时使用 screenshots，并按 PRD 分类产出问题清单与反思。
 ---
 
 # UI 验收
@@ -32,7 +32,7 @@ description: 通用 UI 验收技能。支持按 sprint/PRD 批量验收，优先
 1. 扫描 `docs/prd/` 下所有 sprint 子目录中的 `.md`，排除 `README.md`。
 2. 执行顺序：先 sprint 名称排序，再 PRD 文件名排序。
 3. 每个 PRD 的设计源优先级：
-	- `figma_links` 存在且至少 1 条 `url` 有效：直接使用 Figma MCP。
+	- `figma_links` 存在且至少 1 条 `url` 有效：直接调用 `mcp-figma-toolkit`。
 	- 无有效 `figma_links`：使用 `screenshots`（路径按相对 `docs/` 解析）。
 4. `screenshots` 缺失或无效时，允许同 sprint 下按 PRD 文件名前缀兜底匹配；仍失败则标记 `UI_PENDING`。
 5. 问题清单按 PRD 独立输出：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI问题清单.md`。
@@ -43,6 +43,7 @@ description: 通用 UI 验收技能。支持按 sprint/PRD 批量验收，优先
 
 - **有可访问的实现页面**：本地或目标环境已启动；在 Cursor 中优先用 `@Browser` 打开目标 URL
 - **有设计稿可对照**：`.pen`（Pencil 设计稿）或 Figma 链接可访问
+- **Figma 验收前置**：当走 `figma_links` 路径时，需可用 `mcp-figma-toolkit`（含 `.vscode/mcp.json` 配置与 Figma Desktop 插件运行）
 - **有分析清单（推荐）**：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md` 可作为比对时的检查项
 
 若尚未有分析清单但已有设计稿，可先使用 `.github/skills/design-analysis/SKILL.md` 产出分析清单。
@@ -59,7 +60,7 @@ description: 通用 UI 验收技能。支持按 sprint/PRD 批量验收，优先
 ## 工作流程（6步）
 
 1. **使用浏览器工具查看实际页面**：在 Cursor 中优先使用 `@Browser`，获取实际页面可比对信息。详见 `rules/tools-browser-navigation.md` 和 `rules/tools-design-guidelines.md`
-2. **按 PRD 解析设计稿来源**：优先使用 `figma_links`，缺失时使用 `screenshots` 或兜底截图匹配，并记录取证来源。
+2. **按 PRD 解析设计稿来源**：优先使用 `figma_links` 调用 `mcp-figma-toolkit`，缺失或连接失败时使用 `screenshots` 或兜底截图匹配，并记录取证来源。
 3. **实际页面与设计稿比对**：截图比对或元素级比对，按 P0/P1/P2 维度逐项比对。详见 `rules/comparison-*.md`
 4. **产出 UI 问题清单**：按 PRD 独立记录差异点到问题清单。详见 `rules/workflow-problem-list.md`
 5. **修复与再验证**：先修 P0，再 P1，再 P2；修复后必须再次使用 Browser 工具验证。详见 `rules/tools-browser-navigation.md`

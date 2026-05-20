@@ -18,7 +18,7 @@ tags: workflow, layout-map, analysis, critical
 根据设计稿类型选择工具：
 
 - **PRD frontmatter 优先级**：
-  - `figma_links` 存在且至少 1 条 `url` 有效：直接使用 Figma MCP，跳过截图匹配
+  - `figma_links` 存在且至少 1 条 `url` 有效：直接调用 `mcp-figma-toolkit`，跳过截图匹配
   - 无有效 `figma_links`：使用 `screenshots` 字段解析截图（路径相对 `docs/`）
   - `screenshots` 缺失或无效：同 sprint 下按 PRD 文件名前缀兜底，失败则标记 `UI_PENDING`
 
@@ -28,7 +28,7 @@ tags: workflow, layout-map, analysis, critical
   - 确认顶层 frame 及多状态（如有）
 
 - **Figma 链接**：
-  - 使用 **Figma MCP** 从链接中解析 file key / node id
+  - 使用 **mcp-figma-toolkit** 从链接中解析 file key / node id
   - 可用工具：`get_screenshot`、`get_design_context` 等
   - 获取对应 frame 或节点的截图、布局与节点信息
 
@@ -44,7 +44,7 @@ tags: workflow, layout-map, analysis, critical
 **按「从上到下、再从左到右」扫描**：
 - 先按 y 从大到小（或从 0 起向下）确定所有横向区域顺序
 - 再在同一行内按 x 从左到右读取
-- 使用 Pencil MCP 或 Figma MCP 时也按此顺序逐层获取布局与节点信息
+- 使用 Pencil MCP 或 `mcp-figma-toolkit` 时也按此顺序逐层获取布局与节点信息
 
 详见 `analysis-order.md`。
 

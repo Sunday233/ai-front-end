@@ -1,7 +1,7 @@
 ---
 title: 设计稿工具使用指南
 impact: HIGH
-impactDescription: 根据设计稿类型选择 Pencil MCP 或 Figma MCP 获取布局与节点信息
+impactDescription: 根据设计稿类型选择 Pencil MCP 或 mcp-figma-toolkit 获取布局与节点信息
 tags: tools, design, pencil, figma
 ---
 
@@ -43,12 +43,17 @@ batch_get(patterns, nodeIds)
 
 ### Figma 链接
 
-**工具**：Figma MCP
+**工具**：mcp-figma-toolkit（Figma MCP）
 
 **可用功能**：
 - `get_screenshot` - 获取截图
 - `get_design_context` - 获取设计上下文
 - 从链接中解析 file key / node id
+
+**接入要求**：
+1. 工作区存在 `.vscode/mcp.json` 且包含 `servers.figma.command = "mcp-figma-toolkit"`
+2. 本机已安装 `mcp-figma-toolkit`
+3. Figma Desktop 已导入并运行 `MCP Figma Toolkit` 插件
 
 **使用步骤**：
 1. 从 PRD `figma_links` 中按顺序读取链接
@@ -56,7 +61,9 @@ batch_get(patterns, nodeIds)
 3. 使用 `get_screenshot` 获取对应节点的截图
 4. 使用 `get_design_context` 获取布局与节点信息
 
-**优先级约束**：当 PRD `figma_links` 存在且至少 1 条 `url` 有效时，直接走 Figma MCP，不再匹配截图。
+**优先级约束**：当 PRD `figma_links` 存在且至少 1 条 `url` 有效时，直接调用 `mcp-figma-toolkit`，不再匹配截图。
+
+**连接失败处理**：若 `mcp-figma-toolkit` 当前不可用，记录原因后回退 `screenshots` 或同 sprint 前缀兜底，不阻断后续 PRD。
 
 **示例**：
 ```javascript
@@ -95,7 +102,7 @@ get_design_context(fileKey, nodeId)
 **按「从上到下、再从左到右」扫描**：
 - 先按 y 从大到小（或从 0 起向下）确定所有横向区域顺序
 - 再在同一行内按 x 从左到右读取
-- 使用 Pencil MCP 或 Figma MCP 时也按此顺序逐层获取布局与节点信息
+- 使用 Pencil MCP 或 `mcp-figma-toolkit` 时也按此顺序逐层获取布局与节点信息
 
 详见 `analysis-order.md`。
 

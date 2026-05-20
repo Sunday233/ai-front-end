@@ -1,0 +1,7 @@
+{
+  "servers": {
+    "figma": {
+      "command": "mcp-figma-toolkit"
+    }
+  }
+}

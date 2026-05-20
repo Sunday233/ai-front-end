@@ -1,6 +1,6 @@
 ---
 name: design-analysis
-description: 通用设计稿分析技能。支持按 sprint 扫描 PRD，优先按 figma_links 走 Figma MCP，缺失时按 screenshots 识别截图并产出多 PRD UI 分析清单。
+description: 通用设计稿分析技能。支持按 sprint 扫描 PRD，优先按 figma_links 调用 mcp-figma-toolkit，缺失时按 screenshots 识别截图并产出多 PRD UI 分析清单。
 ---
 
 # 设计稿分析
@@ -26,11 +26,21 @@ description: 通用设计稿分析技能。支持按 sprint 扫描 PRD，优先�
 2. **执行顺序**：先按 sprint 目录名排序，再按 PRD 文件名排序。
 3. **PRD 识别**：以 PRD 文件名（不含 `.md`）作为 `<prd名称>`。
 4. **设计源优先级**：
-	- 若 `figma_links` 存在且至少 1 条 `url` 有效：**直接走 Figma MCP**，并**跳过截图匹配**。
+	- 若 `figma_links` 存在且至少 1 条 `url` 有效：**直接调用 `mcp-figma-toolkit`**（Figma MCP），并**跳过截图匹配**。
 	- 若无有效 `figma_links`：按 `screenshots` 配置解析截图。
 5. **screenshots 路径规则**：`screenshots[].path` 按“相对 `docs/`”解析，例如 `ui/sprint1/a.png` → `docs/ui/sprint1/a.png`。
 6. **截图兜底**：若 `screenshots` 缺失或无效，允许在同 sprint 下按 PRD 文件名前缀兜底匹配截图；若仍找不到，标记 `UI_PENDING`。
 7. **输出路径**：每个 PRD 独立输出到 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`。
+
+## Figma MCP 前置要求（mcp-figma-toolkit）
+
+1. 工作区需配置 `.vscode/mcp.json`：
+	- `servers.figma.command = "mcp-figma-toolkit"`
+2. 本机需安装 `mcp-figma-toolkit`（建议全局安装）。
+3. 需在 Figma Desktop 导入并运行 `MCP Figma Toolkit` 插件。
+4. 若当前环境无法建立 mcp-figma-toolkit 连接：
+	- 记录“Figma MCP 不可用”原因。
+	- 回退到 `screenshots` / 同 sprint 前缀兜底流程，不阻断批处理。
 
 ---
 
@@ -68,7 +78,7 @@ description: 通用设计稿分析技能。支持按 sprint 扫描 PRD，优先�
 ## 工作流程（4步）
 
 1. **扫描 PRD 并确定批次**：按 sprint 和文件名排序，逐个读取 PRD frontmatter（`figma_links`、`screenshots`）。
-2. **选择设计源并取证**：有有效 `figma_links` 时按链接顺序走 Figma MCP；否则按 `screenshots` 读取截图并进入截图模式；必要时执行同 sprint 前缀兜底并记录 `UI_PENDING`。
+2. **选择设计源并取证**：有有效 `figma_links` 时按链接顺序调用 `mcp-figma-toolkit`；否则按 `screenshots` 读取截图并进入截图模式；必要时执行同 sprint 前缀兜底并记录 `UI_PENDING`。
 3. **建立布局 Map + 区域提取**：按「从上到下、从左到右、从外到里」提取布局、文字、图片、层级。详见 `rules/workflow-layout-map.md` 与 `rules/workflow-element-extraction.md`
 4. **样式汇总并输出文档**：汇总样式规范，按 PRD 独立输出分析清单；截图模式必须输出证据等级与待确认项。详见 `rules/workflow-style-summary.md`、`rules/workflow-output-checklist.md` 和 `rules/output-analysis-checklist.md`
 
@@ -97,7 +107,7 @@ description: 通用设计稿分析技能。支持按 sprint 扫描 PRD，优先�
 - `rules/checklist-common-misses.md` - 常见遗漏检查点
 
 ### Tools Rules（工具使用指南）
-- `rules/tools-design-guidelines.md` - 设计稿工具使用（Pencil MCP / Figma MCP / 普通截图）
+- `rules/tools-design-guidelines.md` - 设计稿工具使用（Pencil MCP / mcp-figma-toolkit / 普通截图）
 
 ---
 
