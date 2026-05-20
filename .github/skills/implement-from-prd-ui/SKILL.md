@@ -40,8 +40,9 @@ description: 语义触发“基于 docs/prd 与 docs/ui 自动实现前端工程
 4. Apply 阶段全程围绕同一份 `proposal/tasks/spec` 执行，并结合 instructions、相关 Skills 与 MCP 上下文，禁止脱离 spec 盲改。
 5. Archive 阶段必须执行并沉淀为后续需求参考上下文。
 6. UI 验收以 PRD 设计源优先级为基线（`figma_links` > `screenshots` > 兜底截图），并同时核对 design-analysis 清单与 spec 增量。
-7. 失败自动修复最多 2 次，单 PRD 失败不阻断后续。
-8. 命中高风险操作必须请求人工确认。
+7. 前端代码生成后必须显式调用 `.github/skills/ui-verification/SKILL.md` 执行 UI 验收，不允许以“人工目测”替代。
+8. 失败自动修复最多 2 次，单 PRD 失败不阻断后续。
+9. 命中高风险操作必须请求人工确认。
 
 ## Figma 工具前置（mcp-figma-toolkit）
 
@@ -115,10 +116,11 @@ description: 语义触发“基于 docs/prd 与 docs/ui 自动实现前端工程
 
 ## 步骤 7：UI 验收
 
-1. 按 PRD 设计源优先级执行 UI 验收（`figma_links` > `screenshots` > 兜底截图）。
-2. 同时核对 design-analysis 产物与 OpenSpec spec 增量，确认满足本次业务与交互预期。
-3. 每个 PRD 独立输出 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI问题清单.md` 并修复阻断项。
-4. 允许少量非阻断问题并留档。
+1. 必须调用 `ui-verification` 技能执行 UI 验收。
+2. 按 PRD 设计源优先级执行 UI 验收（`figma_links` > `screenshots` > 兜底截图）。
+3. 同时核对 design-analysis 产物与 OpenSpec spec 增量，确认满足本次业务与交互预期。
+4. 每个 PRD 独立输出 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI问题清单.md` 并修复阻断项。
+5. 允许少量非阻断问题并留档。
 
 ## 步骤 8：Archive 归档
 

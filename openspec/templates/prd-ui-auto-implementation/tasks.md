@@ -1,8 +1,9 @@
 ## 1. 输入与触发
 
 - [ ] 1.1 识别 PRD + UI + 实现语义
-- [ ] 1.2 扫描 docs/prd 与 docs/ui
-- [ ] 1.3 生成 PRD 排序与 UI 配对映射
+- [ ] 1.2 扫描 docs/prd 下 sprint 子目录（排除 README）
+- [ ] 1.3 按 sprint 与文件名排序生成 PRD 执行队列
+- [ ] 1.4 解析每个 PRD 的 figma_links 与 screenshots，生成设计源映射
 
 ## 2. Proposal（需求/变更收敛）
 
@@ -23,11 +24,12 @@
 
 ## 4. 验收与归档
 
-- [ ] 4.1 基于截图优先执行 UI 验收
-- [ ] 4.2 同时核对 design-analysis 清单与 spec 增量
-- [ ] 4.3 修复阻断级问题并回归
-- [ ] 4.4 记录非阻断问题与风险
-- [ ] 4.5 执行 openspec archive <change-id> --yes
-- [ ] 4.6 将 spec 增量合并到 openspec/specs 对应能力
-- [ ] 4.7 归档后执行 openspec validate --strict
-- [ ] 4.8 输出上线就绪结论（非部署）
+- [ ] 4.1 必须调用 ui-verification 执行 UI 验收
+- [ ] 4.2 按 figma_links > screenshots > 同 sprint 前缀兜底选择验收基线
+- [ ] 4.3 同时核对 design-analysis 清单与 spec 增量
+- [ ] 4.4 修复阻断级问题并回归
+- [ ] 4.5 记录非阻断问题与风险
+- [ ] 4.6 执行 openspec archive <change-id> --yes
+- [ ] 4.7 将 spec 增量合并到 openspec/specs 对应能力
+- [ ] 4.8 归档后执行 openspec validate --strict
+- [ ] 4.9 输出上线就绪结论（非部署）

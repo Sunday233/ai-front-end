@@ -18,11 +18,13 @@ Instructions for AI coding assistants using OpenSpec for spec-driven development
 
 1. 先读取：`.github/instructions/12-自动化执行规范.instructions.md`
 2. 再读取：`.github/skills/implement-from-prd-ui/SKILL.md`
-3. 先做需求/变更收敛：创建 OpenSpec 变更（`proposal.md`、`tasks.md`、`spec delta`）
-4. 执行 `openspec validate <change-id> --strict`，通过后默认确认进入 Apply（命中高风险除外）
-5. 开发执行对齐：读取 proposal/tasks/spec 增量，结合 instructions、Skills、MCP 按 tasks 逐项实施
-6. 验收与归档：UI 验收同时核对 design-analysis 清单与 spec 增量，通过后执行 `openspec archive <change-id> --yes`
-7. 归档后将 spec 增量合并到 `openspec/specs`，并执行 `openspec validate --strict`
+3. 扫描并排序 `docs/prd`（先 sprint 后文件名），逐 PRD 解析 `figma_links` 与 `screenshots`
+4. 按设计源优先级执行 design-analysis（`figma_links` > `screenshots` > 同 sprint 前缀兜底）
+5. 先做需求/变更收敛：创建 OpenSpec 变更（`proposal.md`、`tasks.md`、`spec delta`）
+6. 执行 `openspec validate <change-id> --strict`，通过后默认确认进入 Apply（命中高风险除外）
+7. 开发执行对齐：读取 proposal/tasks/spec 增量，结合 instructions、Skills、MCP 按 tasks 逐项实施
+8. 验收与归档：必须调用 `ui-verification`，并同时核对 design-analysis 清单与 spec 增量；有有效 `figma_links` 时以 Figma MCP 取证为基线，通过后执行 `openspec archive <change-id> --yes`
+9. 归档后将 spec 增量合并到 `openspec/specs`，并执行 `openspec validate --strict`
 
 命令映射说明：
 

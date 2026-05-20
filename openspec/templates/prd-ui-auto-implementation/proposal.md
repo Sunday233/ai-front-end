@@ -9,6 +9,8 @@
 - 新增 PRD + UI 语义触发执行链路
 - 强制 OpenSpec 先行（proposal/tasks/spec）
 - 新增多 PRD 批处理与失败续跑机制
+- 新增设计源优先级（`figma_links` > `screenshots` > 同 sprint 前缀兜底）
+- 新增“代码生成后必须调用 ui-verification”的验收约束
 - 新增上线就绪门禁与执行日志
 
 ## Impact
