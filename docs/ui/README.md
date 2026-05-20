@@ -4,9 +4,21 @@
 
 本目录用于存放页面或组件设计稿截图，供 Agent 自动分析与 UI 验收。
 
+## 目录结构约定
+
+截图需按 sprint 分目录组织，推荐结构：
+
+- `docs/ui/<sprint>/<image>.png`
+
+示例：
+
+- `docs/ui/sprint1/object-type-list-main-default.png`
+- `docs/ui/sprint1/object-type-create-step1.png`
+- `docs/ui/sprint1/workbench-main-default.png`
+
 ## 命名规范
 
-采用与 PRD 一致的功能 `slug` 作为前缀：
+建议以 PRD 文件名（`<prd-name>`）为前缀：
 
 - `order-center-home.png`
 - `order-center-detail.png`
@@ -15,6 +27,22 @@
 推荐通用格式：
 
 - `<slug>-<page-or-step>-<state>.png`
+
+## 与 PRD 的关联方式
+
+推荐在 PRD frontmatter 中通过 `screenshots` 显式声明截图：
+
+```yaml
+screenshots:
+	- name: 步骤1-选择数据源
+		path: ui/sprint1/object-type-create-step1.png
+```
+
+约定如下：
+
+1. `screenshots[].path` 使用相对 `docs/` 的路径。
+2. 对应真实文件即 `docs/ui/<sprint>/<image>.png`。
+3. 若 PRD 有有效 `figma_links`，则优先走 Figma MCP，可跳过截图匹配。
 
 ## 质量建议
 
@@ -27,13 +55,13 @@
 
 假设有 3 个功能：工作台、对象类型列表、创建对象类型。
 
-对应 PRD 文件（`docs/prd/`）：
+对应 PRD 文件（`docs/prd/sprint1/`）：
 
 - `workbench.md`
 - `object-type-list.md`
 - `object-type-create.md`
 
-对应 UI 截图（`docs/ui/`）：
+对应 UI 截图（`docs/ui/sprint1/`）：
 
 工作台（多状态）：
 
@@ -56,12 +84,12 @@
 
 ## 当前仓库已对齐资产（2026-05-09）
 
-- `workbench-main-default.png`
-- `object-type-list-main-default.png`
-- `object-type-create-step1.png`
-- `object-type-create-step2.png`
-- `object-type-create-step3.png`
-- `object-type-create-step4.png`
+- `sprint1/workbench-main-default.png`
+- `sprint1/object-type-list-main-default.png`
+- `sprint1/object-type-create-step1.png`
+- `sprint1/object-type-create-step2.png`
+- `sprint1/object-type-create-step3.png`
+- `sprint1/object-type-create-step4.png`
 
 ## 配对失败策略
 

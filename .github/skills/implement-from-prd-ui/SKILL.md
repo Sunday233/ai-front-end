@@ -22,8 +22,15 @@ description: 语义触发“基于 docs/prd 与 docs/ui 自动实现前端工程
 
 1. PRD 目录：`docs/prd/`
 2. UI 目录：`docs/ui/`
-3. 命名规则：功能 `slug` 同名前缀配对
-4. 批处理顺序：按 PRD 文件名排序
+3. 扫描粒度：`docs/prd/` 下所有 sprint 子目录中的 `.md`，排除 `README.md`
+4. 批处理顺序：先按 sprint 目录名排序，再按 PRD 文件名排序
+5. 设计源优先级：
+	- `figma_links` 存在且至少 1 条 `url` 有效：直接走 Figma MCP，跳过截图匹配
+	- 无有效 `figma_links`：按 `screenshots` 读取截图，`screenshots[].path` 按“相对 `docs/`”解析
+	- `screenshots` 缺失或无效：同 sprint 下按 PRD 文件名前缀兜底匹配，失败标记 `UI_PENDING`
+6. 文档产出路径：
+	- UI 分析清单：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`
+	- UI 问题清单：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI问题清单.md`
 
 ## 核心约束
 
@@ -32,7 +39,7 @@ description: 语义触发“基于 docs/prd 与 docs/ui 自动实现前端工程
 3. Proposal 通过后默认确认进入 Apply（除非用户明确拒绝或命中高风险确认）。
 4. Apply 阶段全程围绕同一份 `proposal/tasks/spec` 执行，并结合 instructions、相关 Skills 与 MCP 上下文，禁止脱离 spec 盲改。
 5. Archive 阶段必须执行并沉淀为后续需求参考上下文。
-6. UI 验收以截图为优先基线，并同时核对 design-analysis 清单与 spec 增量。
+6. UI 验收以 PRD 设计源优先级为基线（`figma_links` > `screenshots` > 兜底截图），并同时核对 design-analysis 清单与 spec 增量。
 7. 失败自动修复最多 2 次，单 PRD 失败不阻断后续。
 8. 命中高风险操作必须请求人工确认。
 
@@ -58,8 +65,9 @@ description: 语义触发“基于 docs/prd 与 docs/ui 自动实现前端工程
 ## 步骤 1：意图识别与输入扫描
 
 1. 判断是否命中 PRD + UI + 实现语义。
-2. 扫描 `docs/prd/` 和 `docs/ui/`。
-3. 生成 PRD 排序清单与 UI 配对映射。
+2. 扫描 `docs/prd/` 下所有 sprint 子目录与 `docs/ui/` 对应目录。
+3. 解析每个 PRD frontmatter（重点字段：`figma_links`、`screenshots`）。
+4. 生成“sprint -> PRD -> 设计源”映射并按规则排序。
 
 ## 步骤 2：逐 PRD 执行 Proposal 阶段
 
@@ -78,8 +86,10 @@ description: 语义触发“基于 docs/prd 与 docs/ui 自动实现前端工程
 
 ## 步骤 4：设计分析
 
-1. 基于 UI 截图输出 UI 分析清单。
-2. 缺少 UI 时标记 `UI_PENDING` 并继续。
+1. 若 PRD 有有效 `figma_links`：调用 design-analysis 并直接走 Figma MCP，多链接按顺序分析后合并到同一份清单。
+2. 若无有效 `figma_links`：按 `screenshots` 配置定位截图并调用 design-analysis 进入截图模式。
+3. `screenshots` 缺失或无效时执行同 sprint 前缀兜底，失败则标记 `UI_PENDING` 并继续。
+4. 每个 PRD 独立产出 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`。
 
 ## 步骤 5：实现落地
 
@@ -96,9 +106,9 @@ description: 语义触发“基于 docs/prd 与 docs/ui 自动实现前端工程
 
 ## 步骤 7：UI 验收
 
-1. 对照截图优先基线执行 UI 验收。
+1. 按 PRD 设计源优先级执行 UI 验收（`figma_links` > `screenshots` > 兜底截图）。
 2. 同时核对 design-analysis 产物与 OpenSpec spec 增量，确认满足本次业务与交互预期。
-3. 输出 UI 问题清单并修复阻断项。
+3. 每个 PRD 独立输出 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI问题清单.md` 并修复阻断项。
 4. 允许少量非阻断问题并留档。
 
 ## 步骤 8：Archive 归档
@@ -117,7 +127,7 @@ description: 语义触发“基于 docs/prd 与 docs/ui 自动实现前端工程
 
 1. OpenSpec 变更目录内容。
 2. 实现代码与检查结果。
-3. UI 问题清单。
+3. 按 PRD 分类的 UI 分析清单与 UI 问题清单。
 4. 归档结果与 specs 更新信息（包含增量合并记录）。
 5. 执行日志。
 6. 上线就绪结论。

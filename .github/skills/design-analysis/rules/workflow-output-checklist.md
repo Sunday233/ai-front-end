@@ -14,12 +14,17 @@ tags: workflow, output, checklist
 ## 4.1 文档路径
 
 ```
-docs/样式还原/<页面或模块名称>-UI分析清单.md
+docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md
 ```
 
+其中：
+- `<prd下一级目录名称>`：PRD 在 `docs/prd/` 下的一级分类目录（例如 `sprint1`）
+- `<prd名称>`：PRD 文件名（不含 `.md`）
+
 **示例**：
-- `docs/样式还原/用户中心-UI分析清单.md`
-- `docs/样式还原/商品列表页-UI分析清单.md`
+- `docs/样式还原/sprint1/object-type-list-UI分析清单.md`
+- `docs/样式还原/sprint1/object-type-create-UI分析清单.md`
+- `docs/样式还原/sprint1/workbench-UI分析清单.md`
 
 ## 4.2 文档结构（必须包含）
 

@@ -10,7 +10,7 @@ tags: workflow, checklist, verification
 ### 验收前
 - [ ] 目标页面 URL 已确认（如 `http://localhost:5222/<route>`）
 - [ ] 设计稿（.pen 或图）可打开，可截图或取元素
-- [ ] 已有对应「UI 分析清单」更佳（作为按顺序比对的检查项列表）
+- [ ] 已有对应「UI 分析清单」更佳（`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`，作为按顺序比对的检查项列表）
 
 ### 验收中（必须落地）
 - [ ] 已用 **Browser** 打开目标页面并获取截图或快照（详见 `tools-browser-navigation.md`）

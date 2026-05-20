@@ -156,4 +156,4 @@ src/routes/ai-editor/
 - [ ] 路由在唯一入口文件注册
 - [ ] 组件放置位置正确（通用 vs 页面级）
 
-**样式还原检查**：涉及 UI 还原的样式开发，请参考 `.github/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<名称>-UI分析清单.md`。
+**样式还原检查**：涉及 UI 还原的样式开发，请参考 `.github/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`。

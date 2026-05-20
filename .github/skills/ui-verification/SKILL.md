@@ -1,13 +1,13 @@
 ---
 name: ui-verification
-description: 通用 UI 验收技能。验收必须以「实际页面效果 vs 设计稿」为准，必须使用浏览器工具 (Browser) 查看目标页面，通过页面截图与设计稿截图比对、或页面元素与 .pen 设计稿元素比对等落地方式完成验收，并产出问题清单与反思。
+description: 通用 UI 验收技能。支持按 sprint/PRD 批量验收，优先使用 PRD 的 figma_links，缺失时使用 screenshots，并按 PRD 分类产出问题清单与反思。
 ---
 
 # UI 验收
 
 ## 核心原则
 
-**最终验收标准**：以**实际运行页面的效果**与 **UI 稿（.pen 或 Figma）** 进行比对得出结论，而不是仅凭代码或分析清单推断。
+**最终验收标准**：以**实际运行页面的效果**与 **UI 稿（.pen / Figma / PRD screenshots）** 进行比对得出结论，而不是仅凭代码或分析清单推断。
 
 **工具选择**：优先使用 Cursor 的 Browser（`@Browser`），仅当不在 Cursor 或 Browser 不可用时使用 Playwright MCP。详见 `rules/tools-browser-navigation.md`。
 
@@ -23,6 +23,19 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 - 实现完成后，需要对照设计稿检查还原度
 - 需要产出一份可追踪的 **UI 问题清单**，并据此修复与再验证
 - 需要做「分析不足反思」，反哺设计稿分析（design-analysis）
+- 需要按 `docs/prd/` 多个 PRD 批量执行 UI 验收
+
+---
+
+## PRD + UI 验收协议（批量模式）
+
+1. 扫描 `docs/prd/` 下所有 sprint 子目录中的 `.md`，排除 `README.md`。
+2. 执行顺序：先 sprint 名称排序，再 PRD 文件名排序。
+3. 每个 PRD 的设计源优先级：
+	- `figma_links` 存在且至少 1 条 `url` 有效：直接使用 Figma MCP。
+	- 无有效 `figma_links`：使用 `screenshots`（路径按相对 `docs/` 解析）。
+4. `screenshots` 缺失或无效时，允许同 sprint 下按 PRD 文件名前缀兜底匹配；仍失败则标记 `UI_PENDING`。
+5. 问题清单按 PRD 独立输出：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI问题清单.md`。
 
 ---
 
@@ -30,7 +43,7 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 
 - **有可访问的实现页面**：本地或目标环境已启动；在 Cursor 中优先用 `@Browser` 打开目标 URL
 - **有设计稿可对照**：`.pen`（Pencil 设计稿）或 Figma 链接可访问
-- **有分析清单（推荐）**：`docs/样式还原/<名称>-UI分析清单.md` 可作为比对时的检查项
+- **有分析清单（推荐）**：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md` 可作为比对时的检查项
 
 若尚未有分析清单但已有设计稿，可先使用 `.github/skills/design-analysis/SKILL.md` 产出分析清单。
 
@@ -38,18 +51,19 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 
 ## 目标产出
 
-- **UI 问题清单**：`docs/样式还原/<名称>-UI问题清单.md`（详见 `rules/workflow-problem-list.md`）
+- **UI 问题清单**：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI问题清单.md`（详见 `rules/workflow-problem-list.md`）
 - **分析不足反思（可选）**：反哺 design-analysis（详见 `rules/workflow-reflection.md`）
 
 ---
 
-## 工作流程（5步）
+## 工作流程（6步）
 
 1. **使用浏览器工具查看实际页面**：在 Cursor 中优先使用 `@Browser`，获取实际页面可比对信息。详见 `rules/tools-browser-navigation.md` 和 `rules/tools-design-guidelines.md`
-2. **实际页面与设计稿比对**：截图比对或元素级比对，按 P0/P1/P2 维度逐项比对。详见 `rules/comparison-*.md`
-3. **产出 UI 问题清单**：将差异点记录到问题清单。详见 `rules/workflow-problem-list.md`
-4. **修复与再验证**：先修 P0，再 P1，再 P2；修复后必须再次使用 Browser 工具验证。详见 `rules/tools-browser-navigation.md`
-5. **反思分析不足（可选）**：将「哪些问题是因为分析没做到位」总结下来，反哺 design-analysis。详见 `rules/workflow-reflection.md`
+2. **按 PRD 解析设计稿来源**：优先使用 `figma_links`，缺失时使用 `screenshots` 或兜底截图匹配，并记录取证来源。
+3. **实际页面与设计稿比对**：截图比对或元素级比对，按 P0/P1/P2 维度逐项比对。详见 `rules/comparison-*.md`
+4. **产出 UI 问题清单**：按 PRD 独立记录差异点到问题清单。详见 `rules/workflow-problem-list.md`
+5. **修复与再验证**：先修 P0，再 P1，再 P2；修复后必须再次使用 Browser 工具验证。详见 `rules/tools-browser-navigation.md`
+6. **反思分析不足（可选）**：将「哪些问题是因为分析没做到位」总结下来，反哺 design-analysis。详见 `rules/workflow-reflection.md`
 
 ---
 

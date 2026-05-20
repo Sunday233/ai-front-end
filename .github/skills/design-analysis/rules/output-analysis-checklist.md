@@ -10,10 +10,11 @@ tags: output, checklist, template, analysis
 ## 完整模板
 
 ```markdown
-# <名称> - UI 分析清单
+# <prd名称> - UI 分析清单
 
 > **文档说明**：设计稿分析结果，供前端 UI 开发与验收参照。  
-> **设计稿路径/链接**：`docs/设计稿/<路径>/<文件名>.pen` 或 Figma 链接（如 https://www.figma.com/...）或 `docs/ui/*.png`  
+> **PRD 文件**：`docs/prd/<prd下一级目录名称>/<prd名称>.md`  
+> **设计稿路径/链接**：优先来自 PRD `figma_links`；无有效 `figma_links` 时来自 PRD `screenshots`（按 `docs/` 相对路径解析）  
 > **输入模式**：结构化设计源 / 截图模式（仅截图时必须标注证据等级）  
 > **分析日期**：YYYY-MM-DD
 
@@ -21,9 +22,9 @@ tags: output, checklist, template, analysis
 
 | 文件 | 状态 | 用途 |
 |------|------|------|
-| docs/ui/xxx-default.png | default | 主体布局与默认样式 |
-| docs/ui/xxx-hover.png | hover | 悬浮态差异 |
-| docs/ui/xxx-active.png | active | 激活态差异 |
+| docs/ui/sprint1/object-type-list-main-default.png | default | 主体布局与默认样式 |
+| docs/ui/sprint1/object-type-list-main-hover.png | hover | 悬浮态差异 |
+| docs/ui/sprint1/object-type-list-main-active.png | active | 激活态差异 |
 
 ## 一、设计稿整体分析
 
@@ -250,7 +251,7 @@ tags: output, checklist, template, analysis
 ## 使用说明
 
 1. **复制模板**：将上述模板复制到新文档中
-2. **替换占位符**：将 `<名称>`、`___` 等占位符替换为实际内容
+2. **替换占位符**：将 `<prd下一级目录名称>`、`<prd名称>`、`___` 等占位符替换为实际内容
 3. **填充内容**：根据设计稿分析结果，填充各个章节的内容
 4. **检查完整性**：使用 `workflow-output-checklist.md` 中的质量检查清单验证文档完整性
 

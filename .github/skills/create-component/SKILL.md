@@ -112,7 +112,7 @@ export {default as ShentuButton} from './shentu-button/index.vue';
   - 自定义变量：`var(--shentu-card-bg)`、`var(--shentu-border-radius)` 等
 - 禁止在组件样式中直接硬编码主色，如 `#1677ff`。
 
-**样式还原检查**：涉及 UI 还原的组件样式开发，请参考 `.github/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<名称>-UI分析清单.md`。
+**样式还原检查**：涉及 UI 还原的组件样式开发，请参考 `.github/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`。
 
 ---
 

@@ -36,11 +36,11 @@ description: 通用创建提案技能。根据需求是否有设计稿或 UI 描
 当需求**包含界面**且**有设计稿**（.pen、figma链接、设计图、标注）或**有明确 UI 描述**时：
 
 - **使用技能**：`.github/skills/design-analysis/SKILL.md`
-- **产出**：`docs/样式还原/<名称>-UI分析清单.md`
+- **产出**：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`
 
 这样后续开发可以依据分析清单精确实现，实现后的验收也以此清单为基准。不限定「必须先分析再写提案」：可以边写提案边分析，或先分析再写提案，只要在开发前有一份分析清单即可。
 
-在 **tasks** 中可写明：页面/组件开发须依据 `docs/样式还原/<名称>-UI分析清单.md` 实现布局与样式。
+在 **tasks** 中可写明：页面/组件开发须依据 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md` 实现布局与样式。
 
 ---
 
@@ -80,13 +80,13 @@ description: 通用创建提案技能。根据需求是否有设计稿或 UI 描
 - **What Changes**：改动范围（新页面 / 新组件 / 新接口 / 样式还原等）
 - **Impact**：受影响或新增的 capability、目录、文件
 
-若有设计稿或 UI：可写「图标/图片使用占位元素」「开发依据 docs/样式还原/xxx-UI分析清单.md」等。
+若有设计稿或 UI：可写「图标/图片使用占位元素」「开发依据 docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md」等。
 
 ### 5.2 tasks.md
 
 按**交付形态**与**条件**勾选任务，例如：
 
-- **新页面**：路由目录、`Page.vue`、`Loader.ts`、`index.module.scss`、与布局一致的结构；若有分析清单则写「依据 xxx-UI分析清单 实现」。
+- **新页面**：路由目录、`Page.vue`、`Loader.ts`、`index.module.scss`、与布局一致的结构；若有分析清单则写「依据 docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md 实现」。
 - **功能组件**：组件目录、`index.vue`、`index.module.scss`、占位与规范。
 - **接口/数据层**：`interfaces/<feature>/`、`http/<feature>.ts` 或 mock。
 - **UI 还原验收**：若有设计稿且产出了分析清单，可在 tasks 末尾加「实现后使用 `.github/skills/ui-verification/SKILL.md` 进行 UI 还原验收，产出问题清单并反思分析不足」。
@@ -108,14 +108,14 @@ description: 通用创建提案技能。根据需求是否有设计稿或 UI 描
 
 ## 样式还原验证检查清单（供 create-route / create-component 引用）
 
-当开发涉及 **UI 还原**（有设计稿或分析清单）时，可对照以下检查项自检；更完整项见 `docs/样式还原/<名称>-UI分析清单.md` 中的「验证检查清单」。
+当开发涉及 **UI 还原**（有设计稿或分析清单）时，可对照以下检查项自检；更完整项见 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md` 中的「验证检查清单」。
 
 **布局**：区域位置、尺寸、间距是否与分析清单/设计稿一致；对齐方式（如 flex-start vs center）是否正确。  
 **样式**：颜色、字体、字号、字重、圆角、边框、阴影、效果（如 backdrop-filter）是否一致。  
 **元素**：是否缺少区块、图标、占位图；占位尺寸与比例是否正确。  
 **交互**：默认/hover/active 等状态是否还原（若有设计）。
 
-create-route、create-component 等技能中「涉及 UI 还原时」可引用：`.github/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<名称>-UI分析清单.md`。
+create-route、create-component 等技能中「涉及 UI 还原时」可引用：`.github/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`。
 
 ---
 

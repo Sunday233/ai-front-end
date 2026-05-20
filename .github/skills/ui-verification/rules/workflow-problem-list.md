@@ -10,16 +10,20 @@ tags: workflow, output, problem-list, template
 ### 文档路径
 
 ```
-docs/样式还原/<名称>-UI问题清单.md
+docs/样式还原/<prd下一级目录名称>/<prd名称>-UI问题清单.md
 ```
+
+其中：
+- `<prd下一级目录名称>`：PRD 在 `docs/prd/` 下的一级分类目录（如 `sprint1`）
+- `<prd名称>`：PRD 文件名（不含 `.md`）
 
 ### 文档结构建议
 
 ```markdown
-# <名称> - UI 问题清单
+# <prd名称> - UI 问题清单
 
-> **参照文档**：`docs/样式还原/<名称>-UI分析清单.md`  
-> **设计稿**：`docs/设计稿/<路径>/<文件名>.pen` 或 Figma 链接  
+> **参照文档**：`docs/样式还原/<prd下一级目录名称>/<prd名称>-UI分析清单.md`  
+> **设计稿**：优先 PRD `figma_links`，无有效链接时使用 PRD `screenshots`  
 > **创建/更新日期**：YYYY-MM-DD
 
 ## 一、按区域列问题（区域按从上到下、从左到右顺序排列）

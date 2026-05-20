@@ -51,9 +51,12 @@ batch_get(patterns, nodeIds)
 - 从链接中解析 file key / node id
 
 **使用步骤**：
-1. 从 Figma 链接中解析 file key 和 node id
-2. 使用 `get_screenshot` 获取对应节点的截图
-3. 使用 `get_design_context` 获取布局与节点信息
+1. 从 PRD `figma_links` 中按顺序读取链接
+2. 从每条 Figma 链接解析 file key 和 node id
+3. 使用 `get_screenshot` 获取对应节点的截图
+4. 使用 `get_design_context` 获取布局与节点信息
+
+**优先级约束**：当 PRD `figma_links` 存在且至少 1 条 `url` 有效时，直接走 Figma MCP，不再匹配截图。
 
 **示例**：
 ```javascript
@@ -78,10 +81,12 @@ get_design_context(fileKey, nodeId)
 - 对多状态截图做差异比对（default / hover / active / disabled）
 
 **使用步骤**：
-1. 从 `docs/ui/` 收集同一功能 slug 的截图，按状态分组。
-2. 以截图像素尺寸建立坐标基准（左上角为原点）。
-3. 按「从上到下、从左到右、从外到里」扫描并记录四类重中之重。
-4. 对无法可靠读取的字段标注为“待确认”，禁止伪精确。
+1. 从当前 PRD `screenshots` 字段读取截图列表。
+2. 将 `screenshots[].path` 按“相对 `docs/`”解析为真实文件路径（例如 `ui/sprint1/a.png` → `docs/ui/sprint1/a.png`）。
+3. 若 `screenshots` 缺失或无效，可在同 sprint 下按 PRD 文件名前缀兜底匹配；若仍失败，标记 `UI_PENDING`。
+4. 以截图像素尺寸建立坐标基准（左上角为原点）。
+5. 按「从上到下、从左到右、从外到里」扫描并记录四类重中之重。
+6. 对无法可靠读取的字段标注为“待确认”，禁止伪精确。
 
 **建议**：截图命名和多状态组织优先遵循 `docs/ui/README.md`。
 

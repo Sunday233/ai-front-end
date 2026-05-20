@@ -17,6 +17,11 @@ tags: workflow, layout-map, analysis, critical
 
 根据设计稿类型选择工具：
 
+- **PRD frontmatter 优先级**：
+  - `figma_links` 存在且至少 1 条 `url` 有效：直接使用 Figma MCP，跳过截图匹配
+  - 无有效 `figma_links`：使用 `screenshots` 字段解析截图（路径相对 `docs/`）
+  - `screenshots` 缺失或无效：同 sprint 下按 PRD 文件名前缀兜底，失败则标记 `UI_PENDING`
+
 - **.pen（Pencil 设计稿）**：
   - 使用 **Pencil MCP** 查看结构、截图等
   - 可用工具：`snapshot_layout`、`get_screenshot` 等
@@ -29,7 +34,7 @@ tags: workflow, layout-map, analysis, critical
 
 - **普通截图（png/jpg/jpeg/webp）**：
   - 使用图片查看工具读取截图像素尺寸与可见元素
-  - 按截图文件名区分页面与状态（default / hover / active / disabled）
+  - 优先按 PRD `screenshots` 字段区分页面与状态（default / hover / active / disabled）
   - 以截图左上角为坐标原点，建立区域划分
 
 详见 `tools-design-guidelines.md`。
@@ -84,7 +89,7 @@ tags: workflow, layout-map, analysis, critical
 - 区域 A 底部 → 区域 B 顶部: ___ px
 
 ### 截图模式补充（仅截图输入时）
-- 来源文件: `docs/ui/<file>.png`
+- 来源文件: `docs/ui/<sprint>/<file>.png`（来自 PRD `screenshots.path`）
 - 状态: default / hover / active / disabled
 - 待确认项数量: ___
 ```
