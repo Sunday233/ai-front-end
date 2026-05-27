@@ -10,6 +10,7 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 当满足以下任一情况时使用本技能：
 
 - 需要**分析设计稿**（`.pen`、Figma 链接、Stitch 链接、其它设计图或标注等），把界面结构、样式、元素梳理成可执行的前端任务
+- 输入为 `docs/prd/*.md`，需要先识别 PRD 中声明的设计源，再产出 UI 分析清单
 - 需要**分析普通 UI 截图**（`png/jpg/jpeg/webp` 等），在缺少可计算节点数据时产出可执行的还原清单
 - 需要产出一份**UI 分析清单**文档，供后续开发按清单实现、或供验收时对照
 
@@ -40,6 +41,35 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 ---
 
+## PRD 输入识别
+
+当输入是 `docs/prd/*.md` 时，先读取 PRD 元信息与 UI 配对章节，再决定设计源工具：
+
+| PRD 字段 | 识别结果 | 处理方式 |
+|----------|----------|----------|
+| `primary_design_source: docs-ui` | `docs/ui` 截图 | 启用截图模式 |
+| `primary_design_source: pen` 或 `design_pen_files` | `.pen` 设计稿 | 使用 Pencil MCP |
+| `primary_design_source: figma` 或 `figma_links` | Figma 链接 | 使用 Figma MCP |
+| `primary_design_source: stitch` 或 `stitch_links` | Stitch 链接 | 使用 Stitch MCP |
+| `required_ui_assets` / `optional_ui_assets` | `docs/ui` 截图 | 校验文件是否存在并按状态分组 |
+
+若 PRD 缺少上述字段，则按以下规则兜底识别：
+
+1. 匹配正文中的 `.pen` 路径。
+2. 匹配正文中的 `figma.com` 链接。
+3. 匹配正文中的 Stitch 链接或 `Stitch` 关键词。
+4. 查找 `docs/ui/<prd_slug>*.(png|jpg|jpeg|webp)`。
+
+识别完成后，必须在 UI 分析清单中写明：
+
+- PRD 路径与 `prd_slug`
+- 主设计源类型
+- 设计稿路径/链接或截图文件列表
+- 使用的 MCP/模式
+- UI 分析清单输出路径
+
+---
+
 ## 目标产出
 
 | 产出物 | 路径 | 用途 |
@@ -50,7 +80,7 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 ## 工作流程（4步）
 
-1. **建立布局 Map**：获取设计稿结构或截图结构，记录页面状态、整体尺寸、区域划分。详见 `rules/workflow-layout-map.md`
+1. **建立布局 Map**：若输入为 PRD，先识别设计源；再获取设计稿结构或截图结构，记录页面状态、整体尺寸、区域划分。详见 `rules/workflow-layout-map.md`
 2. **区域与元素提取**：对每个区域按「从外到里」逐项提取，确保文字、图片、布局、层级四者均准确记录；截图模式下同步标注证据等级。详见 `rules/workflow-element-extraction.md`
 3. **样式规范汇总**：汇总颜色、字体、圆角、间距、阴影等样式规范。详见 `rules/workflow-style-summary.md`
 4. **输出 UI 分析清单文档**：将分析结果输出为文档；截图模式需额外输出待确认项。详见 `rules/workflow-output-checklist.md` 和 `rules/output-analysis-checklist.md`
@@ -86,7 +116,7 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 ## 与其它技能的关系
 
-- **create-proposal**：若提案涉及「有设计稿或 UI 描述」的页面/组件，可先或同步使用本技能产出分析清单
+- **create-proposal**：若提案涉及「有设计稿或 UI 描述」的页面/组件，必须在开发前产出或引用本技能的 UI 分析清单
 - **ui-verification**：以本分析清单为基准做 UI 验收时使用；验收若发现「分析遗漏」或「描述不清」，应将结论反哺本技能
 - **create-route / create-component**：开发时若涉及样式还原，应引用本分析清单中的区域与样式规范
 
@@ -94,6 +124,6 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 ## 相关规范
 
-- `.github/instructions/09-样式规范.instructions.md` - 设计稿颜色、圆角等提取规范
-- `.github/skills/create-proposal/SKILL.md` - 创建提案（有设计稿时可先或同步使用本技能）
-- `.github/skills/ui-verification/SKILL.md` - UI 验收（以分析清单为基准做验收）
+- `.agents/rules/09-样式规范.instructions.md` - 设计稿颜色、圆角等提取规范
+- `.agents/skills/create-proposal/SKILL.md` - 创建提案（有设计稿时需引用本技能产物）
+- `.agents/skills/ui-verification/SKILL.md` - UI 验收（以分析清单为基准做验收）

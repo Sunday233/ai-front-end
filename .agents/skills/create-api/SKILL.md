@@ -13,7 +13,7 @@ description: 指导在前端项目中按团队规范创建和维护 HTTP 接口�
 - 为已有接口 **补充类型定义**
 - **重构接口文件** 或拆分模块
 
-请使用本技能，并同时遵守 `.github/instructions/05-API规范.instructions.md` 中的强制规则。
+请使用本技能，并同时遵守 `.agents/rules/05-API规范.instructions.md` 中的强制规则。
 
 ---
 
@@ -153,4 +153,3 @@ const onLoad = async () => {
 - [ ] 是否在 `src/http/<module>.ts` 中集中管理该模块的所有接口？
 - [ ] 函数命名是否符合 `get/create/update/deleteXxx` 规范？
 - [ ] 是否避免在业务代码中重复处理接口错误提示？
-

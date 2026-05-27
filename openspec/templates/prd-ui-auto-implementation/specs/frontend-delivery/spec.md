@@ -18,6 +18,26 @@
 - **WHEN** proposal/tasks/spec delta 均已生成并通过 strict 校验
 - **THEN** 系统才可进入代码实现阶段
 
+### Requirement: PRD 设计源识别与 UI 分析
+
+系统 MUST 从 `docs/prd/*.md` 中识别 `docs/ui` 截图、`.pen`、Figma 链接或 Stitch 链接，并在实现前产出 UI 分析清单。
+
+#### Scenario: 识别设计源并产出分析清单
+
+- **WHEN** PRD 声明 `primary_design_source` 或包含可识别设计源
+- **THEN** 系统选择截图模式、Pencil MCP、Figma MCP 或 Stitch MCP 读取设计稿
+- **AND** 产出 `docs/样式还原/<prd_slug>-UI分析清单.md`
+
+### Requirement: 基于 UI 分析清单实施
+
+系统 MUST 在页面/UI 开发时依据 UI 分析清单还原布局、文字、图片、层级与样式。
+
+#### Scenario: 按分析清单实现 UI
+
+- **WHEN** tasks 进入页面/UI 开发阶段
+- **THEN** 系统读取 UI 分析清单与相关 Rules/Skills
+- **AND** 按 tasks 顺序完成路由、组件、样式、接口与质量门禁
+
 ### Requirement: 多 PRD 批处理与失败续跑
 
 系统 MUST 按文件名顺序处理多个 PRD，并在单 PRD 失败后继续后续 PRD。
@@ -35,6 +55,17 @@
 
 - **WHEN** 质量门禁通过且阻断风险关闭
 - **THEN** 系统输出上线就绪（非部署）结论
+
+### Requirement: UI 验收与问题回归
+
+系统 MUST 使用 Cursor IDE Browser 或 Playwright 打开实现页，与设计稿或 UI 分析清单比对，并按 P0/P1/P2 产出问题清单。
+
+#### Scenario: 产出并回归 UI 问题清单
+
+- **WHEN** 页面/UI 实现完成
+- **THEN** 系统执行 ui-verification
+- **AND** 产出 `docs/样式还原/<prd_slug>-UI问题清单.md`
+- **AND** 修复 P0 问题后再次使用 Browser 或 Playwright 验证
 
 ### Requirement: 执行可观测性
 

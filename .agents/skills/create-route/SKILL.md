@@ -10,8 +10,8 @@ description: 指导在前端项目中按团队规范创建和维护路由，包�
 在开始创建之前，请务必阅读以下关键规范：
 
 **必读规范**：
-- `.github/instructions/03-项目结构.instructions.md` - 目录结构要求（特别是 `index.module.scss`）
-- `.github/instructions/06-路由规范.instructions.md` - 路由配置约束
+- `.agents/rules/03-项目结构.instructions.md` - 目录结构要求（特别是 `index.module.scss`）
+- `.agents/rules/06-路由规范.instructions.md` - 路由配置约束
 
 **常见错误警告**：
 - 样式文件必须使用 `.module.scss` 后缀，禁止使用 `.scss`
@@ -137,7 +137,7 @@ src/routes/ai-editor/
           └─ index.module.scss
 ```
 
-**组件放置规则**（详见 `.github/instructions/04-组件规范.instructions.md`）：
+**组件放置规则**（详见 `.agents/rules/04-组件规范.instructions.md`）：
 - 页面级组件（仅当前页面使用）→ `src/routes/<route>/components/`
 - 通用组件（多处复用）→ `src/components/`
 
@@ -156,4 +156,4 @@ src/routes/ai-editor/
 - [ ] 路由在唯一入口文件注册
 - [ ] 组件放置位置正确（通用 vs 页面级）
 
-**样式还原检查**：涉及 UI 还原的样式开发，请参考 `.github/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<名称>-UI分析清单.md`。
+**样式还原检查**：涉及 UI 还原的样式开发，请参考 `.agents/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<名称>-UI分析清单.md`。

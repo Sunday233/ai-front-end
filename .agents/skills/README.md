@@ -15,8 +15,9 @@ description: 项目的本地技能索引，帮助代理在具体开发场景下�
 - `create-store`：使用 Pinia 创建与维护全局状态（配合 `07-状态管理` 使用）
 - `theme-variables`：正确使用 Antd 与自定义主题 CSS 变量（配合 `09-样式规范` 使用）
 - `create-proposal`：指导创建提案的要求，同时完成哪些工作
-- `design-analysis`：指导如何分析设计稿
-- `ui-verification`：指导如何进行 UI 验收
+- `design-analysis`：指导如何分析设计稿（支持 `docs/ui` 截图、`.pen`、Figma 链接、Stitch 链接）
+- `ui-verification`：指导如何进行 UI 验收（支持 Browser/Playwright 与设计稿侧 Pencil/Figma/Stitch MCP 比对）
+- `implement-from-prd-ui`：基于 `docs/prd/*.md` 自动串联设计源识别、UI 分析、OpenSpec 提案、实施与 UI 验收
 
 ## 第三方技能列表
 

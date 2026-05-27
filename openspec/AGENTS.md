@@ -10,7 +10,7 @@ Instructions for AI coding assistants using OpenSpec for spec-driven development
 - Scaffold: `proposal.md`, `tasks.md`, `design.md` (only if needed), and delta specs per affected capability
 - Write deltas: use `## ADDED|MODIFIED|REMOVED|RENAMED Requirements`; include at least one `#### Scenario:` per requirement
 - Validate: `openspec validate [change-id] --strict` and fix issues
-- Request approval: Do not start implementation until proposal is approved
+- PRD + UI 自动实现：validate 通过后默认进入实施；命中高风险操作时先人工确认
 
 ## Three-Stage Workflow
 
@@ -52,6 +52,16 @@ Skip proposal for:
 3. Draft spec deltas using `## ADDED|MODIFIED|REMOVED Requirements` with at least one `#### Scenario:` per requirement.
 4. Run `openspec validate <id> --strict` and resolve any issues before sharing the proposal.
 
+**PRD + UI 自动实现补充**
+
+当输入来自 `docs/prd/*.md` 且包含 UI/实现意图时：
+
+1. 先读取 `.agents/rules/12-自动化执行规范.instructions.md` 与 `.agents/skills/implement-from-prd-ui/SKILL.md`。
+2. 从 PRD 中识别 `docs/ui` 截图、`.pen`、Figma 链接或 Stitch 链接。
+3. 执行 `design-analysis` 产出 `docs/样式还原/<prd_slug>-UI分析清单.md`。
+4. 再创建 proposal、tasks、spec 增量；tasks 必须写明依据 UI 分析清单实现，并在实现后执行 `ui-verification`。
+5. `openspec validate <id> --strict` 通过后默认进入实施；命中高风险操作时先人工确认。
+
 ### Stage 2: Implementing Changes
 
 Track these steps as TODOs and complete them one by one.
@@ -63,6 +73,13 @@ Track these steps as TODOs and complete them one by one.
 5. **Confirm completion** - Ensure every item in `tasks.md` is finished before updating statuses
 6. **Update checklist** - After all work is done, set every task to `- [x]` so the list reflects reality
 7. **Approval gate** - 默认在 Proposal 校验通过后进入实施；命中高风险操作时必须人工确认
+
+**PRD + UI 实施补充**
+
+- 实施前读取 UI 分析清单。
+- 页面/组件/样式开发必须加载 `.agents/rules` 中的项目结构、组件、路由、样式、通用约束与测试规范。
+- 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`。
+- 实现完成后执行 `ui-verification`，用 Cursor IDE Browser 或 Playwright 打开实现页，与设计稿或 UI 分析清单比对，产出 P0/P1/P2 问题清单并回归。
 
 ### Stage 3: Archiving Changes
 
