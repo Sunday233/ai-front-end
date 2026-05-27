@@ -1,8 +1,8 @@
 ---
 title: 设计稿工具使用指南
 impact: HIGH
-impactDescription: 根据设计稿类型选择 Pencil MCP 或 Figma MCP 获取布局与节点信息
-tags: tools, design, pencil, figma
+impactDescription: 根据设计稿类型选择 Pencil MCP、Figma MCP 或 Stitch MCP 获取布局与节点信息
+tags: tools, design, pencil, figma, stitch
 ---
 
 # 设计稿工具使用指南
@@ -67,6 +67,33 @@ get_screenshot(fileKey, nodeId)
 get_design_context(fileKey, nodeId)
 ```
 
+### Stitch 链接
+
+**工具**：Stitch MCP
+
+**适用场景**：
+- 输入为 Stitch 设计链接、分享链接、节点链接或项目页链接
+- 需要从 Stitch 中读取页面/画板结构、节点层级、样式属性或导出截图
+- 后续要以 Stitch 设计稿作为 UI 验收基准
+
+**可用功能**：
+- 获取链接对应的页面、画板或节点信息
+- 获取设计稿截图或指定节点截图
+- 获取布局、文字、图片、层级、样式变量等结构化上下文
+- 识别多页面、多状态或多断点设计稿
+
+**使用步骤**：
+1. 解析 Stitch 链接中的项目、页面、画板或节点定位信息。
+2. 使用 Stitch MCP 获取入口页面/画板的结构化上下文。
+3. 使用 Stitch MCP 获取整体截图，并按需获取关键节点截图。
+4. 按「从上到下、从左到右、从外到里」记录布局、文字、图片和层级。
+5. 若 Stitch MCP 只能返回截图而无法返回节点结构，则按“截图模式”补充证据等级。
+
+**记录要求**：
+- 在分析清单中记录原始 Stitch 链接、页面/画板名称、节点 ID（如有）和截图导出范围。
+- 多状态设计稿必须分别记录状态名称与对应链接或节点 ID。
+- 对 Stitch MCP 返回的结构化属性按“精确”证据等级记录；对仅凭截图判断的字段标注“估算”或“待确认”。
+
 ### 普通截图（PNG/JPG/JPEG/WEBP）
 
 **工具**：图片查看工具（IDE 图片预览、浏览器预览或等效工具）
@@ -90,7 +117,7 @@ get_design_context(fileKey, nodeId)
 **按「从上到下、再从左到右」扫描**：
 - 先按 y 从大到小（或从 0 起向下）确定所有横向区域顺序
 - 再在同一行内按 x 从左到右读取
-- 使用 Pencil MCP 或 Figma MCP 时也按此顺序逐层获取布局与节点信息
+- 使用 Pencil MCP、Figma MCP 或 Stitch MCP 时也按此顺序逐层获取布局与节点信息
 
 详见 `analysis-order.md`。
 
@@ -114,7 +141,7 @@ get_design_context(fileKey, nodeId)
 ## 注意事项
 
 1. **多状态设计稿**：如有多个 frame（如「有数据 / 无数据」），分别获取每个状态的布局和节点信息
-2. **顶层 frame**：确认顶层 frame，确保获取的是正确的设计稿区域
+2. **顶层 frame/画板**：确认顶层 frame、画板或页面，确保获取的是正确的设计稿区域
 3. **节点 ID**：记录重要节点的 ID，便于后续获取详细信息
 4. **截图对比**：使用截图与实现页面对比时，确保截图区域与实现页面区域一致
 5. **截图模式禁忌**：仅凭视觉无法确认的字体家族、字重、精确间距等字段，必须标注“待确认”，不可猜测填充

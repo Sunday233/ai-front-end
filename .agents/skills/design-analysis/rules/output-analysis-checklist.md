@@ -13,9 +13,10 @@ tags: output, checklist, template, analysis
 # <名称> - UI 分析清单
 
 > **文档说明**：设计稿分析结果，供前端 UI 开发与验收参照。  
-> **设计稿路径/链接**：`docs/设计稿/<路径>/<文件名>.pen` 或 Figma 链接（如 https://www.figma.com/...）或 `docs/ui/*.png`  
+> **设计稿路径/链接**：`docs/设计稿/<路径>/<文件名>.pen`、Figma 链接（如 https://www.figma.com/...）、Stitch 链接或 `docs/ui/*.png`  
 > **输入模式**：结构化设计源 / 截图模式（仅截图时必须标注证据等级）  
 > **分析日期**：YYYY-MM-DD
+> **设计源定位**：页面/画板/Frame/节点 ID（如有）
 
 ## 输入资产清单（截图模式必填）
 
@@ -24,6 +25,16 @@ tags: output, checklist, template, analysis
 | docs/ui/xxx-default.png | default | 主体布局与默认样式 |
 | docs/ui/xxx-hover.png | hover | 悬浮态差异 |
 | docs/ui/xxx-active.png | active | 激活态差异 |
+
+## 结构化设计源信息（.pen / Figma / Stitch 必填）
+
+| 字段 | 内容 |
+|------|------|
+| 设计源类型 | Pencil / Figma / Stitch |
+| 原始路径或链接 |  |
+| 页面/画板/Frame |  |
+| 节点 ID |  |
+| 截图导出范围 | 整页 / 指定区域 / 指定节点 |
 
 ## 一、设计稿整体分析
 

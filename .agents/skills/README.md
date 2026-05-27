@@ -5,7 +5,7 @@ description: 项目的本地技能索引，帮助代理在具体开发场景下�
 
 # 项目技能索引
 
-项目在 `.github/skills` 下定义了一些与 RULE 配套的技能，用于承载**具体实践步骤与示例代码**，避免在 RULE 中塞入过多细节。
+项目在 `.agents/skills` 下定义了一些与 RULE 配套的技能，用于承载**具体实践步骤与示例代码**，避免在 RULE 中塞入过多细节。
 
 ## 自封装技能列表
 
@@ -17,7 +17,6 @@ description: 项目的本地技能索引，帮助代理在具体开发场景下�
 - `create-proposal`：指导创建提案的要求，同时完成哪些工作
 - `design-analysis`：指导如何分析设计稿
 - `ui-verification`：指导如何进行 UI 验收
-- `implement-from-prd-ui`：当需求命中“docs/prd + docs/ui + 实现意图”时，执行自动化实现全流程
 
 ## 第三方技能列表
 

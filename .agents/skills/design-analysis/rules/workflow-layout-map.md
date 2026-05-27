@@ -27,6 +27,11 @@ tags: workflow, layout-map, analysis, critical
   - 可用工具：`get_screenshot`、`get_design_context` 等
   - 获取对应 frame 或节点的截图、布局与节点信息
 
+- **Stitch 链接**：
+  - 使用 **Stitch MCP** 从链接中定位项目、页面、画板或节点
+  - 获取对应设计稿截图、结构化上下文、布局层级与样式信息
+  - 记录原始链接、页面/画板名称、节点 ID（如有）和截图导出范围
+
 - **普通截图（png/jpg/jpeg/webp）**：
   - 使用图片查看工具读取截图像素尺寸与可见元素
   - 按截图文件名区分页面与状态（default / hover / active / disabled）
@@ -39,7 +44,7 @@ tags: workflow, layout-map, analysis, critical
 **按「从上到下、再从左到右」扫描**：
 - 先按 y 从大到小（或从 0 起向下）确定所有横向区域顺序
 - 再在同一行内按 x 从左到右读取
-- 使用 Pencil MCP 或 Figma MCP 时也按此顺序逐层获取布局与节点信息
+- 使用 Pencil MCP、Figma MCP 或 Stitch MCP 时也按此顺序逐层获取布局与节点信息
 
 详见 `analysis-order.md`。
 
@@ -58,6 +63,7 @@ tags: workflow, layout-map, analysis, critical
 | **层级（每区）** | 从外到里的嵌套（谁包谁）、父子/兄弟、先后与叠放顺序；**不可丢层或顺序颠倒** |
 | 截图来源（截图模式） | 本区域来自哪张截图（含状态） |
 | 证据等级（截图模式） | 精确 / 估算 / 待确认，禁止伪精确 |
+| 设计源定位（结构化设计源） | `.pen` 节点、Figma node id 或 Stitch 页面/画板/节点 ID |
 
 **注意**：文字、图片、布局、层级是四类重中之重，详见 `analysis-priorities.md`。
 

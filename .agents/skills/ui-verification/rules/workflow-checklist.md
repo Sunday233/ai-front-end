@@ -9,7 +9,7 @@ tags: workflow, checklist, verification
 
 ### 验收前
 - [ ] 目标页面 URL 已确认（如 `http://localhost:5222/<route>`）
-- [ ] 设计稿（.pen 或图）可打开，可截图或取元素
+- [ ] 设计稿（.pen、Figma 链接、Stitch 链接或图）可打开，可截图或取元素
 - [ ] 已有对应「UI 分析清单」更佳（作为按顺序比对的检查项列表）
 
 ### 验收中（必须落地）
