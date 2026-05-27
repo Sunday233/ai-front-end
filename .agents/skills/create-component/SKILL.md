@@ -13,13 +13,13 @@ description: 指导在前端项目中按团队规范创建和拆分 Vue 3 组件
 - 为某个页面新增**页面级组件**
 - 拆分过大的页面/组件文件
 
-请使用本技能，并同时遵守 `.github/instructions/03-项目结构.instructions.md` 与 `.github/instructions/04-组件规范.instructions.md`。
+请使用本技能，并同时遵守 `.agents/rules/03-项目结构.instructions.md` 与 `.agents/rules/04-组件规范.instructions.md`。
 
 ---
 
 ## 组件放在哪里？
 
-详见 `.github/instructions/04-组件规范.instructions.md` 中的"组件放置决策树"。
+详见 `.agents/rules/04-组件规范.instructions.md` 中的"组件放置决策树"。
 
 - **通用组件**（跨页面复用）：`src/components/<component-name>/`
 - **页面级组件**（只在单页使用）：`src/routes/<route>/components/`
@@ -112,7 +112,7 @@ export {default as ShentuButton} from './shentu-button/index.vue';
   - 自定义变量：`var(--shentu-card-bg)`、`var(--shentu-border-radius)` 等
 - 禁止在组件样式中直接硬编码主色，如 `#1677ff`。
 
-**样式还原检查**：涉及 UI 还原的组件样式开发，请参考 `.github/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<名称>-UI分析清单.md`。
+**样式还原检查**：涉及 UI 还原的组件样式开发，请参考 `.agents/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<名称>-UI分析清单.md`。
 
 ---
 

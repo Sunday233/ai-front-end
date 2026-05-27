@@ -61,6 +61,10 @@
 
 ## CHAPTER-04 UI 配对映射（docs/ui）
 
+### primary_design_source
+
+1. docs-ui
+
 ### required_ui_assets
 
 1. object-type-create-step1.png
@@ -71,11 +75,32 @@
 2. object-type-create-step3.png
 3. object-type-create-step4.png
 
+### design_pen_files
+
+1. （无）
+
+### figma_links
+
+1. （无）
+
+### stitch_links
+
+1. （无）
+
+### ui_analysis_output
+
+1. docs/样式还原/object-type-create-UI分析清单.md
+
+### ui_verification_output
+
+1. docs/样式还原/object-type-create-UI问题清单.md
+
 ### mapping_rule
 
-1. UI 文件存储 docs/ui/
-2. 文件名前缀必须一致
-3. Agent 自动匹配 prd_slug
+1. `primary_design_source=docs-ui`，优先读取 `required_ui_assets` 与 `optional_ui_assets`。
+2. UI 文件存储 `docs/ui/`。
+3. 文件名前缀必须与 `prd_slug` / `ui_prefix` 一致。
+4. Agent 自动匹配 `prd_slug`，执行 `design-analysis` 产出 UI 分析清单。
 
 ## CHAPTER-05 状态定义
 
@@ -114,7 +139,9 @@
 
 ### ui_acceptance
 
-1. 页面符合 UI default 状态
+1. 页面符合 `docs/样式还原/object-type-create-UI分析清单.md`。
+2. 实现完成后执行 `ui-verification`，产出 `docs/样式还原/object-type-create-UI问题清单.md`。
+3. P0（布局、层级、文字、图片）问题必须修复并再次用 Browser 或 Playwright 验证。
 
 ### quality_gates
 
@@ -142,3 +169,5 @@
 2. OpenSpec proposal
 3. OpenSpec tasks
 4. OpenSpec spec
+5. UI 分析清单
+6. UI 问题清单

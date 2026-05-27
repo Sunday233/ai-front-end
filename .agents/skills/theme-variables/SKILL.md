@@ -12,7 +12,7 @@ description: 指导在前端项目中正确使用 Ant Design Vue 与自定义主
 - 为组件/页面编写新的样式
 - 修改已有样式以适配暗色/浅色主题
 
-请使用本技能，并同时遵守 `.github/instructions/04-组件规范.instructions.md` 与 `.github/instructions/09-样式规范.instructions.md`。
+请使用本技能，并同时遵守 `.agents/rules/04-组件规范.instructions.md` 与 `.agents/rules/09-样式规范.instructions.md`。
 
 ---
 
@@ -79,4 +79,3 @@ border-color: var(--ant-color-border);
 - [ ] 所有颜色是否都来自 `var(--xxx)` 变量？
 - [ ] 是否优先使用 Ant Design Vue 的主题变量，其次再用自定义变量？
 - [ ] 是否避免在组件/页面样式中写死颜色值？
-

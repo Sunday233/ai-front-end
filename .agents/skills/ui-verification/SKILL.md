@@ -32,7 +32,7 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 - **有设计稿可对照**：`.pen`（Pencil 设计稿）、Figma 链接或 Stitch 链接可访问
 - **有分析清单（推荐）**：`docs/样式还原/<名称>-UI分析清单.md` 可作为比对时的检查项
 
-若尚未有分析清单但已有设计稿，可先使用 `.github/skills/design-analysis/SKILL.md` 产出分析清单。
+若尚未有分析清单但已有设计稿，可先使用 `.agents/skills/design-analysis/SKILL.md` 产出分析清单。
 
 ---
 
@@ -45,10 +45,10 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 
 ## 工作流程（5步）
 
-1. **使用浏览器工具查看实际页面**：在 Cursor 中优先使用 `@Browser`，获取实际页面可比对信息。详见 `rules/tools-browser-navigation.md` 和 `rules/tools-design-guidelines.md`
-2. **实际页面与设计稿比对**：截图比对或元素级比对，按 P0/P1/P2 维度逐项比对。详见 `rules/comparison-*.md`
+1. **使用浏览器工具查看实际页面**：在 Cursor IDE 中优先使用 Browser，获取实际页面截图/快照；Browser 不可用时使用 Playwright MCP。详见 `rules/tools-browser-navigation.md` 和 `rules/tools-design-guidelines.md`
+2. **实际页面与设计稿/分析清单比对**：截图比对或元素级比对，按 P0/P1/P2 维度逐项比对；设计稿不可直接访问时，必须以 UI 分析清单为基准并记录风险。详见 `rules/comparison-*.md`
 3. **产出 UI 问题清单**：将差异点记录到问题清单。详见 `rules/workflow-problem-list.md`
-4. **修复与再验证**：先修 P0，再 P1，再 P2；修复后必须再次使用 Browser 工具验证。详见 `rules/tools-browser-navigation.md`
+4. **修复与再验证**：先修 P0，再 P1，再 P2；修复后必须再次使用 Browser 或 Playwright 验证。详见 `rules/tools-browser-navigation.md`
 5. **反思分析不足（可选）**：将「哪些问题是因为分析没做到位」总结下来，反哺 design-analysis。详见 `rules/workflow-reflection.md`
 
 ---
@@ -98,6 +98,6 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 
 ## 相关规范
 
-- `.github/skills/design-analysis/SKILL.md` - 设计稿分析（产出分析清单）
-- `.github/skills/create-proposal/SKILL.md` - 创建提案（可引用本技能做实现后验收）
-- `.github/instructions/09-样式规范.instructions.md` - 设计稿颜色提取
+- `.agents/skills/design-analysis/SKILL.md` - 设计稿分析（产出分析清单）
+- `.agents/skills/create-proposal/SKILL.md` - 创建提案（可引用本技能做实现后验收）
+- `.agents/rules/09-样式规范.instructions.md` - 设计稿颜色提取

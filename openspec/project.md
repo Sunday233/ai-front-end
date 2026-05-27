@@ -45,5 +45,7 @@
 | 新增全局状态 | `.agents/skills/create-store/SKILL.md` |
 | 编写样式/主题适配 | `.agents/skills/theme-variables/SKILL.md` |
 | PRD + UI 自动实现 | `.agents/skills/implement-from-prd-ui/SKILL.md` |
+| 设计稿分析与 UI 分析清单 | `.agents/skills/design-analysis/SKILL.md` |
+| UI 还原验收与问题清单 | `.agents/skills/ui-verification/SKILL.md` |
 
 技能索引文件：`.agents/skills/README.md`

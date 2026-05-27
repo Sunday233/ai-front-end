@@ -12,7 +12,7 @@ description: 指导在前端项目中按团队规范使用 Pinia 创建和维护
 - 为业务模块新增全局状态（如主题、用户信息、AI 编辑器状态）
 - 重构原有的状态管理逻辑到统一的 `src/stores` 目录
 
-请使用本技能，并同时遵守 `.github/instructions/03-项目结构.instructions.md`（目录结构约束）与 `.github/instructions/07-状态管理.instructions.md`。
+请使用本技能，并同时遵守 `.agents/rules/03-项目结构.instructions.md`（目录结构约束）与 `.agents/rules/07-状态管理.instructions.md`。
 
 ---
 
@@ -113,4 +113,3 @@ const {toggleTheme} = themeStore;
 - [ ] 是否使用 `useXxxStore` 作为导出的 hook 名称？
 - [ ] 是否根据需要选择了是否使用持久化插件？
 - [ ] 是否避免在 store 中写与 UI 绑定的逻辑？
-
