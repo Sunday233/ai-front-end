@@ -1,13 +1,13 @@
 ---
 name: ui-verification
-description: 通用 UI 验收技能。验收必须以「实际页面效果 vs 设计稿」为准，必须使用浏览器工具 (Browser) 查看目标页面，通过页面截图与设计稿截图比对、或页面元素与 .pen 设计稿元素比对等落地方式完成验收，并产出问题清单与反思。
+description: 通用 UI 验收技能。验收必须以「实际页面效果 vs 设计稿」为准，必须使用浏览器工具 (Browser) 查看目标页面，通过页面截图与设计稿截图比对、或页面元素与结构化设计稿元素比对等落地方式完成验收，并产出问题清单与反思。
 ---
 
 # UI 验收
 
 ## 核心原则
 
-**最终验收标准**：以**实际运行页面的效果**与 **UI 稿（.pen 或 Figma）** 进行比对得出结论，而不是仅凭代码或分析清单推断。
+**最终验收标准**：以**实际运行页面的效果**与 **UI 稿（.pen、Figma 或 Stitch）** 进行比对得出结论，而不是仅凭代码或分析清单推断。
 
 **工具选择**：优先使用 Cursor 的 Browser（`@Browser`），仅当不在 Cursor 或 Browser 不可用时使用 Playwright MCP。详见 `rules/tools-browser-navigation.md`。
 
@@ -29,7 +29,7 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 ## 前置条件
 
 - **有可访问的实现页面**：本地或目标环境已启动；在 Cursor 中优先用 `@Browser` 打开目标 URL
-- **有设计稿可对照**：`.pen`（Pencil 设计稿）或 Figma 链接可访问
+- **有设计稿可对照**：`.pen`（Pencil 设计稿）、Figma 链接或 Stitch 链接可访问
 - **有分析清单（推荐）**：`docs/样式还原/<名称>-UI分析清单.md` 可作为比对时的检查项
 
 若尚未有分析清单但已有设计稿，可先使用 `.github/skills/design-analysis/SKILL.md` 产出分析清单。
@@ -79,7 +79,7 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 
 ### 工具使用指南
 - `rules/tools-browser-navigation.md` - 浏览器工具打开页面
-- `rules/tools-design-guidelines.md` - 设计稿工具使用（Pencil/Figma）
+- `rules/tools-design-guidelines.md` - 设计稿工具使用（Pencil/Figma/Stitch）
 
 ### 工作流程模板
 - `rules/workflow-problem-list.md` - UI 问题清单文档结构

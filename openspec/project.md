@@ -11,11 +11,11 @@
 
 ## 技能与规范
 
-本项目定义了两层指导体系，统一存放在 `.github/` 目录下。
+本项目定义了两层指导体系，统一存放在 `.agents/` 目录下。
 
-### `.github/instructions/` - 开发规范
+### `.agents/rules/` - 开发规范
 
-规范文件包含项目开发的核心规则，按 `applyTo` 自动生效；当任务复杂时可主动读取对应文件强化上下文：
+规范文件包含项目开发的核心规则，不会自动加载。当需要确认规范时，主动读取对应文件：
 
 | 文件 | 何时读取 |
 | --- | --- |
@@ -32,18 +32,18 @@
 | `11-测试规范.instructions.md` | 确认测试要求时 |
 | `12-自动化执行规范.instructions.md` | 命中 PRD + UI 自动实现语义时 |
 
-### `.github/skills/` - 实践技能
+### `.agents/skills/` - 实践技能
 
 技能文件包含具体落地步骤与示例代码，按需读取：
 
 | 场景 | 技能文件 |
 | --- | --- |
-| 创建提案时 | `.github/skills/create-proposal/SKILL.md` |
-| 新增接口 | `.github/skills/create-api/SKILL.md` |
-| 创建/拆分组件 | `.github/skills/create-component/SKILL.md` |
-| 新增页面路由 | `.github/skills/create-route/SKILL.md` |
-| 新增全局状态 | `.github/skills/create-store/SKILL.md` |
-| 编写样式/主题适配 | `.github/skills/theme-variables/SKILL.md` |
-| PRD + UI 自动实现 | `.github/skills/implement-from-prd-ui/SKILL.md` |
+| 创建提案时 | `.agents/skills/create-proposal/SKILL.md` |
+| 新增接口 | `.agents/skills/create-api/SKILL.md` |
+| 创建/拆分组件 | `.agents/skills/create-component/SKILL.md` |
+| 新增页面路由 | `.agents/skills/create-route/SKILL.md` |
+| 新增全局状态 | `.agents/skills/create-store/SKILL.md` |
+| 编写样式/主题适配 | `.agents/skills/theme-variables/SKILL.md` |
+| PRD + UI 自动实现 | `.agents/skills/implement-from-prd-ui/SKILL.md` |
 
-技能索引文件：`.github/skills/README.md`
+技能索引文件：`.agents/skills/README.md`

@@ -10,24 +10,7 @@ Instructions for AI coding assistants using OpenSpec for spec-driven development
 - Scaffold: `proposal.md`, `tasks.md`, `design.md` (only if needed), and delta specs per affected capability
 - Write deltas: use `## ADDED|MODIFIED|REMOVED|RENAMED Requirements`; include at least one `#### Scenario:` per requirement
 - Validate: `openspec validate [change-id] --strict` and fix issues
-- Apply gate: Proposal 校验通过后默认进入实施，命中高风险操作时再人工确认
-
-## PRD + UI 自动实现快速路径
-
-当需求语义命中“基于 `docs/prd` 与 `docs/ui` 自动实现前端”时，按以下顺序执行：
-
-1. 先读取：`.github/instructions/12-自动化执行规范.instructions.md`
-2. 再读取：`.github/skills/implement-from-prd-ui/SKILL.md`
-3. 先做需求/变更收敛：创建 OpenSpec 变更（`proposal.md`、`tasks.md`、`spec delta`）
-4. 执行 `openspec validate <change-id> --strict`，通过后默认确认进入 Apply（命中高风险除外）
-5. 开发执行对齐：读取 proposal/tasks/spec 增量，结合 instructions、Skills、MCP 按 tasks 逐项实施
-6. 验收与归档：UI 验收同时核对 design-analysis 清单与 spec 增量，通过后执行 `openspec archive <change-id> --yes`
-7. 归档后将 spec 增量合并到 `openspec/specs`，并执行 `openspec validate --strict`
-
-命令映射说明：
-
-- 逻辑命令 `openspec proposal`：若 CLI 无该命令，等价执行 `openspec new change <change-id>` + 生成变更资产
-- 逻辑命令 `openspec apply`：若 CLI 无该命令，等价执行按 `tasks.md` 逐项实施
+- Request approval: Do not start implementation until proposal is approved
 
 ## Three-Stage Workflow
 

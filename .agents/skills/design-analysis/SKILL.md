@@ -9,7 +9,7 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 当满足以下任一情况时使用本技能：
 
-- 需要**分析设计稿**（`.pen`、Figma 链接、其它设计图或标注等），把界面结构、样式、元素梳理成可执行的前端任务
+- 需要**分析设计稿**（`.pen`、Figma 链接、Stitch 链接、其它设计图或标注等），把界面结构、样式、元素梳理成可执行的前端任务
 - 需要**分析普通 UI 截图**（`png/jpg/jpeg/webp` 等），在缺少可计算节点数据时产出可执行的还原清单
 - 需要产出一份**UI 分析清单**文档，供后续开发按清单实现、或供验收时对照
 
@@ -23,7 +23,7 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 ## 截图模式（PNG/JPG）补充约束
 
-当输入仅为普通截图（无 `.pen` 结构、无 Figma 可读节点）时，必须启用“截图模式”：
+当输入仅为普通截图（无 `.pen` 结构、无 Figma/Stitch 可读节点）时，必须启用“截图模式”：
 
 1. **来源收敛**：优先使用 `docs/ui/` 下截图，并记录文件名与状态（default / hover / active / disabled）。
 2. **禁止伪精确**：无法从截图可靠读取的字段不得硬填精确值。
@@ -80,7 +80,7 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 - `rules/checklist-common-misses.md` - 常见遗漏检查点
 
 ### Tools Rules（工具使用指南）
-- `rules/tools-design-guidelines.md` - 设计稿工具使用（Pencil MCP / Figma MCP / 普通截图）
+- `rules/tools-design-guidelines.md` - 设计稿工具使用（Pencil MCP / Figma MCP / Stitch MCP / 普通截图）
 
 ---
 

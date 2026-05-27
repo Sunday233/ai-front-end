@@ -47,7 +47,7 @@ tags: analysis, order, workflow, critical
 **设计稿扫描**：
 1. 先按 y 坐标从 0 起向下（或从大到小）确定所有横向区域顺序
 2. 再在同一行内按 x 坐标从左到右读取
-3. 使用 Pencil MCP 或 Figma MCP 时也按此顺序逐层获取布局与节点信息
+3. 使用 Pencil MCP、Figma MCP 或 Stitch MCP 时也按此顺序逐层获取布局与节点信息
 
 **记录顺序**：
 - 区域列表：按从上到下（y）排序
