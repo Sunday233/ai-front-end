@@ -1,0 +1,12 @@
+@use "./variables.scss";
+@use "./reset.scss";
+
+.text-link {
+  color: var(--matrix-primary);
+  cursor: pointer;
+}
+
+.highlight {
+  color: var(--matrix-primary);
+  font-weight: 600;
+}
