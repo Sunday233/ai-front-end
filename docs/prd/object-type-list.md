@@ -111,7 +111,7 @@
 
 ### figma_links
 
-1. 对象类型列表主页：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=28-1261&t=Ldxo9JC2ARz60n9V-1
+<!-- 1. 对象类型列表主页：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=28-1261&t=Ldxo9JC2ARz60n9V-1 -->
 
 ### stitch_links
 
