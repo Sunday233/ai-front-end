@@ -143,10 +143,10 @@
 
 ### figma_links
 
-1. 步骤1-选择数据源：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=33-2990&t=Ldxo9JC2ARz60n9V-1
+<!-- 1. 步骤1-选择数据源：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=33-2990&t=Ldxo9JC2ARz60n9V-1
 2. 步骤2-元数据配置：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=33-2991&t=Ldxo9JC2ARz60n9V-1
 3. 步骤3-属性配置：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=33-2992&t=Ldxo9JC2ARz60n9V-1
-4. 步骤4-动作配置：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=33-2875&t=Ldxo9JC2ARz60n9V-1
+4. 步骤4-动作配置：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=33-2875&t=Ldxo9JC2ARz60n9V-1 -->
 
 ### stitch_links
 

@@ -110,7 +110,7 @@
 
 ### figma_links
 
-1. 工作台整体首页：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=0-1&t=Ldxo9JC2ARz60n9V-1
+<!-- 1. 工作台整体首页：https://www.figma.com/design/81p03H82GOKQXEvBCUh4Ea/testDemo?node-id=0-1&t=Ldxo9JC2ARz60n9V-1 -->
 
 ### stitch_links
 
