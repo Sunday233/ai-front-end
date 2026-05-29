@@ -4,4 +4,5 @@ dist/
 .idea/
 .vscode/
 mcp.json
+.codex/config.toml
 
