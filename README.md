@@ -8,8 +8,8 @@
 
 | 模块 | 作用 | 代表目录 |
 | --- | --- | --- |
-| Rules | 约束做什么、不能做什么（目录、命名、样式、测试、流程门禁） | `.github/instructions/` |
-| Skills | 指导怎么做（API、组件、路由、UI 分析、验收） | `.github/skills/` |
+| Rules | 约束做什么、不能做什么（目录、命名、样式、测试、流程门禁） | `.agents/rules/` |
+| Skills | 指导怎么做（API、组件、路由、UI 分析、验收） | `.agents/skills/` |
 | OpenSpec | 变更提案、任务执行、归档追踪的治理主线 | `openspec/` |
 | 输入资产 | PRD 与 UI 截图驱动自动实现 | `docs/prd/`、`docs/ui/` |
 
@@ -17,13 +17,11 @@
 
 ```text
 .
-├── .github/
-│   ├── copilot-instructions.md        # Copilot 工作区总入口
-│   ├── instructions/                  # 规则（.instructions.md）
+├── .agents/
+│   ├── rules/                         # 规则（.instructions.md）
 │   ├── prompts/                       # OpenSpec 提示词
 │   └── skills/                        # 技能（每个目录一个 SKILL.md）
 ├── docs/
-│   ├── README.md                      # docs 总索引
 │   ├── architecture/                  # 架构与流程说明
 │   ├── prd/                           # PRD 输入
 │   ├── ui/                            # 设计稿截图输入

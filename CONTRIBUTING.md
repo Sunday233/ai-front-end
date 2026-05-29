@@ -8,8 +8,8 @@
 
 欢迎以下类型贡献：
 
-1. 新增/优化 Rules（`.github/instructions/`）
-2. 新增/优化 Skills（`.github/skills/`）
+1. 新增/优化 Rules（`.agents/rules/`）
+2. 新增/优化 Skills（`.agents/skills/`）
 3. 补充 PRD、UI、架构文档（`docs/`）
 4. 优化 OpenSpec 模板与流程文档（`openspec/`）
 
@@ -53,8 +53,8 @@ PR 描述建议包含：
 
 规则冲突时，按以下顺序处理：
 
-1. `.github/instructions/*.instructions.md`
-2. `.github/skills/*/SKILL.md`
+1. `.agents/rules/*.instructions.md`
+2. `.agents/skills/*/SKILL.md`
 3. 其他说明文档
 
 ## 沟通建议
