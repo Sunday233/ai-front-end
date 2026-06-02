@@ -44,9 +44,8 @@
 ├── .agents/
 │   ├── rules/                         # 规则文件，按场景读取
 │   └── skills/                        # 技能文件，每个技能目录包含 SKILL.md
-├── .codex/                            # Codex 内部 rules、skills 软链到 .agents
-│   ├── AGENTS.md                      # Codex 本地说明
-│   └── prompts/                       # OpenSpec 相关提示词
+├── .claude/                           # claude 内部 rules、skills 软链到 .agents
+├── .trae/                             # Trae：同上
 ├── docs/
 │   ├── architecture/                  # 架构与流程文档
 │   ├── prd/                           # PRD 输入
