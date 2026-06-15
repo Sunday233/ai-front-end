@@ -9,7 +9,7 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 
 **最终验收标准**：以**实际运行页面的效果**与 **UI 稿（.pen、Figma 或 Stitch）** 进行比对得出结论，而不是仅凭代码或分析清单推断。
 
-**工具选择**：优先使用 Codex 的 Browser（`@Browser`），仅当不在 Codex 或 Browser 不可用时使用 Playwright MCP。详见 `rules/tools-browser-navigation.md`。
+**工具选择**：当运行环境是 Codex 或 Cursor 时，必须优先使用 `@Browser` 打开目标页面，并用 `@Browser` 获取页面截图/快照完成验收比对；仅当不在 Codex/Cursor，或 `@Browser` 不可用时，才使用 Playwright MCP。详见 `rules/tools-browser-navigation.md`。
 
 **比对方式**：必须进行可落地的比对之一或组合：页面截图 vs 设计稿截图，或页面元素 vs 设计稿元素。详见 `rules/tools-design-guidelines.md`。
 
@@ -28,7 +28,7 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 
 ## 前置条件
 
-- **有可访问的实现页面**：本地或目标环境已启动；在 Cursor 中优先用 `@Browser` 打开目标 URL
+- **有可访问的实现页面**：本地或目标环境已启动；在 Codex 或 Cursor 中优先用 `@Browser` 打开目标 URL、截图并验收比对
 - **有设计稿可对照**：`.pen`（Pencil 设计稿）、Figma 链接或 Stitch 链接可访问
 - **有分析清单（推荐）**：`docs/样式还原/<名称>-UI分析清单.md` 可作为比对时的检查项
 
@@ -45,7 +45,7 @@ description: 通用 UI 验收技能。验收必须以「实际页面效果 vs �
 
 ## 工作流程（5步）
 
-1. **使用浏览器工具查看实际页面**：在 Codex IDE 中优先使用 Browser，获取实际页面截图/快照；Browser 不可用时使用 Playwright MCP。详见 `rules/tools-browser-navigation.md` 和 `rules/tools-design-guidelines.md`
+1. **使用浏览器工具查看实际页面**：在 Codex 或 Cursor 中优先使用 `@Browser` 打开目标页面，获取实际页面截图/快照，并用于后续验收比对；`@Browser` 不可用时使用 Playwright MCP。详见 `rules/tools-browser-navigation.md` 和 `rules/tools-design-guidelines.md`
 2. **实际页面与设计稿/分析清单比对**：截图比对或元素级比对，按 P0/P1/P2 维度逐项比对；设计稿不可直接访问时，必须以 UI 分析清单为基准并记录风险。详见 `rules/comparison-*.md`
 3. **产出 UI 问题清单**：将差异点记录到问题清单。详见 `rules/workflow-problem-list.md`
 4. **修复与再验证**：先修 P0，再 P1，再 P2；修复后必须再次使用 Browser 或 Playwright 验证。详见 `rules/tools-browser-navigation.md`
