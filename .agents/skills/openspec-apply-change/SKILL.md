@@ -56,7 +56,23 @@ Implement tasks from an OpenSpec change.
    - **spec-driven**: proposal, specs, design, tasks
    - Other schemas: follow the contextFiles from CLI output
 
-5. **Show current progress**
+5. **UI component plan gate**
+
+   Before implementing any UI class change, check whether this change is UI related. Treat it as UI related if proposal, design, tasks, specs, or context files mention any of:
+   - `docs/样式还原`
+   - UI analysis checklist
+   - page, component, design, UI restoration
+   - Figma, Stitch, Pencil, `docs/ui`
+   - `src/views`, `src/components`, `src/layout`
+
+   If UI related, verify all of the following before implementation:
+   - `docs/组件拆分/<prd_slug>-组件拆分清单.md` exists.
+   - `openspec/changes/<name>/design.md` references that component plan path.
+   - `openspec/changes/<name>/tasks.md` says to implement according to the component plan.
+
+   If any item is missing, pause immediately and report what must be added. Do not implement tasks until the component plan gate passes.
+
+6. **Show current progress**
 
    Display:
    - Schema being used
@@ -64,7 +80,7 @@ Implement tasks from an OpenSpec change.
    - Remaining tasks overview
    - Dynamic instruction from CLI
 
-6. **Implement tasks (loop until done or blocked)**
+7. **Implement tasks (loop until done or blocked)**
 
    For each pending task:
    - Show which task is being worked on
@@ -79,7 +95,7 @@ Implement tasks from an OpenSpec change.
    - Error or blocker encountered → report and wait for guidance
    - User interrupts
 
-7. **On completion or pause, show status**
+8. **On completion or pause, show status**
 
    Display:
    - Tasks completed this session
@@ -141,6 +157,7 @@ What would you like to do?
 **Guardrails**
 - Keep going through tasks until done or blocked
 - Always read context files before starting (from the apply instructions output)
+- For UI class changes, always pass the component plan gate before implementation
 - If task is ambiguous, pause and ask before implementing
 - If implementation reveals issues, pause and suggest artifact updates
 - Keep code changes minimal and scoped to each task

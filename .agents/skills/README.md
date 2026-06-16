@@ -11,13 +11,14 @@ description: 项目的本地技能索引，帮助代理在具体开发场景下�
 
 - `create-api`：创建与维护 HTTP 接口（配合 `05-API规范` 使用）
 - `create-component`：创建与拆分通用组件/页面级组件（配合 `03/04` 使用）
-- `create-route`：创建与维护路由目录与 Loader/Page（配合 `06-路由规范` 使用）
+- `create-route`：创建与维护 `src/views` 页面目录与 `src/router` 路由配置（配合 `06-路由规范` 使用）
+- `component-planning`：UI 类 OpenSpec apply 前生成和检查组件拆分清单（配合 `03/04/12` 使用）
 - `create-store`：使用 Pinia 创建与维护全局状态（配合 `07-状态管理` 使用）
 - `theme-variables`：正确使用 Antd 与自定义主题 CSS 变量（配合 `09-样式规范` 使用）
 - `create-proposal`：指导创建提案的要求，同时完成哪些工作
 - `design-analysis`：指导如何分析设计稿（支持 `docs/ui` 截图、`.pen`、Figma 链接、Stitch 链接）
 - `ui-verification`：指导如何进行 UI 验收（支持 Browser/Playwright 与设计稿侧 Pencil/Figma/Stitch MCP 比对）
-- `implement-from-prd-ui`：基于 `docs/prd/*.md` 自动串联设计源识别、UI 分析、OpenSpec 提案、实施与 UI 验收
+- `implement-from-prd-ui`：基于 `docs/prd/*.md` 自动串联设计源识别、UI 分析、组件拆分、OpenSpec 提案、实施与 UI 验收
 
 ## 第三方技能列表
 

@@ -22,7 +22,8 @@ description: 指导在前端项目中按团队规范创建和拆分 Vue 3 组件
 详见 `.agents/rules/04-组件规范.instructions.md` 中的"组件放置决策树"。
 
 - **通用组件**（跨页面复用）：`src/components/<component-name>/`
-- **页面级组件**（只在单页使用）：`src/routes/<route>/components/`
+- **页面级组件**（只在单页使用）：`src/views/<view>/components/`
+- 公共组件只有第二处真实使用后才抽到 `src/components/`
 
 命名约定：
 
@@ -44,9 +45,9 @@ src/components/shentu-button/
 页面级组件示例：
 
 ```text
-src/routes/home/components/header/
+src/views/home/components/header/
   ├─ index.vue
-  └─ index.module.scss
+  └─ index.vue 内 scoped style，或按需使用 index.module.scss
 ```
 
 ---
@@ -106,7 +107,7 @@ export {default as ShentuButton} from './shentu-button/index.vue';
 
 **原则：**
 
-- 必须使用 SCSS Modules：`index.module.scss`
+- 默认使用 `<style scoped lang="scss">`；仅在样式需要跨组件复用时使用 `index.module.scss`
 - 自定义颜色必须使用主题 CSS 变量：
   - Ant Design 变量：`var(--ant-color-primary)`、`var(--ant-color-text)` 等
   - 自定义变量：`var(--shentu-card-bg)`、`var(--shentu-border-radius)` 等
@@ -121,7 +122,7 @@ export {default as ShentuButton} from './shentu-button/index.vue';
 - 单个 `.vue` 文件建议不超过 **400 行**，超过时优先考虑拆分为子组件。
 - 拆分时遵循：
   - **页面级组件**：只在一个路由使用 → 放在该路由的 `components/` 下。
-  - **通用组件**：在多个路由使用 → 提取到 `src/components`。
+  - **通用组件**：第二处真实使用后 → 提取到 `src/components`。
 - 一个组件应聚焦单一职责（一个明确的 UI 区块或交互单元）。
 
 ---

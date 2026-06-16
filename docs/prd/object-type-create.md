@@ -156,6 +156,10 @@
 
 1. docs/样式还原/object-type-create-UI分析清单.md
 
+### component_plan_output
+
+1. docs/组件拆分/object-type-create-组件拆分清单.md
+
 ### ui_verification_output
 
 1. docs/样式还原/object-type-create-UI问题清单.md
@@ -289,4 +293,5 @@
 3. OpenSpec tasks。
 4. OpenSpec spec。
 5. UI 分析清单。
-6. UI 问题清单。
+6. 组件拆分清单。
+7. UI 问题清单。

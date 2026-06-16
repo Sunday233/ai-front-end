@@ -11,7 +11,7 @@ tags: tools, design, pencil, figma, stitch, mcp
 
 ### 设计稿类型与工具选择
 
-验收时：用 **Cursor Browser**（优先）或 **Playwright MCP**（无 Browser 时）获取实际页面截图/快照，再根据设计稿来源选择：
+验收时：在 Codex 或 Cursor 中优先用 **`@Browser`** 获取实际页面截图/快照；不可用时使用 **Playwright MCP**，再根据设计稿来源选择：
 
 - 设计稿为 `.pen` 时，用 **Pencil MCP** 获取设计稿截图或节点信息
 - 设计稿为 Figma 链接时，用 **Figma MCP** 获取对应截图或节点信息

@@ -18,6 +18,18 @@
 - **WHEN** proposal/tasks/spec delta 均已生成并通过 strict 校验
 - **THEN** 系统才可进入代码实现阶段
 
+### Requirement: UI 类 Change 组件拆分门禁
+
+系统 MUST 在 UI 类 OpenSpec validate 与 apply 前完成组件拆分前置检查。
+
+#### Scenario: 组件拆分清单齐备后进入实施
+
+- **WHEN** change 涉及页面、组件、设计稿、UI 还原、`docs/ui`、Figma、Stitch、Pencil 或 `docs/样式还原`
+- **THEN** 系统确认 `docs/组件拆分/<prd_slug>-组件拆分清单.md` 已存在
+- **AND** `design.md` 已引用该组件拆分清单
+- **AND** `tasks.md` 已写明按组件拆分清单实施
+- **AND** 缺任一项时暂停，不进入 validate 或 apply
+
 ### Requirement: PRD 设计源识别与 UI 分析
 
 系统 MUST 从 `docs/prd/*.md` 中识别 `docs/ui` 截图、`.pen`、Figma 链接或 Stitch 链接，并在实现前产出 UI 分析清单。
@@ -35,7 +47,7 @@
 #### Scenario: 按分析清单实现 UI
 
 - **WHEN** tasks 进入页面/UI 开发阶段
-- **THEN** 系统读取 UI 分析清单与相关 Rules/Skills
+- **THEN** 系统读取 UI 分析清单、组件拆分清单与相关 Rules/Skills
 - **AND** 按 tasks 顺序完成路由、组件、样式、接口与质量门禁
 
 ### Requirement: 多 PRD 批处理与失败续跑
@@ -58,7 +70,7 @@
 
 ### Requirement: UI 验收与问题回归
 
-系统 MUST 使用 Cursor IDE Browser 或 Playwright 打开实现页，与设计稿或 UI 分析清单比对，并按 P0/P1/P2 产出问题清单。
+系统 MUST 在 Codex 或 Cursor 中优先使用 `@Browser` 打开实现页，与设计稿或 UI 分析清单比对，并按 P0/P1/P2 产出问题清单；不可用时使用 Playwright。
 
 #### Scenario: 产出并回归 UI 问题清单
 

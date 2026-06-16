@@ -1,6 +1,6 @@
 ---
 name: implement-from-prd-ui
-description: 当用户输入 docs/prd/*.md 并希望基于 PRD 与 UI 设计稿自动创建提案、实现页面/UI 或验收时使用。本技能串联设计源识别、design-analysis、create-proposal、OpenSpec validate、按 tasks 实施与 ui-verification。
+description: 当用户输入 docs/prd/*.md 并希望基于 PRD 与 UI 设计稿自动创建提案、实现页面/UI 或验收时使用。本技能串联设计源识别、design-analysis、component-planning、create-proposal、OpenSpec validate、按 tasks 实施与 ui-verification。
 ---
 
 # 基于 PRD + UI 的自动实现
@@ -60,7 +60,24 @@ docs/样式还原/<prd_slug>-UI分析清单.md
 
 若设计源缺失，必须在提案与 tasks 中标记 `UI_PENDING`，并说明降级依据。
 
-### 步骤 2：创建 OpenSpec 提案
+### 步骤 2：组件拆分规划
+
+执行 `.agents/skills/component-planning/SKILL.md`：
+
+- 基于 PRD、UI 分析清单、设计稿/截图与现有代码识别组件边界。
+- 区分页面级组件、公共组件、现有可复用项与候选复用项。
+- 页面级组件默认放在 `src/views/<page>/components/`。
+- 公共组件只有第二处真实使用后才抽到 `src/components/`。
+
+产出：
+
+```text
+docs/组件拆分/<prd_slug>-组件拆分清单.md
+```
+
+该清单是 UI 类 OpenSpec validate 与 apply 的前置门禁。缺失时不得进入提案校验或实施。
+
+### 步骤 3：创建 OpenSpec 提案
 
 执行 `.agents/skills/create-proposal/SKILL.md`，产出 SDD 变更资产：
 
@@ -76,9 +93,16 @@ openspec/changes/<change-id>/
 
 - 读取并遵守相关 Rules 与 Skills。
 - 依据 UI 分析清单实现布局与样式。
+- 读取并遵守 `docs/组件拆分/<prd_slug>-组件拆分清单.md`。
 - 按顺序完成页面、组件、接口、样式和质量门禁。
 - 实现后执行 `ui-verification` 并产出 UI 问题清单。
 - 修复 P0/P1/P2 问题后再次用 Browser 或 Playwright 验证。
+
+`design.md` 必须引用：
+
+```text
+docs/组件拆分/<prd_slug>-组件拆分清单.md
+```
 
 创建后必须执行：
 
@@ -88,7 +112,15 @@ openspec validate <change-id> --strict
 
 校验通过后进入实施；命中高风险项时先人工确认。
 
-### 步骤 3：页面/UI 开发
+### 步骤 4：页面/UI 开发
+
+UI 类 change 在 apply 前必须检查：
+
+- `docs/组件拆分/<prd_slug>-组件拆分清单.md` 存在。
+- `design.md` 已引用组件拆分清单。
+- `tasks.md` 已写明按组件拆分清单实施。
+
+缺任一项时必须暂停并补齐。
 
 按 `tasks.md` 顺序实施：
 
@@ -104,11 +136,11 @@ openspec validate <change-id> --strict
 - 层级：外到内结构、父子/兄弟关系、叠放顺序。
 - 样式：颜色、字号、字重、圆角、阴影、状态。
 
-### 步骤 4：UI 验收与回归
+### 步骤 5：UI 验收与回归
 
 执行 `.agents/skills/ui-verification/SKILL.md`：
 
-1. 使用 Cursor IDE Browser 打开实现页；不可用时使用 Playwright MCP。
+1. 在 Codex 或 Cursor 中优先使用 `@Browser` 打开实现页；不可用时使用 Playwright MCP。
 2. 获取实现页截图或快照。
 3. 获取设计稿侧截图或节点信息，或读取 UI 分析清单。
 4. 按从上到下、从左到右、从外到里比对。
@@ -126,6 +158,7 @@ docs/样式还原/<prd_slug>-UI问题清单.md
 ## 完成标准
 
 - UI 分析清单已产出，或明确记录 `UI_PENDING`。
+- 组件拆分清单已产出，OpenSpec `design.md` 已引用，`tasks.md` 已写明按清单实施。
 - OpenSpec proposal、tasks、spec delta 已产出并通过 strict validate。
 - 代码实现按 tasks 完成。
 - 类型/lint/测试/构建门禁按项目要求通过。

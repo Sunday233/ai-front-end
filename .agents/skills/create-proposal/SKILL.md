@@ -27,7 +27,7 @@ description: 通用创建提案技能。根据需求是否有设计稿或 UI 描
 |------|------|------|
 | **是否有设计稿或 UI 要求描述** | 有 / 无 | 有 → 使用 design-analysis 产出 UI 分析清单；实现后使用 ui-verification 做 UI 还原验收 |
 | **是否有接口（已提供或约定）** | 有 / 无 / 未就绪 | 有 → 正常对接；无 → 可不做数据层；未就绪 → mock，见项目 Mock 数据策略 |
-| **交付形态** | 新页面 / 功能组件 / 能力模块 / 其它 | 决定目录结构（routes vs components）、tasks 模板 |
+| **交付形态** | 新页面 / 功能组件 / 能力模块 / 其它 | 决定目录结构（views vs components）、tasks 模板 |
 | **是否仅样式/还原类** | 是 / 否 | 是 → 重点在 design-analysis + 验收 |
 
 ---
@@ -52,35 +52,55 @@ description: 通用创建提案技能。根据需求是否有设计稿或 UI 描
 
 ---
 
-## 步骤 3：定义组件与代码结构（涉及 UI 时）
+## 步骤 3：组件拆分规划（涉及 UI 时）
+
+若交付形态是**页面**或**功能组件**，必须在 OpenSpec validate 前执行 `.agents/skills/component-planning/SKILL.md`，产出：
+
+```text
+docs/组件拆分/<名称>-组件拆分清单.md
+```
+
+前置检查必须确认：
+
+- 组件拆分清单存在。
+- `design.md` 引用该清单路径。
+- `tasks.md` 写明按组件拆分清单实施。
+
+缺任一项时，不得执行 `openspec validate <change-id> --strict`。
+
+---
+
+## 步骤 4：定义组件与代码结构（涉及 UI 时）
 
 若交付形态是**页面**或**功能组件**，根据 `.agents/rules/04-组件规范.instructions.md` 判断组件放置位置：
 
 - 多处复用 → `src/components/<name>/`
-- 单页或单能力内使用 → `src/routes/<page>/components/<name>/` 或对应功能目录下
+- 单页或单能力内使用 → `src/views/<page>/components/<name>/` 或对应功能目录下
+- 公共组件只有第二处真实使用后才抽到 `src/components/`
 
 涉及页面时，常见约定：
 
-- 样式文件使用 `.module.scss`
-- `interfaces/` 下为文件夹，含 `model.ts`、`api.ts`
+- 页面目录使用 `src/views/<page>/index.vue`
+- 样式默认使用 `<style scoped lang="scss">`，样式需要复用时才使用 `.module.scss`
+- `src/types/<feature>/` 下为文件夹，含 `model.ts`、`api.ts`
 - 图标/图片未定时用占位元素（见 `.agents/rules/08-通用约束.instructions.md`）
 
 ---
 
-## 步骤 4：接口与数据层（有接口或需 mock 时）
+## 步骤 5：接口与数据层（有接口或需 mock 时）
 
 若需求**涉及接口**（已提供或未就绪）：
 
-- **已提供接口**：按 `.agents/rules/03-项目结构.instructions.md` 等规范，在 tasks 中安排 `interfaces/`、`http/` 等。
-- **未就绪**：按项目 Mock 数据策略，在 `interfaces/<feature>/` 下定义 `model.ts`、`api.ts`，在 `http/` 下提供 mock；tasks 中标注「mock，后续替换」。
+- **已提供接口**：按 `.agents/rules/03-项目结构.instructions.md` 等规范，在 tasks 中安排 `src/types/`、`src/services/` 等。
+- **未就绪**：按项目 Mock 数据策略，在 `src/types/<feature>/` 下定义 `model.ts`、`api.ts`，在 `src/services/<feature>.ts` 下提供 mock；tasks 中标注「mock，后续替换」。
 
 若不涉及接口，可省略或仅写「无后端依赖」。
 
 ---
 
-## 步骤 5：创建提案文档
+## 步骤 6：创建提案文档
 
-### 5.1 proposal.md
+### 6.1 proposal.md
 
 根据需求类型书写，建议包含：
 
@@ -90,28 +110,43 @@ description: 通用创建提案技能。根据需求是否有设计稿或 UI 描
 
 若有设计稿或 UI：必须写「开发依据 `docs/样式还原/<名称>-UI分析清单.md`」，并说明设计源类型（`docs-ui` / `pen` / `figma` / `stitch`）。
 
-### 5.2 tasks.md
+### 6.2 design.md
+
+UI 类 change 必须在 `design.md` 中引用：
+
+```text
+docs/组件拆分/<名称>-组件拆分清单.md
+```
+
+建议写明：
+
+- 页面级组件默认放在 `src/views/<page>/components/`。
+- 公共组件只有第二处真实使用后才抽到 `src/components/`。
+- 实施偏离组件拆分清单时，必须先更新清单或在 tasks 中记录原因。
+
+### 6.3 tasks.md
 
 按**交付形态**与**条件**勾选任务，例如：
 
-- **准备任务**：读取 PRD、UI 分析清单、相关 Rules 与 Skills；确认 `change-id`、目标路由、目标页面 URL。
-- **新页面**：路由目录、`Page.vue`、`Loader.ts`、`index.module.scss`、与布局一致的结构；若有分析清单则写「依据 xxx-UI分析清单 实现」。
-- **功能组件**：组件目录、`index.vue`、`index.module.scss`、占位与规范。
-- **接口/数据层**：`interfaces/<feature>/`、`http/<feature>.ts` 或 mock。
+- **准备任务**：读取 PRD、UI 分析清单、组件拆分清单、相关 Rules 与 Skills；确认 `change-id`、目标路由、目标页面 URL。
+- **新页面**：页面目录、`index.vue`、可选 `components/`、与布局一致的结构；若有分析清单则写「依据 xxx-UI分析清单 实现」。
+- **功能组件**：组件目录、`index.vue`、按需 scoped style 或 `index.module.scss`、占位与规范。
+- **接口/数据层**：`src/types/<feature>/`、`src/services/<feature>.ts` 或 mock。
 - **质量门禁**：类型检查、lint、测试、构建按项目要求执行。
 - **UI 还原验收**：若有设计稿且产出了分析清单，必须在 tasks 末尾加「实现后使用 `.agents/skills/ui-verification/SKILL.md` 进行 UI 还原验收，产出问题清单；修复 P0/P1/P2 后再次用 Browser 或 Playwright 验证」。
 
 PRD + UI 自动实现的 tasks 必须包含以下顺序：
 
 1. 读取 PRD 与 UI 分析清单。
-2. 读取 `.agents/rules/03-项目结构.instructions.md`、`04-组件规范.instructions.md`、`06-路由规范.instructions.md`、`09-样式规范.instructions.md`、`11-测试规范.instructions.md`。
-3. 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`。
-4. 依据 UI 分析清单实现布局、文字、图片、层级与样式。
-5. 执行质量门禁。
-6. 执行 UI 验收并产出 UI 问题清单。
-7. 修复问题并回归验证。
+2. 读取组件拆分清单，并按清单创建或复用组件。
+3. 读取 `.agents/rules/03-项目结构.instructions.md`、`04-组件规范.instructions.md`、`06-路由规范.instructions.md`、`09-样式规范.instructions.md`、`11-测试规范.instructions.md`。
+4. 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`。
+5. 依据 UI 分析清单实现布局、文字、图片、层级与样式。
+6. 执行质量门禁。
+7. 执行 UI 验收并产出 UI 问题清单。
+8. 修复问题并回归验证。
 
-### 5.3 spec.md
+### 6.4 spec.md
 
 定义需求规格：场景、验收标准、可选的状态与边界。若有 UI，可引用分析清单中的「验证检查清单」作为验收参考。
 
@@ -119,9 +154,10 @@ spec 增量必须包含至少一个 `#### Scenario:`，并覆盖：
 
 - PRD 中的功能验收。
 - UI 按分析清单还原的验收。
+- 组件拆分清单被读取并执行的验收。
 - 质量门禁通过的验收。
 
-### 5.4 validate
+### 6.5 validate
 
 创建 proposal、tasks、spec 增量后必须执行：
 
@@ -129,7 +165,7 @@ spec 增量必须包含至少一个 `#### Scenario:`，并覆盖：
 openspec validate <change-id> --strict
 ```
 
-validate 通过后进入实施；若命中 `.agents/rules/12-自动化执行规范.instructions.md` 中的高风险项，先人工确认。
+执行 validate 前，UI 类 change 必须先通过组件拆分前置检查：组件拆分清单存在、`design.md` 已引用、`tasks.md` 已写明按清单实施。validate 通过后进入实施；若命中 `.agents/rules/12-自动化执行规范.instructions.md` 中的高风险项，先人工确认。
 
 ---
 
@@ -163,4 +199,5 @@ create-route、create-component 等技能中「涉及 UI 还原时」可引用�
 - `.agents/rules/09-样式规范.instructions.md` - 设计稿颜色提取
 - `.agents/rules/12-自动化执行规范.instructions.md` - PRD + UI 自动执行闭环
 - `.agents/skills/design-analysis/SKILL.md` - 设计稿分析（有设计稿时使用，产出 UI 分析清单）
+- `.agents/skills/component-planning/SKILL.md` - 组件拆分规划（UI 类 change apply 前门禁）
 - `.agents/skills/ui-verification/SKILL.md` - UI 验收（实现后需验收时使用）

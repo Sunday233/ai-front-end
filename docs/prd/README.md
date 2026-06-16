@@ -34,6 +34,7 @@
 | `figma_links` | 条件必填 | `primary_design_source=figma` 时必填，列出 Figma frame 或节点链接 |
 | `stitch_links` | 条件必填 | `primary_design_source=stitch` 时必填，列出 Stitch 页面、画板或节点链接 |
 | `ui_analysis_output` | 推荐 | UI 分析清单目标路径：`docs/样式还原/<prd_slug>-UI分析清单.md` |
+| `component_plan_output` | 推荐 | 组件拆分清单目标路径：`docs/组件拆分/<prd_slug>-组件拆分清单.md` |
 | `ui_verification_output` | 推荐 | UI 问题清单目标路径：`docs/样式还原/<prd_slug>-UI问题清单.md` |
 
 设计源对应工具：
@@ -48,9 +49,10 @@
 识别后流程固定为：
 
 1. 执行 `design-analysis`，产出 UI 分析清单。
-2. 执行 `create-proposal`，产出 OpenSpec proposal、tasks、spec 增量，并运行 `openspec validate <change-id> --strict`。
-3. 按 tasks 顺序实施页面/UI，依据 UI 分析清单还原布局与样式。
-4. 执行 `ui-verification`，用 Browser 或 Playwright 打开实现页，与设计稿或分析清单比对，产出 UI 问题清单。
+2. 执行 `component-planning`，产出组件拆分清单。
+3. 执行 `create-proposal`，产出 OpenSpec proposal、design、tasks、spec 增量，并运行 validate 前置检查与 `openspec validate <change-id> --strict`。
+4. 按 tasks 顺序实施页面/UI，依据 UI 分析清单与组件拆分清单还原布局、样式与组件结构。
+5. 执行 `ui-verification`，用 Browser 或 Playwright 打开实现页，与设计稿或分析清单比对，产出 UI 问题清单。
 
 ## PRD 模板（可识别章节版）
 
@@ -112,6 +114,10 @@
 ### ui_analysis_output
 
 1. docs/样式还原/<prd_slug>-UI分析清单.md
+
+### component_plan_output
+
+1. docs/组件拆分/<prd_slug>-组件拆分清单.md
 
 ### ui_verification_output
 

@@ -21,22 +21,22 @@ description: 指导在前端项目中按团队规范创建和维护 HTTP 接口�
 
 1. 先确定业务模块名称（如 `banner`、`user`、`ai-editor`）。
 2. 对应的文件归属：
-   - 请求封装文件：`src/http/<module>.ts`
-   - 类型定义文件：`src/interfaces/<module>/api.ts`
-   - 业务模型类型：`src/interfaces/<module>/model.ts`
+   - 请求封装文件：`src/services/<module>.ts`
+   - 类型定义文件：`src/types/<module>/api.ts`
+   - 业务模型类型：`src/types/<module>/model.ts`
 
 **约定：**
 
-- 所有请求函数都放在 `src/http` 下按模块拆分，禁止在组件、page、store 中直接写 `axios.xxx`。
+- 所有请求函数都放在 `src/services` 下按模块拆分，禁止在组件、page、store 中直接写 `axios.xxx`。
 
 ---
 
 ## 步骤 2：在 interfaces 中定义类型
 
-在 `src/interfaces/<module>/model.ts` 中定义基础业务模型：
+在 `src/types/<module>/model.ts` 中定义基础业务模型：
 
 ```ts
-// src/interfaces/banner/model.ts
+// src/types/banner/model.ts
 export interface Banner {
   id: number;
   title: string;
@@ -45,10 +45,10 @@ export interface Banner {
 }
 ```
 
-在 `src/interfaces/<module>/api.ts` 中定义请求/响应类型：
+在 `src/types/<module>/api.ts` 中定义请求/响应类型：
 
 ```ts
-// src/interfaces/banner/api.ts
+// src/types/banner/api.ts
 import type {Banner} from './model';
 
 export interface GetBannerListParams {
@@ -76,20 +76,20 @@ export interface GetBannerListResponse {
 
 ---
 
-## 步骤 3：在 http 中创建请求函数
+## 步骤 3：在 services 中创建请求函数
 
-在 `src/http/<module>.ts` 中：
+在 `src/services/<module>.ts` 中：
 
 ```ts
-// src/http/banner.ts
-import {httpClient} from '@/http/client';
+// src/services/banner.ts
+import {httpClient} from '@/services/client';
 import type {
   GetBannerListParams,
   GetBannerListResponse,
   GetBannerDetailResponse,
   CreateBannerParams,
   UpdateBannerParams,
-} from '@/interfaces/banner/api';
+} from '@/types/banner/api';
 
 export const getBannerList = async (params: GetBannerListParams) => {
   return httpClient.get<GetBannerListResponse>('/backend/banners', {params});
@@ -137,7 +137,7 @@ export const deleteBanner = async (id: number) => {
 在组件或 store 中使用时：
 
 ```ts
-import {getBannerList} from '@/http/banner';
+import {getBannerList} from '@/services/banner';
 
 const onLoad = async () => {
   const res = await getBannerList({page: 1, pageSize: 10});
@@ -149,7 +149,7 @@ const onLoad = async () => {
 
 ## 快速检查清单
 
-- [ ] 是否在 `src/interfaces/<module>/api.ts` 中定义了清晰的请求/响应类型？
-- [ ] 是否在 `src/http/<module>.ts` 中集中管理该模块的所有接口？
+- [ ] 是否在 `src/types/<module>/api.ts` 中定义了清晰的请求/响应类型？
+- [ ] 是否在 `src/services/<module>.ts` 中集中管理该模块的所有接口？
 - [ ] 函数命名是否符合 `get/create/update/deleteXxx` 规范？
 - [ ] 是否避免在业务代码中重复处理接口错误提示？
