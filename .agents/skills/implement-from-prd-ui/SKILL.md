@@ -58,6 +58,11 @@ description: 当用户输入 docs/prd/*.md 并希望基于 PRD 与 UI 设计稿�
 docs/样式还原/<prd_slug>-UI分析清单.md
 ```
 
+质量门禁：
+- 若设计稿包含表格、列表、左右列映射、字段-属性映射、主键/标题键等关系型 UI，分析清单必须包含行级映射表。
+- 若分析清单只写“左右两列”“字段映射”等概括语，必须先补全分析清单，再进入组件拆分。
+- Stitch/Figma/Pencil 节点信息不足时，可结合 `docs/ui` 截图补充，但必须标注证据等级。
+
 若设计源缺失，必须在提案与 tasks 中标记 `UI_PENDING`，并说明降级依据。
 
 ### 步骤 2：组件拆分规划
@@ -68,6 +73,7 @@ docs/样式还原/<prd_slug>-UI分析清单.md
 - 区分页面级组件、公共组件、现有可复用项与候选复用项。
 - 页面级组件默认放在 `src/views/<page>/components/`。
 - 公共组件只有第二处真实使用后才抽到 `src/components/`。
+- 对关系型 UI，组件拆分清单必须写明承接行级映射的数据契约和子组件职责。
 
 产出：
 
@@ -93,6 +99,7 @@ openspec/changes/<change-id>/
 
 - 读取并遵守相关 Rules 与 Skills。
 - 依据 UI 分析清单实现布局与样式。
+- 对表格、列表、左右映射、字段属性映射等关系型 UI，按 UI 分析清单的行级映射表实现；不得将源字段与目标属性拆成无显式对应关系的并列列表。
 - 读取并遵守 `docs/组件拆分/<prd_slug>-组件拆分清单.md`。
 - 按顺序完成页面、组件、接口、样式和质量门禁。
 - 实现后执行 `ui-verification` 并产出 UI 问题清单。
@@ -140,12 +147,13 @@ UI 类 change 在 apply 前必须检查：
 
 执行 `.agents/skills/ui-verification/SKILL.md`：
 
-1. 在 Codex 或 Cursor 中优先使用 `@Browser` 打开实现页；不可用时使用 Playwright MCP。
+1. 在 Codex 中优先按 `browser:control-in-app-browser` 连接 in-app Browser (`iab`) 打开实现页；Cursor 中优先使用 `@Browser`；Browser 运行时或目标 URL 导航失败时才使用 Playwright MCP。
 2. 获取实现页截图或快照。
 3. 获取设计稿侧截图或节点信息，或读取 UI 分析清单。
 4. 按从上到下、从左到右、从外到里比对。
-5. 按 P0/P1/P2 产出问题清单。
-6. 修复后再次用 Browser 或 Playwright 验证。
+5. 对关系型 UI 逐行比对名称、顺序、状态、操作按钮和对齐关系。
+6. 按 P0/P1/P2 产出问题清单；若未使用 Browser 完成验收，必须记录失败阶段、替代工具、视口和证据。
+7. 修复后再次用 Browser 或 Playwright 验证。
 
 产出：
 

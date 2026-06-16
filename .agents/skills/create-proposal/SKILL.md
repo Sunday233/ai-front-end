@@ -48,6 +48,8 @@ description: 通用创建提案技能。根据需求是否有设计稿或 UI 描
 
 这样后续开发可以依据分析清单精确实现，实现后的验收也以此清单为基准。对于 PRD + UI 自动实现流程，开发前必须有 UI 分析清单；若设计源缺失，必须在 proposal 与 tasks 中标记 `UI_PENDING` 并说明降级依据。
 
+若 UI 包含表格、列表、左右列映射、字段-属性映射、主键/标题键等关系型区域，UI 分析清单必须包含行级映射表。若只有“字段映射/左右两列”这类概述，必须先补分析清单，再写 proposal/tasks。
+
 在 **tasks** 中可写明：页面/组件开发须依据 `docs/样式还原/<名称>-UI分析清单.md` 实现布局与样式。
 
 ---
@@ -65,6 +67,7 @@ docs/组件拆分/<名称>-组件拆分清单.md
 - 组件拆分清单存在。
 - `design.md` 引用该清单路径。
 - `tasks.md` 写明按组件拆分清单实施。
+- 关系型 UI 已在组件拆分清单中标明行级数据契约、子组件职责和验收关注点。
 
 缺任一项时，不得执行 `openspec validate <change-id> --strict`。
 
@@ -134,6 +137,7 @@ docs/组件拆分/<名称>-组件拆分清单.md
 - **接口/数据层**：`src/types/<feature>/`、`src/services/<feature>.ts` 或 mock。
 - **质量门禁**：类型检查、lint、测试、构建按项目要求执行。
 - **UI 还原验收**：若有设计稿且产出了分析清单，必须在 tasks 末尾加「实现后使用 `.agents/skills/ui-verification/SKILL.md` 进行 UI 还原验收，产出问题清单；修复 P0/P1/P2 后再次用 Browser 或 Playwright 验证」。
+- **关系型 UI**：若包含表格/列表/左右映射/字段属性映射，必须加任务「按 UI 分析清单逐行实现映射关系，并在验收中逐行核对名称、顺序、状态、操作按钮和对齐」。
 
 PRD + UI 自动实现的 tasks 必须包含以下顺序：
 
@@ -142,9 +146,10 @@ PRD + UI 自动实现的 tasks 必须包含以下顺序：
 3. 读取 `.agents/rules/03-项目结构.instructions.md`、`04-组件规范.instructions.md`、`06-路由规范.instructions.md`、`09-样式规范.instructions.md`、`11-测试规范.instructions.md`。
 4. 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`。
 5. 依据 UI 分析清单实现布局、文字、图片、层级与样式。
-6. 执行质量门禁。
-7. 执行 UI 验收并产出 UI 问题清单。
-8. 修复问题并回归验证。
+6. 对关系型 UI 按行级映射表实现，不得用无对应关系的两个并列列表代替。
+7. 执行质量门禁。
+8. 执行 UI 验收并产出 UI 问题清单；未使用 Browser 时记录降级原因。
+9. 修复问题并回归验证。
 
 ### 6.4 spec.md
 
@@ -169,7 +174,7 @@ openspec validate <change-id> --strict
 
 ---
 
-## 步骤 6：实现后的 UI 还原验收
+## 步骤 7：实现后的 UI 还原验收
 
 当需求**包含界面**且**有设计稿**并已产出 **UI 分析清单**时，在**实现完成**后需要进行 UI 还原验收时：
 
@@ -186,6 +191,7 @@ openspec validate <change-id> --strict
 **样式**：颜色、字体、字号、字重、圆角、边框、阴影、效果（如 backdrop-filter）是否一致。  
 **元素**：是否缺少区块、图标、占位图；占位尺寸与比例是否正确。  
 **交互**：默认/hover/active 等状态是否还原（若有设计）。
+**关系**：表格、列表、左右映射、字段属性映射是否逐行一致，源字段与目标字段/属性不能错位或缺失。
 
 create-route、create-component 等技能中「涉及 UI 还原时」可引用：`.agents/skills/create-proposal/SKILL.md` 中的「样式还原验证检查清单」及对应页面的 `docs/样式还原/<名称>-UI分析清单.md`。
 

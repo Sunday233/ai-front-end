@@ -26,6 +26,7 @@ tags: comparison, layout, p0, critical
 - **对齐方式**：图标与文本是否水平居中对齐（`align-items: center`）？详见 `errors-alignment.md`
 - **CSS 优先级**：组件样式是否被页面级样式覆盖（如 `display: block` 覆盖了 `display: flex`）？详见 `errors-css-priority.md`
 - **按钮/交互元素**：高度、宽度、定位是否符合设计稿（**必须用浏览器工具实际查看渲染效果**，不能仅凭代码推测）？详见 `errors-button-dimensions.md`、`errors-button-position.md`
+- **映射/表格/左右列区域**：源字段与目标字段是否按设计稿逐行对应？行高、顺序、列间距、主键/标题键标签、删除/新增按钮是否与设计稿一致？映射错位或缺失按 P0/P1 处理，不得降为普通 P2 图标差异。
 
 **相关规则**：
 - `writing-page-container-width.md` - 页面容器宽度规则

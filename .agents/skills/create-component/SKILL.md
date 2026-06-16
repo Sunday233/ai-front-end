@@ -125,6 +125,26 @@ export {default as ShentuButton} from './shentu-button/index.vue';
   - **通用组件**：第二处真实使用后 → 提取到 `src/components`。
 - 一个组件应聚焦单一职责（一个明确的 UI 区块或交互单元）。
 
+### 关系型 UI 组件约束
+
+当组件实现表格、列表、左右列映射、字段-属性映射、主键/标题键等区域时：
+
+- Props/状态必须表达设计稿语义关系，优先使用 `rows` / `mappingRows` 行级模型。
+- 不要用两个没有显式关联的数组分别渲染左右两侧，除非另有稳定 id 映射并在模板中逐行绑定。
+- 行组件应同时拿到源侧与目标侧数据，保证名称、顺序、状态标签、字数/校验、删除/新增按钮和对齐关系可一起维护。
+- 若 UI 分析清单没有行级映射表，先补清单，再实现组件。
+
+示例：
+
+```ts
+interface FieldAttributeMappingRow {
+  id: string;
+  sourceField: { name: string; type: string; isPrimary?: boolean };
+  targetAttribute: { name: string; type: string; countText?: string; readonly?: boolean };
+  removable: boolean;
+}
+```
+
 ---
 
 ## 步骤 4：与 Ant Design Vue 协同
@@ -157,3 +177,4 @@ const props = defineProps<ShentuButtonProps>();
 - [ ] 是否通过 `src/components/index.ts` 集中导出通用组件？
 - [ ] 样式是否全部使用 SCSS Modules，且颜色使用主题变量？
 - [ ] 组件文件是否过大，是否需要拆分子组件？
+- [ ] 表格/列表/左右映射/字段属性映射是否使用行级数据模型，而非无对应关系的并列数组？
