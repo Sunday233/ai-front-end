@@ -50,6 +50,23 @@
 - **THEN** 系统读取 UI 分析清单、组件拆分清单与相关 Rules/Skills
 - **AND** 按 tasks 顺序完成路由、组件、样式、接口与质量门禁
 
+### Requirement: 页面级 API 与文档汇总
+
+系统 MUST 在 PRD 声明接口契约时，按页面级 service、axios 请求封装、mock 替换点与 API 汇总文档实施。
+
+#### Scenario: 接口契约落地到页面 service
+
+- **WHEN** PRD 包含 `CHAPTER-06 数据与接口要求`
+- **THEN** 系统提取 `data_fields`、`api_contract` 与 `mock_policy`
+- **AND** 若项目缺少 `src/services/client.ts`，先创建 axios 请求封装
+- **AND** 每个页面使用 `src/services/<page-slug>.ts`
+- **AND** 每个含 mock 的页面使用 `src/services/<page-slug>.mock.ts`
+- **AND** 类型定义位于 `src/types/<page-slug>/model.ts` 与 `src/types/<page-slug>/api.ts`
+- **AND** 请求通过 `src/services/client.ts` 的 `httpClient` 发起
+- **AND** mock 通过 axios adapter/handler、页面级 mock 文件与 `src/services/mock.ts` 注册入口拦截
+- **AND** 不得将多个页面的 mock handler / mock 数据集中保留在单个业务 ts 文件中
+- **AND** 更新 `docs/api/接口汇总.md`
+
 ### Requirement: 多 PRD 批处理与失败续跑
 
 系统 MUST 按文件名顺序处理多个 PRD，并在单 PRD 失败后继续后续 PRD。

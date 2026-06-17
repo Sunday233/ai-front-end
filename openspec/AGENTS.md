@@ -59,7 +59,7 @@ Skip proposal for:
 1. 先读取 `.agents/rules/12-自动化执行规范.instructions.md` 与 `.agents/skills/implement-from-prd-ui/SKILL.md`。
 2. 从 PRD 中识别 `docs/ui` 截图、`.pen`、Figma 链接或 Stitch 链接。
 3. 执行 `design-analysis` 产出 `docs/样式还原/<prd_slug>-UI分析清单.md`。
-4. 再创建 proposal、tasks、spec 增量；tasks 必须写明依据 UI 分析清单实现，并在实现后执行 `ui-verification`。
+4. 再创建 proposal、tasks、spec 增量；tasks 必须写明依据 UI 分析清单实现，并在实现后执行 `ui-verification`；涉及接口时必须写明 `src/services/client.ts`、页面级 service、页面级 mock 文件、axios mock 层切换和 `docs/api/接口汇总.md`。
 5. `openspec validate <id> --strict` 通过后默认进入实施；命中高风险操作时先人工确认。
 
 ### Stage 2: Implementing Changes
@@ -78,7 +78,7 @@ Track these steps as TODOs and complete them one by one.
 
 - 实施前读取 UI 分析清单。
 - 页面/组件/样式开发必须加载 `.agents/rules` 中的项目结构、组件、路由、样式、通用约束与测试规范。
-- 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`。
+- 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`；涉及接口文档时使用 `api-doc-summary`。
 - 实现完成后执行 `ui-verification`，用 Cursor IDE Browser 或 Playwright 打开实现页，与设计稿或 UI 分析清单比对，产出 P0/P1/P2 问题清单并回归。
 
 ### Stage 3: Archiving Changes

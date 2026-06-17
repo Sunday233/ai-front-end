@@ -85,7 +85,7 @@ docs/组件拆分/<名称>-组件拆分清单.md
 
 - 页面目录使用 `src/views/<page>/index.vue`
 - 样式默认使用 `<style scoped lang="scss">`，样式需要复用时才使用 `.module.scss`
-- `src/types/<feature>/` 下为文件夹，含 `model.ts`、`api.ts`
+- `src/types/<page-slug>/` 下为文件夹，含 `model.ts`、`api.ts`
 - 图标/图片未定时用占位元素（见 `.agents/rules/08-通用约束.instructions.md`）
 
 ---
@@ -94,8 +94,13 @@ docs/组件拆分/<名称>-组件拆分清单.md
 
 若需求**涉及接口**（已提供或未就绪）：
 
-- **已提供接口**：按 `.agents/rules/03-项目结构.instructions.md` 等规范，在 tasks 中安排 `src/types/`、`src/services/` 等。
-- **未就绪**：按项目 Mock 数据策略，在 `src/types/<feature>/` 下定义 `model.ts`、`api.ts`，在 `src/services/<feature>.ts` 下提供 mock；tasks 中标注「mock，后续替换」。
+- 先读取 PRD `CHAPTER-06 数据与接口要求`，提取 `data_fields`、`api_contract`、`mock_policy`。
+- 先检查项目是否已有 `src/services/client.ts`；若不存在，tasks 必须先安排创建 axios 请求封装。
+- 检查是否已有集中式 mock 文件；若存在，tasks 必须安排按页面拆分到 `src/services/<page-slug>.mock.ts`。
+- **已提供接口**：按 `.agents/rules/05-API规范.instructions.md` 与 `.agents/skills/create-api/SKILL.md`，在 tasks 中安排 `src/services/client.ts`、`src/services/<page-slug>.ts`、`src/services/<page-slug>.mock.ts`、`src/types/<page-slug>/model.ts`、`src/types/<page-slug>/api.ts`。
+- **未就绪**：按项目 Mock 数据策略，页面 service 仍通过 `httpClient` 发请求，mock 仅通过 axios adapter/handler、页面级 `src/services/<page-slug>.mock.ts` 与 `src/services/mock.ts` 注册入口拦截；tasks 中标注 mock 覆盖状态与「后续替换点」。
+- 在 tasks 中安排导出 API 文档元数据，并使用 `.agents/skills/api-doc-summary/SKILL.md` 更新 `docs/api/接口汇总.md`。
+- 若 PRD `api_contract` 只有接口名称没有 path/method，tasks 必须写明 `path/method 待后端确认`，禁止自行创造为真实接口承诺。
 
 若不涉及接口，可省略或仅写「无后端依赖」。
 
@@ -134,7 +139,9 @@ docs/组件拆分/<名称>-组件拆分清单.md
 - **准备任务**：读取 PRD、UI 分析清单、组件拆分清单、相关 Rules 与 Skills；确认 `change-id`、目标路由、目标页面 URL。
 - **新页面**：页面目录、`index.vue`、可选 `components/`、与布局一致的结构；若有分析清单则写「依据 xxx-UI分析清单 实现」。
 - **功能组件**：组件目录、`index.vue`、按需 scoped style 或 `index.module.scss`、占位与规范。
-- **接口/数据层**：`src/types/<feature>/`、`src/services/<feature>.ts` 或 mock。
+- **接口/数据层**：从 PRD `CHAPTER-06` 提取 `data_fields/api_contract/mock_policy`；先检查/创建 `src/services/client.ts`；按每页一个 `src/services/<page-slug>.ts`、`src/services/<page-slug>.mock.ts`、`src/types/<page-slug>/model.ts`、`src/types/<page-slug>/api.ts` 实施；通过 `httpClient` 发请求；mock 在 axios 请求层拦截。
+- **集中 mock 迁移**：若发现 mock 接口集中在单个 ts 文件中，必须按页面拆分到 `src/services/<page-slug>.mock.ts`，并保留 `src/services/mock.ts` 仅做统一注册。
+- **API 文档**：页面 service 导出 API 文档元数据；实现后使用 `api-doc-summary` 更新 `docs/api/接口汇总.md`。
 - **质量门禁**：类型检查、lint、测试、构建按项目要求执行。
 - **UI 还原验收**：若有设计稿且产出了分析清单，必须在 tasks 末尾加「实现后使用 `.agents/skills/ui-verification/SKILL.md` 进行 UI 还原验收，产出问题清单；修复 P0/P1/P2 后再次用 Browser 或 Playwright 验证」。
 - **关系型 UI**：若包含表格/列表/左右映射/字段属性映射，必须加任务「按 UI 分析清单逐行实现映射关系，并在验收中逐行核对名称、顺序、状态、操作按钮和对齐」。
@@ -143,13 +150,16 @@ PRD + UI 自动实现的 tasks 必须包含以下顺序：
 
 1. 读取 PRD 与 UI 分析清单。
 2. 读取组件拆分清单，并按清单创建或复用组件。
-3. 读取 `.agents/rules/03-项目结构.instructions.md`、`04-组件规范.instructions.md`、`06-路由规范.instructions.md`、`09-样式规范.instructions.md`、`11-测试规范.instructions.md`。
-4. 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`。
-5. 依据 UI 分析清单实现布局、文字、图片、层级与样式。
-6. 对关系型 UI 按行级映射表实现，不得用无对应关系的两个并列列表代替。
-7. 执行质量门禁。
-8. 执行 UI 验收并产出 UI 问题清单；未使用 Browser 时记录降级原因。
-9. 修复问题并回归验证。
+3. 若 PRD 有 `CHAPTER-06 数据与接口要求`，提取接口契约并写入 API/data tasks。
+4. 涉及接口时，检查是否存在 `src/services/client.ts`；不存在则先创建 axios 封装。
+5. 涉及接口时，检查是否存在集中式 mock；存在则按页面拆分为 `src/services/<page-slug>.mock.ts`。
+6. 读取 `.agents/rules/03-项目结构.instructions.md`、`04-组件规范.instructions.md`、`05-API规范.instructions.md`、`06-路由规范.instructions.md`、`09-样式规范.instructions.md`、`11-测试规范.instructions.md`。
+7. 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`、`api-doc-summary`。
+8. 依据 UI 分析清单实现布局、文字、图片、层级与样式。
+9. 对关系型 UI 按行级映射表实现，不得用无对应关系的两个并列列表代替。
+10. 执行质量门禁。
+11. 执行 UI 验收并产出 UI 问题清单；未使用 Browser 时记录降级原因。
+12. 修复问题并回归验证。
 
 ### 6.4 spec.md
 
@@ -158,6 +168,7 @@ PRD + UI 自动实现的 tasks 必须包含以下顺序：
 spec 增量必须包含至少一个 `#### Scenario:`，并覆盖：
 
 - PRD 中的功能验收。
+- PRD `api_contract` 到页面 service、类型定义、mock 替换点与 API 汇总文档的验收。
 - UI 按分析清单还原的验收。
 - 组件拆分清单被读取并执行的验收。
 - 质量门禁通过的验收。
@@ -206,4 +217,6 @@ create-route、create-component 等技能中「涉及 UI 还原时」可引用�
 - `.agents/rules/12-自动化执行规范.instructions.md` - PRD + UI 自动执行闭环
 - `.agents/skills/design-analysis/SKILL.md` - 设计稿分析（有设计稿时使用，产出 UI 分析清单）
 - `.agents/skills/component-planning/SKILL.md` - 组件拆分规划（UI 类 change apply 前门禁）
+- `.agents/skills/create-api/SKILL.md` - 页面级 API、axios 封装、mock/real 切换
+- `.agents/skills/api-doc-summary/SKILL.md` - API 汇总文档
 - `.agents/skills/ui-verification/SKILL.md` - UI 验收（实现后需验收时使用）

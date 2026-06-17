@@ -54,15 +54,13 @@
 4. 按 tasks 顺序实施页面/UI，依据 UI 分析清单与组件拆分清单还原布局、样式与组件结构。
 5. 执行 `ui-verification`，用 Browser 或 Playwright 打开实现页，与设计稿或分析清单比对，产出 UI 问题清单。
 
-## PRD 模板（可识别章节版）
+## 当前示例 PRD
 
-优先使用以下模板：
+当前仓库包含以下可识别章节版 PRD：
 
-- `docs/prd/object-type-list-template.md`（对象类型列表示例，固定章节）
-
-可选通用模板：
-
-- `docs/prd/prd-template.md`
+- `docs/prd/workbench.md`
+- `docs/prd/object-type-list.md`
+- `docs/prd/object-type-create.md`
 
 可识别模板使用规则：
 
@@ -70,7 +68,7 @@
 2. `prd_slug` 与 `ui_prefix` 必须一致。
 3. `primary_design_source=docs-ui` 时，`required_ui_assets` 中的文件名必须真实存在于 `docs/ui/`。
 4. `primary_design_source=pen/figma/stitch` 时，必须填写对应的 `design_pen_files`、`figma_links` 或 `stitch_links`。
-5. 新功能建议复制对象列表示例并替换内容，不改结构。
+5. 新功能建议复制当前最接近的示例 PRD 并替换内容，不改章节结构。
 
 建议做法：
 

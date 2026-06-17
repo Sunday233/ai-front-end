@@ -40,6 +40,7 @@
 | --- | --- |
 | 创建提案时 | `.agents/skills/create-proposal/SKILL.md` |
 | 新增接口 | `.agents/skills/create-api/SKILL.md` |
+| 汇总 API 文档 | `.agents/skills/api-doc-summary/SKILL.md` |
 | 创建/拆分组件 | `.agents/skills/create-component/SKILL.md` |
 | 新增页面路由 | `.agents/skills/create-route/SKILL.md` |
 | 新增全局状态 | `.agents/skills/create-store/SKILL.md` |

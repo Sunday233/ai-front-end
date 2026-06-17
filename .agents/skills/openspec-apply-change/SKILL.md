@@ -2,7 +2,6 @@
 name: openspec-apply-change
 description: Implement tasks from an OpenSpec change. Use when the user wants to start implementing, continue implementation, or work through tasks.
 license: MIT
-compatibility: Requires openspec CLI.
 metadata:
   author: openspec
   version: "1.0"
@@ -72,7 +71,32 @@ Implement tasks from an OpenSpec change.
 
    If any item is missing, pause immediately and report what must be added. Do not implement tasks until the component plan gate passes.
 
-6. **Show current progress**
+6. **API implementation gate**
+
+   Before implementing any API related change, check whether this change is API related. Treat it as API related if proposal, design, tasks, specs, PRD, or context files mention any of:
+   - `CHAPTER-06 数据与接口要求`
+   - `api_contract`
+   - `data_fields`
+   - `mock_policy`
+   - `src/services`
+   - `src/types`
+   - `docs/api/接口汇总.md`
+   - axios, httpClient, mock, API, 接口
+
+   If API related, verify all of the following before implementation:
+   - `tasks.md` says to use `.agents/skills/create-api/SKILL.md`.
+   - `tasks.md` includes checking or creating `src/services/client.ts` before API/mock implementation.
+   - `tasks.md` includes one page service path: `src/services/<page-slug>.ts`.
+   - `tasks.md` includes one page mock path when mock is needed: `src/services/<page-slug>.mock.ts`.
+   - `tasks.md` includes type paths: `src/types/<page-slug>/model.ts` and `src/types/<page-slug>/api.ts`.
+   - `tasks.md` says requests must go through `src/services/client.ts` / `httpClient`.
+   - `tasks.md` says mock must be handled through axios adapter/handler, page-level mock files, and `src/services/mock.ts` registration, not page/component branches.
+   - `tasks.md` says centralized single-file mock implementations must be split by page before completing API tasks.
+   - `tasks.md` says to use `.agents/skills/api-doc-summary/SKILL.md` and update `docs/api/接口汇总.md`.
+
+   If any item is missing, pause immediately and report what must be added. Do not implement API tasks until the API gate passes.
+
+7. **Show current progress**
 
    Display:
    - Schema being used
@@ -80,12 +104,15 @@ Implement tasks from an OpenSpec change.
    - Remaining tasks overview
    - Dynamic instruction from CLI
 
-7. **Implement tasks (loop until done or blocked)**
+8. **Implement tasks (loop until done or blocked)**
 
    For each pending task:
    - Show which task is being worked on
    - Make the code changes required
    - Keep changes minimal and focused
+   - For API tasks, verify `src/services/client.ts` exists, page service uses `httpClient`, page mock lives in `src/services/<page-slug>.mock.ts`, `src/services/mock.ts` only registers handlers, API metadata is exported, and `docs/api/接口汇总.md` is updated before marking the task complete
+   - For API tasks, run a static check such as `rg "import axios|axios\\." src` and confirm only `src/services/client.ts` or approved mock adapter files match
+   - For API tasks, if existing mock handlers are concentrated in a single business ts file, pause and split them by page before marking the task complete
    - Mark task complete in the tasks file: `- [ ]` → `- [x]`
    - Continue to next task
 
@@ -95,7 +122,7 @@ Implement tasks from an OpenSpec change.
    - Error or blocker encountered → report and wait for guidance
    - User interrupts
 
-8. **On completion or pause, show status**
+9. **On completion or pause, show status**
 
    Display:
    - Tasks completed this session
@@ -158,6 +185,7 @@ What would you like to do?
 - Keep going through tasks until done or blocked
 - Always read context files before starting (from the apply instructions output)
 - For UI class changes, always pass the component plan gate before implementation
+- For API related changes, always pass the API implementation gate before implementation
 - If task is ambiguous, pause and ask before implementing
 - If implementation reveals issues, pause and suggest artifact updates
 - Keep code changes minimal and scoped to each task

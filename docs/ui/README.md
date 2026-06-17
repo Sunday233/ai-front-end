@@ -54,14 +54,25 @@
 - `object-type-create-step3.png`
 - `object-type-create-step4.png`
 
-## 当前仓库已对齐资产（2026-05-09）
+## 当前仓库已对齐资产（2026-06-17）
 
-- `workbench-main-default.png`
-- `object-type-list-main-default.png`
-- `object-type-create-step1.png`
-- `object-type-create-step2.png`
-- `object-type-create-step3.png`
-- `object-type-create-step4.png`
+当前 PRD 的主设计源声明为 `stitch`，本目录保留本地截图作为分析或验收兜底：
+
+- `工作台默认状态.png`
+- `工作台-点击新建按钮.png`
+- `对象类型列表页.png`
+- `创建对象类型第1步-默认状态.png`
+- `创建对象类型第1步-选择数据集弹窗-1.png`
+- `创建对象类型第1步-选择数据集弹窗-2.png`
+- `创建对象类型第1步-选择数据集弹窗-3.png`
+- `创建对象类型第1步-选择数据集后.png`
+- `创建对象类型第2步-默认.png`
+- `创建对象类型第2步-点击添加对象组.png`
+- `创建对象类型第2步-添加对象组后.png`
+- `创建对象类型第3步.png`
+- `创建对象类型第4步-默认状态.png`
+- `创建对象类型第4步-选择操作类型.png`
+- `创建对象类型第4步-选择用户后.png`
 
 ## 配对失败策略
 

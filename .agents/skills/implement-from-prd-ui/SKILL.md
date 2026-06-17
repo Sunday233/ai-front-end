@@ -83,6 +83,21 @@ docs/组件拆分/<prd_slug>-组件拆分清单.md
 
 该清单是 UI 类 OpenSpec validate 与 apply 的前置门禁。缺失时不得进入提案校验或实施。
 
+### 步骤 2.5：接口契约提取
+
+若 PRD 存在 `CHAPTER-06 数据与接口要求`：
+
+- 提取 `data_fields`、`api_contract`、`mock_policy`。
+- 检查是否存在 `src/services/client.ts`；不存在时，必须在 proposal/tasks 中安排先创建 axios 请求封装。
+- 以 `prd_slug` 作为 `page-slug`，规划每页一个 `src/services/<page-slug>.ts`。
+- 规划每页一个 `src/services/<page-slug>.mock.ts`；`src/services/mock.ts` 只能作为统一注册入口。
+- 规划 `src/types/<page-slug>/model.ts` 与 `src/types/<page-slug>/api.ts`。
+- 若接口未就绪，mock 必须在 axios 请求层拦截，页面 service 仍通过 `httpClient` 发请求。
+- 若现有实现存在集中式 mock ts 文件，必须在 proposal/tasks 中安排按页面拆分，禁止继续沿用集中 mock。
+- 记录 API 文档输出：`docs/api/接口汇总.md`。
+
+缺少 method/path 时，不得自行确认为真实后端接口；必须在 proposal/tasks 中标记 `待后端确认`。
+
 ### 步骤 3：创建 OpenSpec 提案
 
 执行 `.agents/skills/create-proposal/SKILL.md`，产出 SDD 变更资产：
@@ -101,7 +116,9 @@ openspec/changes/<change-id>/
 - 依据 UI 分析清单实现布局与样式。
 - 对表格、列表、左右映射、字段属性映射等关系型 UI，按 UI 分析清单的行级映射表实现；不得将源字段与目标属性拆成无显式对应关系的并列列表。
 - 读取并遵守 `docs/组件拆分/<prd_slug>-组件拆分清单.md`。
+- 若 PRD 包含 `CHAPTER-06`，读取接口契约并按 axios client、页面级 service、页面级 mock 文件、类型定义、mock 替换点和 API 汇总文档实施。
 - 按顺序完成页面、组件、接口、样式和质量门禁。
+- 涉及接口时，使用 `api-doc-summary` 更新 `docs/api/接口汇总.md`。
 - 实现后执行 `ui-verification` 并产出 UI 问题清单。
 - 修复 P0/P1/P2 问题后再次用 Browser 或 Playwright 验证。
 
@@ -135,6 +152,7 @@ UI 类 change 在 apply 前必须检查：
 - 新增/拆分组件：使用 `create-component`。
 - 编写样式与主题适配：使用 `theme-variables`。
 - 涉及接口：使用 `create-api`。
+- 涉及接口文档：使用 `api-doc-summary`。
 
 实现时必须依据 UI 分析清单还原：
 
@@ -142,6 +160,15 @@ UI 类 change 在 apply 前必须检查：
 - 内容：文字、图片、图标、占位元素。
 - 层级：外到内结构、父子/兄弟关系、叠放顺序。
 - 样式：颜色、字号、字重、圆角、阴影、状态。
+
+接口实现必须满足：
+
+- 每个页面一个 `src/services/<page-slug>.ts`。
+- 每个含 mock 的页面一个 `src/services/<page-slug>.mock.ts`。
+- 页面 service 只通过 `httpClient` 发请求。
+- mock 通过 axios adapter/handler、页面级 mock 文件与 `src/services/mock.ts` 注册入口拦截；具体页面 mock 不得集中在单个业务 ts 文件。
+- 页面 service 导出 API 文档元数据。
+- `docs/api/接口汇总.md` 已覆盖本次接口。
 
 ### 步骤 5：UI 验收与回归
 
@@ -169,5 +196,6 @@ docs/样式还原/<prd_slug>-UI问题清单.md
 - 组件拆分清单已产出，OpenSpec `design.md` 已引用，`tasks.md` 已写明按清单实施。
 - OpenSpec proposal、tasks、spec delta 已产出并通过 strict validate。
 - 代码实现按 tasks 完成。
+- 涉及接口时，`src/services/client.ts`、页面 service、页面 mock 文件、类型定义、mock 替换点与 `docs/api/接口汇总.md` 已完成。
 - 类型/lint/测试/构建门禁按项目要求通过。
 - UI 问题清单已产出，P0 已修复并完成回归验证。
