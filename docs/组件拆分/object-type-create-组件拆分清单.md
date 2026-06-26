@@ -6,13 +6,13 @@
 - UI 分析清单：`docs/样式还原/object-type-create-UI分析清单.md`
 - 设计源：Stitch `projects/11214155578152749288`，本地截图 `docs/ui/创建对象类型*.png`
 - 目标页面/路由：`/object-types/create`
-- 现状说明：当前仓库没有 `src/` 业务代码目录，现有可复用项不可扫描；以下为目标 Vue 工程中的落地建议。
+- 现状说明：当前仓库没有 `src/` 业务代码目录，现有可复用项不可扫描；以下为本次 Vue 实现层的落地规划。
 
 ## 现有可复用项
 
 | 名称 | 路径 | 复用方式 | 说明 |
 |------|------|----------|------|
-| 无 | - | - | 当前仓库无业务代码，无法扫描已有组件 |
+| `AppShell` | `src/layout/app-shell/index.vue` | 公共布局 | 与工作台、对象类型列表页共用左侧导航和工作区容器 |
 
 ## 页面组件拆分
 
@@ -44,19 +44,19 @@
 
 ```text
 ObjectTypeCreatePage
-├── WorkbenchSidebar(候选复用，首次可页面级)
-├── Breadcrumb
-├── CreateStepHeader
-├── StepContent
-│   ├── DatasourceStep
-│   │   └── DatasetSelectModal
-│   ├── MetadataStep
-│   │   └── ObjectGroupSelect
-│   ├── AttributeStep
-│   │   └── AttributeMappingRow[]
-│   └── ActionStep
-└── WizardFooter
-    └── PrimaryKeyConfirmModal
+└── AppShell
+    ├── Breadcrumb
+    ├── CreateStepHeader
+    ├── StepContent
+    │   ├── DatasourceStep
+    │   │   └── DatasetSelectModal
+    │   ├── MetadataStep
+    │   │   └── ObjectGroupSelect
+    │   ├── AttributeStep
+    │   │   └── AttributeMappingRow[]
+    │   └── ActionStep
+    └── WizardFooter
+        └── PrimaryKeyConfirmModal
 ```
 
 ## Apply 约束
@@ -66,5 +66,4 @@ ObjectTypeCreatePage
 - 第 4 步动作和用户权限也必须用行级数据契约，不得把动作选择和权限选择写成无关联状态。
 - 页面级组件默认放在 `src/views/object-type-create/components/`。
 - 接口未就绪时，页面仍通过 service 调 `httpClient`，mock 只能在请求层拦截。
-- 当前仓库无前端应用；若在本仓库继续 apply，需要先创建 Vue 3 + Vite + TypeScript 基础工程。
-
+- 当前仓库无前端应用；本次 apply 需要先创建 Vue 3 + Vite + TypeScript 基础工程。

@@ -6,13 +6,13 @@
 - UI 分析清单：`docs/样式还原/object-type-list-UI分析清单.md`
 - 设计源：Stitch `projects/11214155578152749288`，本地截图 `docs/ui/对象类型列表页.png`
 - 目标页面/路由：`/object-types`
-- 现状说明：当前仓库没有 `src/` 业务代码目录，现有可复用项不可扫描；以下为目标 Vue 工程中的落地建议。
+- 现状说明：当前仓库没有 `src/` 业务代码目录，现有可复用项不可扫描；以下为本次 Vue 实现层的落地规划。
 
 ## 现有可复用项
 
 | 名称 | 路径 | 复用方式 | 说明 |
 |------|------|----------|------|
-| 无 | - | - | 当前仓库无业务代码，无法扫描已有组件 |
+| `AppShell` | `src/layout/app-shell/index.vue` | 公共布局 | 与工作台、创建页共用左侧导航和工作区容器 |
 
 ## 页面组件拆分
 
@@ -22,7 +22,7 @@
 | `ObjectTypeListToolbar` | 页面级 | `src/views/object-type-list/components/object-type-list-toolbar/index.vue` | 搜索框、刷新、设置、创建按钮 | 页面专用 | 顶部操作区 |
 | `ObjectTypeTable` | 页面级 | `src/views/object-type-list/components/object-type-table/index.vue` | 表格列、行、状态标签、详情操作 | 页面专用 | 表格区 |
 | `ObjectTypeStatusTag` | 页面级候选复用 | `src/views/object-type-list/components/object-type-status-tag/index.vue` | 正常/草稿/可见标签样式 | 第二处真实使用后再抽公共 | 表格标签 |
-| `ObjectTypePagination` | 页面级 | `src/views/object-type-list/components/object-type-pagination/index.vue` | 分页、每页条数、跳页 | 页面专用，可直接封装 AntD Pagination | 分页区 |
+| `ObjectTypePagination` | 页面级 | `src/views/object-type-list/components/object-type-pagination/index.vue` | 分页、每页条数、跳页 | 页面专用 | 分页区 |
 | `ObjectTypeEmptyState` | 页面级 | `src/views/object-type-list/components/object-type-empty-state/index.vue` | 空列表/搜索无结果/错误态 | 页面专用 | 空状态区 |
 
 ## 关系型 UI 数据契约
@@ -37,15 +37,15 @@
 
 ```text
 ObjectTypeListPage
-├── WorkbenchSidebar(候选复用，首次可页面级)
-└── Content
-    ├── Breadcrumb
-    ├── Title
-    ├── ObjectTypeListToolbar
-    ├── ObjectTypeTable
-    │   └── ObjectTypeStatusTag
-    ├── ObjectTypeEmptyState
-    └── ObjectTypePagination
+└── AppShell
+    └── Content
+        ├── Breadcrumb
+        ├── Title
+        ├── ObjectTypeListToolbar
+        ├── ObjectTypeTable
+        │   └── ObjectTypeStatusTag
+        ├── ObjectTypeEmptyState
+        └── ObjectTypePagination
 ```
 
 ## Apply 约束
@@ -54,5 +54,4 @@ ObjectTypeListPage
 - 表格必须按 UI 分析清单行级映射实现，不得改变列顺序。
 - 搜索、防抖、分页、刷新必须通过页面 service 发请求，不得在组件内写 mock 分支。
 - 页面级组件默认放在 `src/views/object-type-list/components/`。
-- 当前仓库无前端应用；若在本仓库继续 apply，需要先创建 Vue 3 + Vite + TypeScript 基础工程。
-
+- 当前仓库无前端应用；本次 apply 需要先创建 Vue 3 + Vite + TypeScript 基础工程。

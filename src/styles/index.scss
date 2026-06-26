@@ -1,0 +1,29 @@
+@use './variables';
+@use './reset';
+
+.matrix-count-badge {
+  display: inline-flex;
+  min-width: 24px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  color: var(--matrix-color-text-secondary);
+  font-size: 12px;
+  line-height: 20px;
+  background: var(--matrix-color-table-head);
+  border: 1px solid var(--matrix-color-border);
+  border-radius: var(--matrix-radius-sm);
+}
+
+.matrix-icon-tile {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: var(--matrix-color-primary);
+  border-radius: var(--matrix-radius-sm);
+}
