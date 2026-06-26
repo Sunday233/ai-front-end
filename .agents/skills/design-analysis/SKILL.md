@@ -113,6 +113,7 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 ### Tools Rules（工具使用指南）
 - `rules/tools-design-guidelines.md` - 设计稿工具使用（Pencil MCP / Figma MCP / Stitch MCP / 普通截图）
+- `rules/tools-stitch-mcp-analysis.md` - Stitch MCP 细化调用流程与质量门禁
 
 ---
 

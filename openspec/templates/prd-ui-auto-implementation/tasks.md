@@ -11,8 +11,10 @@
 
 - [ ] 2.1 按设计源选择工具：截图模式 / Pencil MCP / Figma MCP / Stitch MCP
 - [ ] 2.2 执行 `.agents/skills/design-analysis/SKILL.md`
-- [ ] 2.3 产出 `docs/样式还原/<prd_slug>-UI分析清单.md`
-- [ ] 2.4 在分析清单中记录 PRD 路径、设计源、截图/链接、证据等级与待确认项
+- [ ] 2.3 若主设计源为 Stitch，读取 `.agents/skills/design-analysis/rules/tools-stitch-mcp-analysis.md`，并按 `get_project`、`list_screens`、逐目标 `get_screen`、`list_design_systems` 记录 MCP 调用证据
+- [ ] 2.4 若主设计源为 Stitch，建立 PRD 页面/状态到 Stitch screen 的覆盖矩阵，并标明 `docs/ui` 截图兜底
+- [ ] 2.5 产出 `docs/样式还原/<prd_slug>-UI分析清单.md`
+- [ ] 2.6 在分析清单中记录 PRD 路径、设计源、截图/链接、MCP 调用记录、screen 覆盖矩阵、证据等级与待确认项
 
 ## 3. Component Planning（组件拆分规划）
 

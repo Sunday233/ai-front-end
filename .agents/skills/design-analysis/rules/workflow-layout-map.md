@@ -29,8 +29,9 @@ tags: workflow, layout-map, analysis, critical
 
 - **Stitch 链接**：
   - 使用 **Stitch MCP** 从链接中定位项目、页面、画板或节点
-  - 获取对应设计稿截图、结构化上下文、布局层级与样式信息
-  - 记录原始链接、页面/画板名称、节点 ID（如有）和截图导出范围
+  - 按 `tools-stitch-mcp-analysis.md` 依次调用 `get_project`、`list_screens`、目标 `get_screen` 与 `list_design_systems`
+  - 建立 PRD 页面/状态到 Stitch screen 的覆盖矩阵，再获取对应设计稿截图、结构化上下文、布局层级与样式信息
+  - 记录原始链接、页面/画板名称、screenId、screenInstanceId、节点 ID（如有）和截图导出范围
 
 - **普通截图（png/jpg/jpeg/webp）**：
   - 使用图片查看工具读取截图像素尺寸与可见元素

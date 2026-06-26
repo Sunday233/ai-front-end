@@ -54,6 +54,7 @@ batch_get(patterns, nodeIds)
 1. 从 Figma 链接中解析 file key 和 node id
 2. 使用 `get_screenshot` 获取对应节点的截图
 3. 使用 `get_design_context` 获取布局与节点信息
+4. 使用 `get_variable_defs` 获取变量和主题
 
 **示例**：
 ```javascript
@@ -82,17 +83,23 @@ get_design_context(fileKey, nodeId)
 - 获取布局、文字、图片、层级、样式变量等结构化上下文
 - 识别多页面、多状态或多断点设计稿
 
+**必须遵循**：读取 `rules/tools-stitch-mcp-analysis.md`，按其中的「项目定位 -> screen 候选池 -> 逐 screen 详情 -> 设计系统 -> 区域复核」流程执行。
+
 **使用步骤**：
-1. 解析 Stitch 链接中的项目、页面、画板或节点定位信息。
-2. 使用 Stitch MCP 获取入口页面/画板的结构化上下文。
-3. 使用 Stitch MCP 获取整体截图，并按需获取关键节点截图。
-4. 按「从上到下、从左到右、从外到里」记录布局、文字、图片和层级。
-5. 若 Stitch MCP 只能返回截图而无法返回节点结构，则按“截图模式”补充证据等级。
+1. 解析 Stitch 链接中的 `projectId`、页面、画板、screen 或节点定位信息。
+2. 调用 `get_project` 读取项目上下文；若没有项目 ID，先用 `list_projects` 定位项目。
+3. 调用 `list_screens` 建立 screen 候选池，并与 PRD 页面、状态、`docs/ui` 截图交叉匹配。
+4. 对每个目标页面/状态调用 `get_screen`，不得只读取项目概览后直接分析。
+5. 调用 `list_design_systems` 获取设计系统或记录不可用原因。
+6. 输出 Stitch MCP 调用记录、screen 覆盖矩阵和字段证据等级。
+7. 按「从上到下、从左到右、从外到里」记录布局、文字、图片和层级。
+8. 若 Stitch MCP 返回信息不足，则使用 `docs/ui` 截图兜底并标注“估算”或“待确认”。
 
 **记录要求**：
 - 在分析清单中记录原始 Stitch 链接、页面/画板名称、节点 ID（如有）和截图导出范围。
 - 多状态设计稿必须分别记录状态名称与对应链接或节点 ID。
 - 对 Stitch MCP 返回的结构化属性按“精确”证据等级记录；对仅凭截图判断的字段标注“估算”或“待确认”。
+- 分析清单必须包含 `Stitch MCP 调用记录` 和 `Stitch screen 覆盖矩阵`；缺失时不得进入组件拆分。
 
 ### 普通截图（PNG/JPG/JPEG/WEBP）
 

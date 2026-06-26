@@ -49,7 +49,7 @@ description: 当用户输入 docs/prd/*.md 并希望基于 PRD 与 UI 设计稿�
 
 - `.pen`：用 Pencil MCP 读取结构、截图与节点。
 - Figma：用 Figma MCP 读取截图与设计上下文。
-- Stitch：用 Stitch MCP 读取页面/画板/节点、截图与结构化上下文。
+- Stitch：先读取 `design-analysis/rules/tools-stitch-mcp-analysis.md`，再用 Stitch MCP 按 `get_project`、`list_screens`、逐目标 `get_screen`、`list_design_systems` 的顺序读取项目、screen、状态、截图/结构化上下文与设计系统信息。
 - `docs/ui`：按截图模式读取图片尺寸、可见元素、布局与状态。
 
 产出：
@@ -62,6 +62,7 @@ docs/样式还原/<prd_slug>-UI分析清单.md
 - 若设计稿包含表格、列表、左右列映射、字段-属性映射、主键/标题键等关系型 UI，分析清单必须包含行级映射表。
 - 若分析清单只写“左右两列”“字段映射”等概括语，必须先补全分析清单，再进入组件拆分。
 - Stitch/Figma/Pencil 节点信息不足时，可结合 `docs/ui` 截图补充，但必须标注证据等级。
+- Stitch 主设计源必须在分析清单中包含 `Stitch MCP 调用记录`、`Stitch screen 覆盖矩阵` 和字段证据等级；缺失任一项时不得进入组件拆分。
 
 若设计源缺失，必须在提案与 tasks 中标记 `UI_PENDING`，并说明降级依据。
 

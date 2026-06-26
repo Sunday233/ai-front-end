@@ -32,7 +32,7 @@
 | `optional_ui_assets` | 否 | 补充状态截图，如 hover / active / empty |
 | `design_pen_files` | 条件必填 | `primary_design_source=pen` 时必填，列出 `.pen` 文件路径 |
 | `figma_links` | 条件必填 | `primary_design_source=figma` 时必填，列出 Figma frame 或节点链接 |
-| `stitch_links` | 条件必填 | `primary_design_source=stitch` 时必填，列出 Stitch 页面、画板或节点链接 |
+| `stitch_links` | 条件必填 | `primary_design_source=stitch` 时必填，列出 Stitch 项目、页面、screen 或节点链接；建议同时写明页面/状态名称 |
 | `ui_analysis_output` | 推荐 | UI 分析清单目标路径：`docs/样式还原/<prd_slug>-UI分析清单.md` |
 | `component_plan_output` | 推荐 | 组件拆分清单目标路径：`docs/组件拆分/<prd_slug>-组件拆分清单.md` |
 | `ui_verification_output` | 推荐 | UI 问题清单目标路径：`docs/样式还原/<prd_slug>-UI问题清单.md` |
@@ -44,7 +44,7 @@
 | `docs-ui` | `design-analysis` 截图模式，读取 `docs/ui` |
 | `pen` | Pencil MCP 读稿，再执行 `design-analysis` |
 | `figma` | Figma MCP 读稿，再执行 `design-analysis` |
-| `stitch` | Stitch MCP 读稿，再执行 `design-analysis` |
+| `stitch` | Stitch MCP 按 `get_project`、`list_screens`、逐目标 `get_screen`、`list_design_systems` 读稿，再执行 `design-analysis` |
 
 识别后流程固定为：
 
@@ -68,7 +68,8 @@
 2. `prd_slug` 与 `ui_prefix` 必须一致。
 3. `primary_design_source=docs-ui` 时，`required_ui_assets` 中的文件名必须真实存在于 `docs/ui/`。
 4. `primary_design_source=pen/figma/stitch` 时，必须填写对应的 `design_pen_files`、`figma_links` 或 `stitch_links`。
-5. 新功能建议复制当前最接近的示例 PRD 并替换内容，不改章节结构。
+5. `primary_design_source=stitch` 时，建议在 PRD 中列出每个页面/状态的期望名称，例如 default、dropdown open、modal open、empty、step1-step4，便于 Stitch MCP 建立 screen 覆盖矩阵。
+6. 新功能建议复制当前最接近的示例 PRD 并替换内容，不改章节结构。
 
 建议做法：
 

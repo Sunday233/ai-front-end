@@ -36,6 +36,21 @@ tags: output, checklist, template, analysis
 | 节点 ID |  |
 | 截图导出范围 | 整页 / 指定区域 / 指定节点 |
 
+## Stitch MCP 调用记录（Stitch 必填）
+
+| 顺序 | MCP 工具 | 输入摘要 | 输出摘要 | 用途 | 结论 |
+|------|----------|----------|----------|------|------|
+| 1 | get_project | projects/xxx | screenInstances: n | 定位项目 | 成功 |
+| 2 | list_screens | projectId=xxx | screens: n | 建立候选池 | 成功 |
+| 3 | get_screen | screenId=xxx | 页面 default | 分析布局 | 成功 |
+| 4 | list_design_systems | projectId=xxx | designSystems: n | 样式来源 | 成功 |
+
+## Stitch screen 覆盖矩阵（Stitch 必填）
+
+| PRD 页面/状态 | Stitch screen | screenId | screenInstanceId | deviceType | 本地截图兜底 | 覆盖结论 |
+|---------------|---------------|----------|------------------|------------|--------------|----------|
+|  |  |  |  |  |  |  |
+
 ## 一、设计稿整体分析
 
 （页面状态、整体尺寸、**按从上到下排序的**区域划分、区域间间距）
