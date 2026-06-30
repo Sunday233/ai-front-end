@@ -1,17 +1,43 @@
-import type { WorkbenchCreatePermissions, WorkbenchResourceMenu, WorkbenchSummary } from "./model";
+import type {
+  WorkbenchMenuItem,
+  WorkbenchObjectTypeCard,
+  WorkbenchSummary,
+} from "./model";
 
-export interface SearchWorkbenchObjectTypesParams {
-  keyword: string;
+export interface GetWorkbenchSummaryParams {
+  workspaceId: string;
+  agentId: string;
 }
 
-export type GetWorkbenchSummaryResponse = WorkbenchSummary;
+export interface GetWorkbenchSummaryResponse {
+  summary: WorkbenchSummary;
+}
+
+export interface GetWorkbenchMenusParams {
+  agentId: string;
+}
 
 export interface GetWorkbenchMenusResponse {
-  menus: WorkbenchResourceMenu[];
+  menus: WorkbenchMenuItem[];
+}
+
+export interface SearchWorkbenchObjectTypesParams {
+  agentId: string;
+  keyword?: string;
 }
 
 export interface SearchWorkbenchObjectTypesResponse {
-  list: WorkbenchSummary["favoriteObjectTypes"];
+  list: WorkbenchObjectTypeCard[];
 }
 
-export type GetWorkbenchCreatePermissionsResponse = WorkbenchCreatePermissions;
+export interface GetWorkbenchCreatePermissionsParams {
+  agentId: string;
+}
+
+export interface GetWorkbenchCreatePermissionsResponse {
+  canCreateObjectType: boolean;
+  canCreateLink: boolean;
+  canCreateAction: boolean;
+  canCreateObjectGroup: boolean;
+  canManageAgent: boolean;
+}

@@ -84,11 +84,13 @@ openspec-archive-change
 主链路约束：
 
 - `design-analysis` 必须在开发前产出 UI 分析清单；设计源缺失时必须在 proposal/tasks 中标记 `UI_PENDING`。
+- UI 分析清单必须包含 `UI 证据索引`，统一记录 Stitch / Figma / `.pen` / `docs-ui` / 截图 / 纯 PRD 的设计源定位、最终证据、必验区域和关系型核对项。
 - `component-planning` 必须在 UI 类 change validate/apply 前产出组件拆分清单。
 - UI 类 change 的 `design.md` 必须引用组件拆分清单，`tasks.md` 必须写明按组件拆分清单实施。
 - 涉及接口时，必须使用 `create-api` 规划 `src/services/client.ts`、页面 service、页面 mock、类型文件与 mock 替换点。
 - 涉及接口文档时，必须使用 `api-doc-summary` 更新 `docs/api/接口汇总.md`。
-- 实现完成后必须使用 `ui-verification` 进行 UI 还原验收，修复后再次验证。
+- 实现完成后必须使用 `ui-verification` 进行 UI 还原验收，修复后再次验证；Browser 截图失败时记录失败阶段并降级 Playwright CLI/MCP，验收只保留最终引用证据。
+- 质量门禁推荐顺序：`test/typecheck/lint/openspec validate` 可并行，`build` 单独执行，build 后必要时补跑 lint。
 
 ## 技能选择速查
 

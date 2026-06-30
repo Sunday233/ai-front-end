@@ -24,6 +24,8 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 **关系型 UI 必须结构化记录**：遇到表格、列表、左右两列映射、字段-属性映射、主键/标题键、配置步骤页时，必须输出行级映射表，记录源字段、目标字段/属性、类型、状态标签、操作按钮、字数/校验提示、行顺序和对齐关系。不得只写“左右两列”“字段映射”等概括语。
 
+**设计源证据必须先归一**：不要假设设计稿一定来自 Stitch。先识别 `.pen`、Figma、Stitch、`docs/ui`、普通截图或纯 PRD，再输出统一的 `UI 证据索引`。后续组件拆分、实现和验收只消费该索引，减少重复读取设计源。
+
 ## 截图模式（PNG/JPG）补充约束
 
 当输入仅为普通截图（无 `.pen` 结构、无 Figma/Stitch 可读节点）时，必须启用“截图模式”：
@@ -68,7 +70,18 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 - 主设计源类型
 - 设计稿路径/链接或截图文件列表
 - 使用的 MCP/模式
+- `UI 证据索引`：页面/状态、设计源类型、设计源定位、本地证据、必验区域、关系型核对项
 - UI 分析清单输出路径
+
+设计源归一字段：
+
+| 设计源类型 | 设计源定位写法 | 本地证据写法 |
+|------------|----------------|--------------|
+| Stitch | projectId + screenId/screenInstanceId + 状态名 | Stitch 截图、结构化上下文或 `docs/ui` 兜底图 |
+| Figma | fileKey + nodeId/frame 名 + 状态名 | Figma 截图、design context 或导出图 |
+| Pencil `.pen` | filePath + nodeId/frame 名 | Pencil screenshot、layout snapshot |
+| `docs-ui` / 普通截图 | 图片路径 + 状态名 | 原图路径、尺寸、截图模式证据等级 |
+| 纯 PRD | PRD 章节 + UI_PENDING | 假设、风险、待补设计源 |
 
 ---
 
@@ -82,7 +95,7 @@ description: 通用设计稿分析技能。只要需要「分析设计稿、梳�
 
 ## 工作流程（4步）
 
-1. **建立布局 Map**：若输入为 PRD，先识别设计源；再获取设计稿结构或截图结构，记录页面状态、整体尺寸、区域划分。详见 `rules/workflow-layout-map.md`
+1. **建立证据索引与布局 Map**：若输入为 PRD，先识别设计源并输出 `UI 证据索引`；再获取设计稿结构或截图结构，记录页面状态、整体尺寸、区域划分。详见 `rules/workflow-layout-map.md`
 2. **区域与元素提取**：对每个区域按「从外到里」逐项提取，确保文字、图片、布局、层级四者均准确记录；含映射/表格/列表的区域必须逐行输出结构化关系；截图模式下同步标注证据等级。详见 `rules/workflow-element-extraction.md`
 3. **样式规范汇总**：汇总颜色、字体、圆角、间距、阴影等样式规范。详见 `rules/workflow-style-summary.md`
 4. **输出 UI 分析清单文档**：将分析结果输出为文档；截图模式需额外输出待确认项。详见 `rules/workflow-output-checklist.md` 和 `rules/output-analysis-checklist.md`

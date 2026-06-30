@@ -1,101 +1,99 @@
 <template>
   <header class="workbench-header">
-    <div class="breadcrumb">返回首页&nbsp;&nbsp;|&nbsp;&nbsp;<DesktopOutlined /> 工作台</div>
-    <div class="toolbar">
-      <a-input
+    <div class="workbench-header__breadcrumb">返回首页 <span>|</span> <DesktopOutlined /> 工作台</div>
+    <div class="workbench-header__tools">
+      <Input
         :value="keyword"
+        class="workbench-header__search"
         placeholder="请输入关键词进行搜索"
+        :maxlength="50"
         allow-clear
-        class="search-input"
         @change="onInputChange"
       >
         <template #suffix>
-          <span class="word-count">{{ keyword.length }} / 50</span>
+          <span class="workbench-header__counter">{{ keyword.length }} / 50</span>
           <SearchOutlined />
         </template>
-      </a-input>
-      <div class="create-wrapper">
-        <a-button v-if="canCreate" type="primary" @click="$emit('toggleCreateMenu')">
-          <PlusOutlined />
+      </Input>
+      <Dropdown trigger="click" placement="bottomRight">
+        <Button v-if="canCreate" type="primary">
+          <template #icon>
+            <PlusOutlined />
+          </template>
           新建
-        </a-button>
-        <CreateResourceMenu
-          v-if="menuOpen && summary"
-          :options="summary.createOptions"
-          :permissions="summary.permissions"
-          @select="$emit('selectCreateRoute', $event)"
-        />
-      </div>
+        </Button>
+        <template #overlay>
+          <div class="workbench-header__popover">
+            <CreateResourceMenu @select="$emit('create', $event)" />
+          </div>
+        </template>
+      </Dropdown>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import {DesktopOutlined, PlusOutlined, SearchOutlined} from '@ant-design/icons-vue';
-import {computed} from 'vue';
-import CreateResourceMenu from '@/views/workbench/components/create-resource-menu/index.vue';
-import type {WorkbenchSummary} from '@/types/workbench/model';
+import {
+  DesktopOutlined,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons-vue";
+import { Button, Dropdown, Input } from "ant-design-vue";
+import CreateResourceMenu from "../create-resource-menu/index.vue";
 
-const props = defineProps<{
+interface WorkbenchHeaderProps {
   keyword: string;
-  menuOpen: boolean;
-  summary: WorkbenchSummary | null;
-}>();
+  canCreate: boolean;
+}
+
+defineProps<WorkbenchHeaderProps>();
 
 const emit = defineEmits<{
-  'update:keyword': [value: string];
-  toggleCreateMenu: [];
-  selectCreateRoute: [routePath: string];
+  search: [keyword: string];
+  create: [key: string];
 }>();
 
-const canCreate = computed(() => {
-  const permissions = props.summary?.permissions;
-
-  return Boolean(
-    permissions?.canCreateObjectType ||
-      permissions?.canCreateLink ||
-      permissions?.canCreateAction ||
-      permissions?.canCreateObjectGroup,
-  );
-});
-
 const onInputChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  emit('update:keyword', target.value.slice(0, 50));
+  emit("search", (event.target as HTMLInputElement).value);
 };
 </script>
 
 <style scoped lang="scss">
 .workbench-header {
   position: relative;
-  z-index: 2;
+  z-index: 1;
+  padding: 16px 16px 0;
 }
 
-.breadcrumb {
+.workbench-header__breadcrumb {
   display: flex;
-  height: 34px;
+  gap: 6px;
   align-items: center;
-  gap: 4px;
-  color: var(--matrix-color-text-secondary);
+  height: 24px;
+  margin-bottom: 22px;
+  color: var(--matrix-text-muted);
 }
 
-.toolbar {
+.workbench-header__tools {
   display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
+  grid-template-columns: minmax(420px, 1fr) auto;
   gap: 20px;
+  align-items: center;
 }
 
-.search-input {
-  height: 30px;
+.workbench-header__search {
+  height: 32px;
 }
 
-.word-count {
+.workbench-header__counter {
   margin-right: 8px;
-  color: var(--matrix-color-text-muted);
+  color: var(--matrix-text-muted);
 }
 
-.create-wrapper {
-  position: relative;
+.workbench-header__popover {
+  overflow: hidden;
+  background: var(--matrix-bg-container);
+  border-radius: 8px;
+  box-shadow: var(--matrix-shadow-popover);
 }
 </style>

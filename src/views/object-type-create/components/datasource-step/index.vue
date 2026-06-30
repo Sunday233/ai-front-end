@@ -1,8 +1,8 @@
 <template>
   <div class="datasource-step">
-    <div class="source-row">
-      <span class="label">数据源：</span>
-      <button class="source-card active" type="button">
+    <div class="datasource-step__row">
+      <span class="datasource-step__label">数据源：</span>
+      <button class="datasource-step__mode datasource-step__mode--active" type="button">
         <DatabaseOutlined />
         <span>
           <strong>已有数据集</strong>
@@ -10,100 +10,99 @@
         </span>
       </button>
     </div>
-    <div class="dataset-row">
-      <span class="required">*</span>
-      <span>选择数据集：</span>
-      <span class="dataset-name">
+
+    <div class="datasource-step__select">
+      <span><b>*</b> 选择数据集：</span>
+      <span class="datasource-step__dataset">
         <DatabaseOutlined />
         {{ selectedDataset?.name ?? '暂无选择数据集' }}
       </span>
-      <a-button class="choose-button" @click="$emit('openDatasetModal')">
-        <PlusOutlined />
+      <Button type="primary" ghost @click="$emit('open-dataset')">
+        <template #icon>
+          <PlusOutlined />
+        </template>
         选择数据集
-      </a-button>
+      </Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {DatabaseOutlined, PlusOutlined} from '@ant-design/icons-vue';
-import type {DatasetRow} from '@/types/object-type-create/model';
+import type { DatasetOption } from "@/types/object-type-create/model";
+import { DatabaseOutlined, PlusOutlined } from "@ant-design/icons-vue";
+import { Button } from "ant-design-vue";
 
-defineProps<{
-  selectedDataset: DatasetRow | null;
-}>();
+interface DatasourceStepProps {
+  selectedDataset?: DatasetOption;
+}
+
+defineProps<DatasourceStepProps>();
 
 defineEmits<{
-  openDatasetModal: [];
+  "open-dataset": [];
 }>();
 </script>
 
 <style scoped lang="scss">
 .datasource-step {
-  width: 1090px;
-  padding: 54px 0;
-  margin-left: 192px;
+  padding: 56px 192px;
 }
 
-.source-row,
-.dataset-row {
+.datasource-step__row {
   display: flex;
+  gap: 12px;
   align-items: center;
 }
 
-.source-row {
-  justify-content: flex-start;
-}
-
-.label {
+.datasource-step__label {
   width: 72px;
-  margin-right: 10px;
-  color: var(--matrix-color-text-secondary);
+  color: var(--matrix-text-secondary);
   text-align: right;
 }
 
-.source-card {
+.datasource-step__mode {
   display: grid;
-  width: 280px;
-  height: 80px;
-  grid-template-columns: 28px 1fr;
-  align-items: start;
+  grid-template-columns: 24px 1fr;
   gap: 10px;
-  padding: 12px 16px;
+  width: 282px;
+  padding: 14px 16px;
   text-align: left;
-  cursor: pointer;
-  background: var(--matrix-color-primary-soft);
-  border: 1px solid var(--matrix-color-primary);
+  background: var(--matrix-bg-subtle);
+  border: 1px solid var(--matrix-primary);
+
+  strong,
+  small {
+    display: block;
+  }
 
   strong {
-    display: block;
-    color: var(--matrix-color-primary);
+    color: var(--matrix-primary);
+    font-weight: 500;
   }
 
   small {
-    color: var(--matrix-color-text-muted);
+    margin-top: 6px;
+    color: var(--matrix-text-muted);
+    line-height: 20px;
   }
 }
 
-.dataset-row {
-  position: relative;
-  margin-top: 28px;
-  justify-content: flex-start;
-}
-
-.required {
-  color: var(--matrix-color-error);
-}
-
-.dataset-name {
-  display: inline-flex;
+.datasource-step__select {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 8px;
   align-items: center;
-  gap: 4px;
-  margin-left: 4px;
+  margin-top: 22px;
+
+  b {
+    color: var(--matrix-error);
+  }
 }
 
-.choose-button {
-  position: absolute;
-  right: 0;
+.datasource-step__dataset {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--matrix-text-secondary);
 }
 </style>

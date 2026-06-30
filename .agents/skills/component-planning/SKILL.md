@@ -37,8 +37,9 @@ UI 类 change 必须满足：
 
 1. `docs/prd/<prd_slug>.md`
 2. `docs/样式还原/<prd_slug>-UI分析清单.md`
-3. `docs/ui/` 中与 `prd_slug` 或 PRD 声明匹配的截图
-4. 现有代码目录：`src/components`、`src/layout`、`src/views`
+3. UI 分析清单中的 `UI 证据索引`，用于确认页面/状态、设计源类型、最终证据、必验区域与关系型核对项
+4. `docs/ui/` 中与 `prd_slug` 或 PRD 声明匹配的截图
+5. 现有代码目录：`src/components`、`src/layout`、`src/views`
 
 若当前仓库没有业务代码目录，只基于 PRD、UI 分析清单与截图给出建议，并在清单中说明“现有代码不可扫描”。
 
@@ -52,6 +53,7 @@ UI 类 change 必须满足：
 - `src/components/` 只能放跨页面复用且业务耦合低的组件。
 - 已存在的 `src/layout`、`src/components` 优先复用。
 - 拆分依据必须来自 PRD、UI 分析清单、截图或现有代码，不凭空制造抽象。
+- 组件拆分必须引用 `UI 证据索引` 的页面/状态和必验区域；不要在组件规划阶段重新发现设计源。
 - 关系型 UI（表格、列表、左右映射、字段-属性映射、主键/标题键）必须拆出明确职责：数据契约、行级渲染、状态标签、操作按钮、验收关注点。
 - 若设计稿是一一映射关系，组件规划应优先使用 `mappingRows` / `rows` 这类行级数据模型，而不是无约束的 `leftItems` + `rightItems` 并列数组。
 
@@ -76,6 +78,7 @@ OpenSpec change 的 `design.md` 必须引用该路径。
 
 - PRD：
 - UI 分析清单：
+- UI 证据索引：
 - 设计源：
 - 目标页面/路由：
 

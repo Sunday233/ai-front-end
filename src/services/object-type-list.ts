@@ -4,27 +4,36 @@ import type {
   GetObjectTypeListParams,
   GetObjectTypeListPermissionsResponse,
   GetObjectTypeListResponse,
+  RefreshObjectTypeListParams,
   RefreshObjectTypeListResponse,
   SearchObjectTypesParams,
   SearchObjectTypesResponse,
 } from "@/types/object-type-list/api";
 
-const BASE_PATH = "/mock/object-types";
-
 export const getObjectTypeList = (params: GetObjectTypeListParams) => {
-  return httpClient.get<GetObjectTypeListResponse>(BASE_PATH, { params });
+  return httpClient.get<GetObjectTypeListResponse>("/matrix/object-types", {
+    params,
+  });
 };
 
 export const searchObjectTypes = (params: SearchObjectTypesParams) => {
-  return httpClient.get<SearchObjectTypesResponse>(`${BASE_PATH}/search`, { params });
+  return httpClient.get<SearchObjectTypesResponse>(
+    "/matrix/object-types/search",
+    { params },
+  );
 };
 
-export const refreshObjectTypeList = (params: GetObjectTypeListParams) => {
-  return httpClient.get<RefreshObjectTypeListResponse>(`${BASE_PATH}/refresh`, { params });
+export const refreshObjectTypeList = (params: RefreshObjectTypeListParams) => {
+  return httpClient.get<RefreshObjectTypeListResponse>(
+    "/matrix/object-types/refresh",
+    { params },
+  );
 };
 
 export const getObjectTypeListPermissions = () => {
-  return httpClient.get<GetObjectTypeListPermissionsResponse>(`${BASE_PATH}/permissions`);
+  return httpClient.get<GetObjectTypeListPermissionsResponse>(
+    "/matrix/object-types/permissions",
+  );
 };
 
 export const objectTypeListApiDocs = [
@@ -33,63 +42,63 @@ export const objectTypeListApiDocs = [
     page: "object-type-list",
     service: "src/services/object-type-list.ts",
     name: "getObjectTypeList",
-    method: "待后端确认",
-    path: `待后端确认；当前 mock path ${BASE_PATH}`,
+    method: "GET",
+    path: "/matrix/object-types",
     paramsType: "GetObjectTypeListParams",
     bodyType: "-",
     responseType: "GetObjectTypeListResponse",
     params: ["pageNo", "pageSize", "keyword"],
-    mock: "覆盖默认列表、空列表、搜索无结果、加载失败、无新建权限",
+    mock: "覆盖默认列表、空列表、无新建权限",
     mockFile: "src/services/object-type-list.mock.ts",
-    replacement: "后端列表接口路径、状态枚举和排序口径确认后替换 path 与枚举映射",
-    source: "docs/prd/object-type-list.md#CHAPTER-06",
+    replacement: "真实列表路径、状态枚举待后端确认",
+    source: "docs/prd/object-type-list.md#api_contract",
   },
   {
     module: "对象类型列表",
     page: "object-type-list",
     service: "src/services/object-type-list.ts",
     name: "searchObjectTypes",
-    method: "待后端确认",
-    path: `待后端确认；当前 mock path ${BASE_PATH}/search`,
+    method: "GET",
+    path: "/matrix/object-types/search",
     paramsType: "SearchObjectTypesParams",
     bodyType: "-",
     responseType: "SearchObjectTypesResponse",
     params: ["pageNo", "pageSize", "keyword"],
-    mock: "覆盖精确匹配、前缀匹配、模糊匹配与高亮展示",
+    mock: "覆盖精确匹配、前缀匹配、模糊匹配、搜索无结果",
     mockFile: "src/services/object-type-list.mock.ts",
-    replacement: "后端搜索接口与高亮协议确认后替换",
-    source: "docs/prd/object-type-list.md#CHAPTER-06",
+    replacement: "真实搜索排序口径待后端确认",
+    source: "docs/prd/object-type-list.md#api_contract",
   },
   {
     module: "对象类型列表",
     page: "object-type-list",
     service: "src/services/object-type-list.ts",
     name: "refreshObjectTypeList",
-    method: "待后端确认",
-    path: `待后端确认；当前 mock path ${BASE_PATH}/refresh`,
-    paramsType: "GetObjectTypeListParams",
+    method: "GET",
+    path: "/matrix/object-types/refresh",
+    paramsType: "RefreshObjectTypeListParams",
     bodyType: "-",
     responseType: "RefreshObjectTypeListResponse",
     params: ["pageNo", "pageSize", "keyword"],
-    mock: "复用当前筛选条件返回列表",
+    mock: "复用当前筛选条件刷新",
     mockFile: "src/services/object-type-list.mock.ts",
-    replacement: "后端刷新语义确认后替换",
-    source: "docs/prd/object-type-list.md#CHAPTER-06",
+    replacement: "刷新是否独立接口待后端确认",
+    source: "docs/prd/object-type-list.md#api_contract",
   },
   {
     module: "对象类型列表",
     page: "object-type-list",
     service: "src/services/object-type-list.ts",
     name: "getObjectTypeListPermissions",
-    method: "待后端确认",
-    path: `待后端确认；当前 mock path ${BASE_PATH}/permissions`,
+    method: "GET",
+    path: "/matrix/object-types/permissions",
     paramsType: "-",
     bodyType: "-",
     responseType: "GetObjectTypeListPermissionsResponse",
     params: [],
-    mock: "覆盖有新建权限与无新建权限",
+    mock: "覆盖可新建与仅可详情",
     mockFile: "src/services/object-type-list.mock.ts",
-    replacement: "真实权限系统接入后替换",
-    source: "docs/prd/object-type-list.md#CHAPTER-06",
+    replacement: "真实权限字段待权限系统确认",
+    source: "docs/prd/object-type-list.md#api_contract",
   },
 ] satisfies ApiDocEntry[];

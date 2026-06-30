@@ -1,4 +1,4 @@
-import type { ObjectTypeListItem, ObjectTypeListPermissions } from "./model";
+import type { ObjectTypeListItem, ObjectTypeListPermission } from "./model";
 
 export interface GetObjectTypeListParams {
   pageNo: number;
@@ -6,15 +6,23 @@ export interface GetObjectTypeListParams {
   keyword?: string;
 }
 
-export type SearchObjectTypesParams = GetObjectTypeListParams;
-
 export interface GetObjectTypeListResponse {
   list: ObjectTypeListItem[];
   total: number;
-  pageNo: number;
-  pageSize: number;
 }
 
+export type SearchObjectTypesParams = GetObjectTypeListParams;
+
 export type SearchObjectTypesResponse = GetObjectTypeListResponse;
+
+export interface RefreshObjectTypeListParams {
+  pageNo: number;
+  pageSize: number;
+  keyword?: string;
+}
+
 export type RefreshObjectTypeListResponse = GetObjectTypeListResponse;
-export type GetObjectTypeListPermissionsResponse = ObjectTypeListPermissions;
+
+export interface GetObjectTypeListPermissionsResponse {
+  permissions: ObjectTypeListPermission;
+}

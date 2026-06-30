@@ -1,146 +1,87 @@
 <template>
   <div class="action-step">
     <label>选择生成的操作类型：</label>
-    <div class="action-list">
-      <button
-        v-for="action in actionRows"
+    <div class="action-step__list">
+      <Checkbox
+        v-for="action in actions"
         :key="action.id"
-        class="action-card"
-        :class="{selected: selectedActionIds.includes(action.id)}"
-        type="button"
-        @click="toggleAction(action.id)"
+        :checked="selectedIds.includes(action.id)"
+        class="action-step__item"
+        @change="onToggle(action.id, $event)"
       >
-        <a-checkbox :checked="selectedActionIds.includes(action.id)" />
-        <span>
-          <strong>{{ action.title }}</strong>
-          <small>{{ action.description }}</small>
-        </span>
-      </button>
-    </div>
-
-    <div v-if="selectedActionIds.length > 0" class="executor-row">
-      <label><span>*</span> 配置可执行操作的用户/用户组：</label>
-      <a-select :value="executorType" class="executor-type" :options="executorTypeOptions" />
-      <a-select
-        mode="multiple"
-        class="executor-select"
-        :value="selectedExecutorIds"
-        :options="executorOptions.map((item) => ({value: item.id, label: item.name}))"
-        open
-        @change="onExecutorChange"
-      />
+        <strong>{{ action.name }}</strong>
+        <span>{{ action.description }}</span>
+      </Checkbox>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
-import type {ActionConfigRow, ActionType, ExecutorOption} from '@/types/object-type-create/model';
+import type { ActionOption } from "@/types/object-type-create/model";
+import { Checkbox } from "ant-design-vue";
+import type { CheckboxChangeEvent } from "ant-design-vue/es/checkbox/interface";
 
-const props = defineProps<{
-  actionRows: ActionConfigRow[];
-  selectedActionIds: ActionType[];
-  executorType: '用户' | '用户组';
-  executorOptions: ExecutorOption[];
-  selectedExecutors: ExecutorOption[];
-}>();
+interface ActionStepProps {
+  actions: ActionOption[];
+  selectedIds: string[];
+}
+
+const props = defineProps<ActionStepProps>();
 
 const emit = defineEmits<{
-  'update:selectedActionIds': [value: ActionType[]];
-  'update:selectedExecutors': [value: ExecutorOption[]];
+  update: [selectedIds: string[]];
 }>();
 
-const executorTypeOptions = [
-  {value: '用户', label: '用户'},
-  {value: '用户组', label: '用户组'},
-];
-
-const selectedExecutorIds = computed(() => props.selectedExecutors.map((item) => item.id));
-
-const toggleAction = (id: ActionType) => {
-  const next = props.selectedActionIds.includes(id)
-    ? props.selectedActionIds.filter((item) => item !== id)
-    : [...props.selectedActionIds, id];
-
-  emit('update:selectedActionIds', next);
-};
-
-const onExecutorChange = (value: unknown) => {
-  const ids = Array.isArray(value) ? value.map(String) : [];
-  emit(
-    'update:selectedExecutors',
-    props.executorOptions.filter((option) => ids.includes(option.id)),
-  );
+const onToggle = (actionId: string, event: CheckboxChangeEvent) => {
+  const checked = event.target.checked;
+  const selected = checked
+    ? [...props.selectedIds, actionId]
+    : props.selectedIds.filter((id) => id !== actionId);
+  emit("update", selected);
 };
 </script>
 
 <style scoped lang="scss">
 .action-step {
-  width: 1200px;
-  padding-top: 54px;
-  margin-left: 76px;
+  width: 1080px;
+  margin: 54px auto 0;
 }
 
 .action-step > label {
-  display: inline-block;
-  margin-right: 12px;
-  color: var(--matrix-color-text-secondary);
-  white-space: nowrap;
+  display: block;
+  margin-bottom: 10px;
+  color: var(--matrix-text-secondary);
 }
 
-.action-list {
-  display: inline-grid;
-  width: 1010px;
-  gap: 10px;
-  vertical-align: top;
-}
-
-.action-card {
+.action-step__list {
   display: grid;
-  height: 66px;
-  grid-template-columns: 24px 1fr;
-  align-items: start;
-  gap: 8px;
-  padding: 12px 18px;
-  text-align: left;
-  cursor: pointer;
-  background: var(--matrix-color-panel-bg);
-  border: 1px solid var(--matrix-color-border);
-  border-radius: var(--matrix-radius-sm);
+  gap: 10px;
+}
 
-  &.selected {
-    background: var(--matrix-color-primary-soft);
-    border-color: var(--matrix-color-primary);
+.action-step__item {
+  display: flex;
+  align-items: flex-start;
+  min-height: 68px;
+  margin: 0;
+  padding: 14px 18px;
+  border: 1px solid var(--matrix-border);
+  border-radius: 4px;
+
+  :deep(.ant-checkbox) {
+    margin-top: 3px;
+  }
+
+  :deep(.ant-checkbox + span) {
+    display: grid;
+    gap: 8px;
   }
 
   strong {
-    display: block;
     font-weight: 500;
   }
 
-  small {
-    color: var(--matrix-color-text-muted);
+  span {
+    color: var(--matrix-text-muted);
   }
-}
-
-.executor-row {
-  display: grid;
-  grid-template-columns: auto 106px 420px;
-  align-items: start;
-  gap: 8px;
-  margin-top: 16px;
-
-  label {
-    padding-top: 6px;
-    color: var(--matrix-color-text-secondary);
-
-    span {
-      color: var(--matrix-color-error);
-    }
-  }
-}
-
-.executor-select {
-  width: 420px;
 }
 </style>

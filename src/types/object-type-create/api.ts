@@ -1,7 +1,19 @@
-import type { DatasetDetail, DatasetRow, ObjectGroupOption, ObjectTypeCreateDraft } from "./model";
+import type {
+  ActionOption,
+  DatasetOption,
+  ObjectTypeCreateDraft,
+} from "./model";
 
-export interface ValidateNameParams {
-  value: string;
+export interface GetObjectTypeCreatePermissionsResponse {
+  canCreateObjectType: boolean;
+}
+
+export interface GetAvailableDatasetsResponse {
+  datasets: DatasetOption[];
+}
+
+export interface ValidateDatasetNameBody {
+  datasetName: string;
 }
 
 export interface ValidateNameResponse {
@@ -9,33 +21,23 @@ export interface ValidateNameResponse {
   message?: string;
 }
 
-export interface GetObjectTypeCreatePermissionsResponse {
-  canCreate: boolean;
+export interface ValidateObjectTypeNameBody {
+  objectTypeName: string;
 }
 
-export interface GetAvailableDatasetsResponse {
-  datasets: DatasetRow[];
-  detail: DatasetDetail;
+export interface ValidateObjectTypeEnglishNameBody {
+  objectTypeEnglishName: string;
 }
 
-export interface GetObjectGroupsResponse {
-  groups: ObjectGroupOption[];
+export interface ValidateObjectTypeIdBody {
+  objectTypeId: string;
 }
 
 export interface CreateObjectTypeBody {
-  datasetName?: string;
-  datasetPath?: string;
-  existingDatasetId?: string;
-  objectTypeName: string;
-  objectTypeEnglishName?: string;
-  objectTypeId: string;
-  description?: string;
-  objectGroupId?: string;
+  draft: ObjectTypeCreateDraft;
 }
 
 export interface CreateObjectTypeResponse {
   id: string;
-  name: string;
+  actions: ActionOption[];
 }
-
-export type GetObjectTypeCreateDraftResponse = ObjectTypeCreateDraft;

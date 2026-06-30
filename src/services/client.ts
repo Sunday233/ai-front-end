@@ -1,4 +1,9 @@
-import axios, { type AxiosError, type AxiosRequestConfig, type AxiosResponse, type Method } from "axios";
+import axios, {
+  type AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+  type Method,
+} from "axios";
 
 export interface ApiEnvelope<T> {
   code: number;
@@ -7,11 +12,17 @@ export interface ApiEnvelope<T> {
 }
 
 const isApiEnvelope = <T>(payload: unknown): payload is ApiEnvelope<T> => {
-  return typeof payload === "object" && payload !== null && "code" in payload && "msg" in payload && "data" in payload;
+  return (
+    typeof payload === "object" &&
+    payload !== null &&
+    "code" in payload &&
+    "msg" in payload &&
+    "data" in payload
+  );
 };
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? "",
+  baseURL: import.meta.env.VITE_API_BASE_URL ?? "/backend",
   timeout: 15000,
 });
 
@@ -25,7 +36,7 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-const unwrapResponse = <T>(response: AxiosResponse<ApiEnvelope<T> | T>) => {
+const unwrapResponse = <T>(response: AxiosResponse<ApiEnvelope<T> | T>): T => {
   const payload = response.data;
 
   if (isApiEnvelope<T>(payload)) {
@@ -36,10 +47,14 @@ const unwrapResponse = <T>(response: AxiosResponse<ApiEnvelope<T> | T>) => {
     return payload.data;
   }
 
-  return payload as T;
+  return payload;
 };
 
-const request = async <T>(method: Method, url: string, config?: AxiosRequestConfig) => {
+const request = async <T>(
+  method: Method,
+  url: string,
+  config?: AxiosRequestConfig,
+) => {
   try {
     const response = await axiosInstance.request<ApiEnvelope<T> | T>({
       ...config,
@@ -54,9 +69,14 @@ const request = async <T>(method: Method, url: string, config?: AxiosRequestConf
 };
 
 export const httpClient = {
-  get: <T>(url: string, config?: AxiosRequestConfig) => request<T>("GET", url, config),
-  post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) => request<T>("POST", url, { ...config, data }),
-  put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) => request<T>("PUT", url, { ...config, data }),
-  patch: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) => request<T>("PATCH", url, { ...config, data }),
-  delete: <T>(url: string, config?: AxiosRequestConfig) => request<T>("DELETE", url, config),
+  get: <T>(url: string, config?: AxiosRequestConfig) =>
+    request<T>("GET", url, config),
+  post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+    request<T>("POST", url, { ...config, data }),
+  put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+    request<T>("PUT", url, { ...config, data }),
+  patch: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+    request<T>("PATCH", url, { ...config, data }),
+  delete: <T>(url: string, config?: AxiosRequestConfig) =>
+    request<T>("DELETE", url, config),
 };

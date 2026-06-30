@@ -1,29 +1,45 @@
 import { httpClient } from "@/services/client";
 import type { ApiDocEntry } from "@/types/api-doc";
 import type {
+  GetWorkbenchCreatePermissionsParams,
   GetWorkbenchCreatePermissionsResponse,
+  GetWorkbenchMenusParams,
   GetWorkbenchMenusResponse,
+  GetWorkbenchSummaryParams,
   GetWorkbenchSummaryResponse,
   SearchWorkbenchObjectTypesParams,
   SearchWorkbenchObjectTypesResponse,
 } from "@/types/workbench/api";
 
-const BASE_PATH = "/mock/workbench";
-
-export const getWorkbenchSummary = () => {
-  return httpClient.get<GetWorkbenchSummaryResponse>(`${BASE_PATH}/summary`);
+export const getWorkbenchSummary = (params: GetWorkbenchSummaryParams) => {
+  return httpClient.get<GetWorkbenchSummaryResponse>(
+    "/matrix/workbench/summary",
+    { params },
+  );
 };
 
-export const getWorkbenchMenus = () => {
-  return httpClient.get<GetWorkbenchMenusResponse>(`${BASE_PATH}/menus`);
+export const getWorkbenchMenus = (params: GetWorkbenchMenusParams) => {
+  return httpClient.get<GetWorkbenchMenusResponse>("/matrix/workbench/menus", {
+    params,
+  });
 };
 
-export const searchWorkbenchObjectTypes = (params: SearchWorkbenchObjectTypesParams) => {
-  return httpClient.get<SearchWorkbenchObjectTypesResponse>(`${BASE_PATH}/search-object-types`, { params });
+export const searchWorkbenchObjectTypes = (
+  params: SearchWorkbenchObjectTypesParams,
+) => {
+  return httpClient.get<SearchWorkbenchObjectTypesResponse>(
+    "/matrix/workbench/object-types/search",
+    { params },
+  );
 };
 
-export const getWorkbenchCreatePermissions = () => {
-  return httpClient.get<GetWorkbenchCreatePermissionsResponse>(`${BASE_PATH}/create-permissions`);
+export const getWorkbenchCreatePermissions = (
+  params: GetWorkbenchCreatePermissionsParams,
+) => {
+  return httpClient.get<GetWorkbenchCreatePermissionsResponse>(
+    "/matrix/workbench/create-permissions",
+    { params },
+  );
 };
 
 export const workbenchApiDocs = [
@@ -32,63 +48,63 @@ export const workbenchApiDocs = [
     page: "workbench",
     service: "src/services/workbench.ts",
     name: "getWorkbenchSummary",
-    method: "待后端确认",
-    path: `待后端确认；当前 mock path ${BASE_PATH}/summary`,
-    paramsType: "-",
+    method: "GET",
+    path: "/matrix/workbench/summary",
+    paramsType: "GetWorkbenchSummaryParams",
     bodyType: "-",
     responseType: "GetWorkbenchSummaryResponse",
-    params: [],
-    mock: "覆盖默认态、空态、无权限态、加载失败态",
+    params: ["workspaceId", "agentId"],
+    mock: "覆盖默认态、空态、加载失败态",
     mockFile: "src/services/workbench.mock.ts",
-    replacement: "后端工作台汇总接口确认后替换",
-    source: "docs/prd/workbench.md#CHAPTER-06",
+    replacement: "路径与统计口径待后端确认",
+    source: "docs/prd/workbench.md#api_contract",
   },
   {
     module: "Matrix 智能体工作台",
     page: "workbench",
     service: "src/services/workbench.ts",
     name: "getWorkbenchMenus",
-    method: "待后端确认",
-    path: `待后端确认；当前 mock path ${BASE_PATH}/menus`,
-    paramsType: "-",
+    method: "GET",
+    path: "/matrix/workbench/menus",
+    paramsType: "GetWorkbenchMenusParams",
     bodyType: "-",
     responseType: "GetWorkbenchMenusResponse",
-    params: [],
-    mock: "覆盖资源菜单数量与权限隐藏",
+    params: ["agentId"],
+    mock: "覆盖菜单选中、资源数量、管理入口",
     mockFile: "src/services/workbench.mock.ts",
-    replacement: "后端菜单与数量接口确认后替换",
-    source: "docs/prd/workbench.md#CHAPTER-06",
+    replacement: "真实菜单权限与资源统计接口待后端确认",
+    source: "docs/prd/workbench.md#api_contract",
   },
   {
     module: "Matrix 智能体工作台",
     page: "workbench",
     service: "src/services/workbench.ts",
     name: "searchWorkbenchObjectTypes",
-    method: "待后端确认",
-    path: `待后端确认；当前 mock path ${BASE_PATH}/search-object-types`,
+    method: "GET",
+    path: "/matrix/workbench/object-types/search",
     paramsType: "SearchWorkbenchObjectTypesParams",
     bodyType: "-",
     responseType: "SearchWorkbenchObjectTypesResponse",
-    params: ["keyword"],
-    mock: "覆盖名称模糊搜索与空结果",
+    params: ["agentId", "keyword"],
+    mock: "覆盖名称模糊搜索与无结果",
     mockFile: "src/services/workbench.mock.ts",
-    replacement: "后端全局搜索接口确认后替换",
-    source: "docs/prd/workbench.md#CHAPTER-06",
+    replacement: "后端搜索优先级待确认",
+    source: "docs/prd/workbench.md#api_contract",
   },
   {
     module: "Matrix 智能体工作台",
     page: "workbench",
     service: "src/services/workbench.ts",
     name: "getWorkbenchCreatePermissions",
-    method: "待后端确认",
-    path: `待后端确认；当前 mock path ${BASE_PATH}/create-permissions`,
-    paramsType: "-",
+    method: "GET",
+    path: "/matrix/workbench/create-permissions",
+    paramsType: "GetWorkbenchCreatePermissionsParams",
     bodyType: "-",
     responseType: "GetWorkbenchCreatePermissionsResponse",
-    params: [],
-    mock: "覆盖对象类型、链接、动作、管理入口权限",
+    params: ["agentId"],
+    mock: "覆盖有权限与无权限",
     mockFile: "src/services/workbench.mock.ts",
-    replacement: "真实权限系统接入后替换",
-    source: "docs/prd/workbench.md#CHAPTER-06",
+    replacement: "真实权限码待权限系统确认",
+    source: "docs/prd/workbench.md#api_contract",
   },
 ] satisfies ApiDocEntry[];

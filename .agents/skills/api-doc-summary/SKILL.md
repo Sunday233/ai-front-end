@@ -18,8 +18,8 @@ docs/api/接口汇总.md
 - `.agents/rules/05-API规范.instructions.md`
 - `.agents/skills/create-api/SKILL.md`
 - 相关 PRD 的 `CHAPTER-06 数据与接口要求`
-- 本次变更涉及的 `src/services/*.ts` 与 `src/types/*/api.ts`
-- 本次变更涉及的 `src/services/*.mock.ts` 与 `src/services/mock.ts`
+- 本次变更涉及的页面 service、类型与 mock 文件；先用 `rg "ApiDocEntry|ApiDocs|export const .*ApiDocs" src/services src/types` 定位，避免读取无关页面
+- 本次变更涉及的 `src/services/mock.ts` 注册入口
 
 ---
 
@@ -32,6 +32,11 @@ docs/api/接口汇总.md
 3. OpenSpec `proposal.md`、`design.md`、`tasks.md`、`spec.md` 中的接口说明。
 4. `src/types/<page-slug>/api.ts` 中的 Params/Body/Response 类型。
 5. `src/services/<page-slug>.mock.ts` 中的页面 mock 覆盖情况。
+
+Token 节流要求：
+- 先读取 service 的 `ApiDocEntry[]` 元数据；只有元数据缺字段时，再读取对应类型或 mock 文件补证据。
+- 只扫描本次 change/PRD 涉及页面；保留已有文档中无关接口条目，不重写全表。
+- 对大型 service/mock 文件用 `rg` 定位接口名、mock path、导出常量，再小范围读取。
 
 若 service 元数据缺失，不要凭空补全。先在问题清单中标记“缺少 ApiDocEntry”，再基于 PRD 与类型文件写可确认字段。
 
@@ -87,6 +92,7 @@ docs/api/接口汇总.md
 - 不允许把 mock 文档写成真实后端承诺。
 - 不允许把 `src/services/mock.ts` 记录为具体页面 mock 文件；它只能作为统一注册入口。
 - 更新已有文档时保留与本次无关的接口条目，只调整本次涉及行。
+- 汇总文档优先使用固定表格模板，避免为每个接口写重复段落。
 
 ---
 

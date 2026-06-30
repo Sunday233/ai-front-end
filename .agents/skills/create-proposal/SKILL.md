@@ -48,6 +48,8 @@ description: 通用创建提案技能。根据需求是否有设计稿或 UI 描
 
 这样后续开发可以依据分析清单精确实现，实现后的验收也以此清单为基准。对于 PRD + UI 自动实现流程，开发前必须有 UI 分析清单；若设计源缺失，必须在 proposal 与 tasks 中标记 `UI_PENDING` 并说明降级依据。
 
+UI 分析清单必须包含 `UI 证据索引`，把 Stitch / Figma / `.pen` / `docs-ui` / 普通截图 / 纯 PRD 统一成“页面/状态、设计源类型、设计源定位、本地证据、必验区域、关系型核对”。后续 proposal、tasks、design 和验收只引用该索引，不在 apply 阶段重复发现设计源。
+
 若 UI 包含表格、列表、左右列映射、字段-属性映射、主键/标题键等关系型区域，UI 分析清单必须包含行级映射表。若只有“字段映射/左右两列”这类概述，必须先补分析清单，再写 proposal/tasks。
 
 在 **tasks** 中可写明：页面/组件开发须依据 `docs/样式还原/<名称>-UI分析清单.md` 实现布局与样式。
@@ -137,13 +139,15 @@ docs/组件拆分/<名称>-组件拆分清单.md
 按**交付形态**与**条件**勾选任务，例如：
 
 - **准备任务**：读取 PRD、UI 分析清单、组件拆分清单、相关 Rules 与 Skills；确认 `change-id`、目标路由、目标页面 URL。
+- **设计源证据索引**：确认 UI 分析清单包含 `UI 证据索引`；实现和验收引用索引中的设计源定位、最终证据、必验区域和关系型核对项。
 - **新页面**：页面目录、`index.vue`、可选 `components/`、与布局一致的结构；若有分析清单则写「依据 xxx-UI分析清单 实现」。
 - **功能组件**：组件目录、`index.vue`、按需 scoped style 或 `index.module.scss`、占位与规范。
 - **接口/数据层**：从 PRD `CHAPTER-06` 提取 `data_fields/api_contract/mock_policy`；先检查/创建 `src/services/client.ts`；按每页一个 `src/services/<page-slug>.ts`、`src/services/<page-slug>.mock.ts`、`src/types/<page-slug>/model.ts`、`src/types/<page-slug>/api.ts` 实施；通过 `httpClient` 发请求；mock 在 axios 请求层拦截。
 - **集中 mock 迁移**：若发现 mock 接口集中在单个 ts 文件中，必须按页面拆分到 `src/services/<page-slug>.mock.ts`，并保留 `src/services/mock.ts` 仅做统一注册。
 - **API 文档**：页面 service 导出 API 文档元数据；实现后使用 `api-doc-summary` 更新 `docs/api/接口汇总.md`。
-- **质量门禁**：类型检查、lint、测试、构建按项目要求执行。
-- **UI 还原验收**：若有设计稿且产出了分析清单，必须在 tasks 末尾加「实现后使用 `.agents/skills/ui-verification/SKILL.md` 进行 UI 还原验收，产出问题清单；修复 P0/P1/P2 后再次用 Browser 或 Playwright 验证」。
+- **质量门禁**：类型检查、lint、测试、构建按项目要求执行；推荐 `test/typecheck/lint/openspec validate` 并行，`build` 单独跑，build 后如可能生成临时文件则补跑 lint。
+- **UI 还原验收**：若有设计稿且产出了分析清单，必须在 tasks 末尾加「实现后使用 `.agents/skills/ui-verification/SKILL.md` 进行 UI 还原验收，产出问题清单；Browser 一次探测失败后记录降级原因；多状态页面用串行批处理截图/DOM 抽取；修复 P0/P1/P2 后再次用 Browser 或 Playwright 验证」。
+- **验收证据保留**：中间探索截图放临时目录；只保留 UI 问题清单引用的最终截图/快照。
 - **关系型 UI**：若包含表格/列表/左右映射/字段属性映射，必须加任务「按 UI 分析清单逐行实现映射关系，并在验收中逐行核对名称、顺序、状态、操作按钮和对齐」。
 
 PRD + UI 自动实现的 tasks 必须包含以下顺序：
@@ -157,9 +161,9 @@ PRD + UI 自动实现的 tasks 必须包含以下顺序：
 7. 按需使用 `create-route`、`create-component`、`theme-variables`、`create-api`、`api-doc-summary`。
 8. 依据 UI 分析清单实现布局、文字、图片、层级与样式。
 9. 对关系型 UI 按行级映射表实现，不得用无对应关系的两个并列列表代替。
-10. 执行质量门禁。
-11. 执行 UI 验收并产出 UI 问题清单；未使用 Browser 时记录降级原因。
-12. 修复问题并回归验证。
+10. 执行质量门禁：`test/typecheck/lint/openspec validate` 可并行，`build` 单独执行，必要时 build 后补跑 lint。
+11. 执行 UI 验收并产出 UI 问题清单；未使用 Browser 完成截图时记录失败阶段、替代工具、视口和证据。
+12. 修复问题并回归验证；清理未引用的中间截图，保留最终证据。
 
 ### 6.4 spec.md
 

@@ -1,38 +1,38 @@
-export type WorkbenchResourceType =
-  | "workbench"
-  | "object-type"
-  | "link-type"
-  | "action-type"
-  | "object-type-group"
-  | "agent-management"
-  | "data-cleaning"
-  | "knowledge-base";
-
-export interface WorkbenchResourceMenu {
-  key: WorkbenchResourceType;
+export interface WorkbenchMenuItem {
+  key: string;
   name: string;
   count?: number;
   routePath: string;
   permissionCode?: string;
+  iconType:
+    | "workbench"
+    | "object"
+    | "link"
+    | "action"
+    | "group"
+    | "manage"
+    | "clean"
+    | "knowledge";
 }
 
-export interface ObjectTypeCardTag {
+export interface WorkbenchObjectGroup {
   id: string;
-  label: string;
+  name: string;
   count: number;
 }
 
 export interface WorkbenchObjectTypeCard {
   id: string;
+  rid: string;
   name: string;
-  description?: string;
   instanceCount: number;
-  appText: string;
+  appName: string;
+  description: string;
+  groups: WorkbenchObjectGroup[];
   favorite: boolean;
-  tags: ObjectTypeCardTag[];
 }
 
-export interface WorkbenchCreatePermissions {
+export interface WorkbenchCreatePermission {
   canCreateObjectType: boolean;
   canCreateLink: boolean;
   canCreateAction: boolean;
@@ -40,22 +40,13 @@ export interface WorkbenchCreatePermissions {
   canManageAgent: boolean;
 }
 
-export interface WorkbenchCreateOption {
-  key: "object-type" | "link-type" | "action-type" | "object-type-group";
-  title: string;
-  description: string;
-  routePath: string;
-  permissionKey: keyof WorkbenchCreatePermissions;
-}
-
 export interface WorkbenchSummary {
   workspaceId: string;
   workspaceName: string;
   agentId: string;
   agentName: string;
-  menus: WorkbenchResourceMenu[];
   recentObjectTypes: WorkbenchObjectTypeCard[];
   favoriteObjectTypes: WorkbenchObjectTypeCard[];
-  createOptions: WorkbenchCreateOption[];
-  permissions: WorkbenchCreatePermissions;
+  resourceCounts: Record<string, number>;
+  permissions: WorkbenchCreatePermission;
 }

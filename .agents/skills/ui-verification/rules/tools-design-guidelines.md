@@ -11,12 +11,16 @@ tags: tools, design, pencil, figma, stitch, mcp
 
 ### 设计稿类型与工具选择
 
-验收时：在 Codex 中优先用 **`browser:control-in-app-browser` 的 in-app Browser (`iab`)** 获取实际页面截图/快照；在 Cursor 中优先用 **`@Browser`**。Browser 运行时或目标 URL 导航失败时才使用 **Playwright MCP**，再根据设计稿来源选择：
+验收时：在 Codex 中优先用 **`browser:control-in-app-browser` 的 in-app Browser (`iab`)** 获取实际页面截图/快照；在 Cursor 中优先用 **`@Browser`**。Browser 运行时、目标 URL 导航失败或 Browser 截图阶段失败时才使用 **Playwright CLI/MCP**，再根据设计稿来源选择：
 
+- 优先读取 UI 分析清单中的 **`UI 证据索引`**，确认页面/状态、设计源类型、设计源定位、本地证据、必验区域和关系型核对项
 - 设计稿为 `.pen` 时，用 **Pencil MCP** 获取设计稿截图或节点信息
 - 设计稿为 Figma 链接时，用 **Figma MCP** 获取对应截图或节点信息
 - 设计稿为 Stitch 链接时，用 **Stitch MCP** 获取对应截图或节点信息
+- 设计稿为 `docs/ui` 或普通静态图片时，直接使用图片路径与实现页截图比对
 - 将设计稿侧信息与实现页比对得出结论
+
+如果 `UI 证据索引` 已提供足够设计侧截图/节点证据，不要在验收阶段重新发现设计源；只在索引缺失或证据不足时回源补取。
 
 ### 设计稿为 .pen（Pencil 设计稿）
 

@@ -1,59 +1,65 @@
 <template>
   <div class="app-shell">
-    <aside class="sidebar">
-      <RouterLink class="brand" to="/workbench">{{ summary?.workspaceName ?? '智能体管理Matrix' }}</RouterLink>
+    <aside class="app-shell__sidebar">
+      <RouterLink class="app-shell__brand" to="/workbench">智能体管理Matrix</RouterLink>
+      <div class="app-shell__agent">rrr</div>
 
-      <div class="agent-name">{{ summary?.agentName ?? 'rrr' }}</div>
-
-      <nav class="sidebar-menu" aria-label="主导航">
-        <RouterLink
-          class="menu-item"
-          :class="{active: activeKey === 'workbench'}"
-          to="/workbench"
-        >
+      <nav class="app-shell__nav">
+        <RouterLink class="app-shell__item" :class="{'app-shell__item--active': activeKey === 'workbench'}" to="/workbench">
           <DesktopOutlined />
           <span>工作台</span>
         </RouterLink>
 
-        <div class="menu-group-title">数据资源</div>
-        <RouterLink
-          v-for="item in resourceMenus"
-          :key="item.key"
-          class="menu-item"
-          :class="{active: activeKey === item.key}"
-          :to="item.routePath"
-        >
-          <component :is="getMenuIcon(item.key)" />
-          <span>{{ item.name }}</span>
-          <span v-if="item.count !== undefined" class="matrix-count-badge">{{ item.count }}</span>
-        </RouterLink>
+        <div class="app-shell__section">数据资源</div>
 
-        <RouterLink
-          v-for="item in managementMenus"
-          :key="item.key"
-          class="menu-item"
-          :class="{active: activeKey === item.key}"
-          :to="item.routePath"
-        >
-          <component :is="getMenuIcon(item.key)" />
-          <span>{{ item.name }}</span>
+        <RouterLink class="app-shell__item" :class="{'app-shell__item--active': activeKey === 'object-types'}" to="/object-types">
+          <ApartmentOutlined />
+          <span>对象类型</span>
+          <span class="app-shell__badge">39</span>
         </RouterLink>
+        <a class="app-shell__item" href="#link-types" aria-disabled="true">
+          <LinkOutlined />
+          <span>链接类型</span>
+          <span class="app-shell__badge">6</span>
+        </a>
+        <a class="app-shell__item" href="#action-types" aria-disabled="true">
+          <EditOutlined />
+          <span>动作类型</span>
+          <span class="app-shell__badge">31</span>
+        </a>
+        <a class="app-shell__item" href="#object-groups" aria-disabled="true">
+          <BlockOutlined />
+          <span>对象类型组</span>
+          <span class="app-shell__badge">17</span>
+        </a>
+        <a v-if="showManage" class="app-shell__item" href="#agent-manage" aria-disabled="true">
+          <SettingOutlined />
+          <span>智能体管理</span>
+        </a>
+        <a v-if="showManage" class="app-shell__item" href="#data-clean" aria-disabled="true">
+          <ClearOutlined />
+          <span>数据清理</span>
+        </a>
+        <a class="app-shell__item" href="#knowledge" aria-disabled="true">
+          <BookOutlined />
+          <span>知识库</span>
+        </a>
       </nav>
 
-      <div class="sidebar-footer">
-        <div class="edited-row">
+      <div class="app-shell__footer">
+        <div class="app-shell__edited">
           <CheckCircleOutlined />
-          <span>已编辑 <strong>22</strong> 处</span>
+          <span>已编辑 <b>22</b> 处</span>
         </div>
-        <div class="footer-actions">
-          <a-button>放弃</a-button>
-          <a-button type="primary">保存</a-button>
+        <div class="app-shell__actions">
+          <Button>放弃</Button>
+          <Button type="primary">保存</Button>
         </div>
       </div>
     </aside>
 
-    <main class="shell-main">
-      <div class="top-illustration" aria-hidden="true"></div>
+    <main class="app-shell__main">
+      <div class="app-shell__hero" />
       <slot />
     </main>
   </div>
@@ -62,68 +68,24 @@
 <script setup lang="ts">
 import {
   ApartmentOutlined,
-  AppstoreOutlined,
+  BlockOutlined,
+  BookOutlined,
   CheckCircleOutlined,
   ClearOutlined,
-  ClusterOutlined,
   DesktopOutlined,
+  EditOutlined,
   LinkOutlined,
-  ThunderboltOutlined,
-  ToolOutlined,
-} from '@ant-design/icons-vue';
-import type {Component} from 'vue';
-import {computed, onMounted, ref} from 'vue';
-import {useRoute} from 'vue-router';
-import {getWorkbenchSummary} from '@/services/workbench';
-import type {WorkbenchResourceMenu, WorkbenchResourceType, WorkbenchSummary} from '@/types/workbench/model';
+  SettingOutlined,
+} from "@ant-design/icons-vue";
+import { Button } from "ant-design-vue";
 
-const summary = ref<WorkbenchSummary | null>(null);
-const route = useRoute();
+interface AppShellProps {
+  activeKey: "workbench" | "object-types";
+  showManage?: boolean;
+}
 
-const menuIconMap: Record<WorkbenchResourceType, Component> = {
-  workbench: DesktopOutlined,
-  'object-type': ApartmentOutlined,
-  'link-type': LinkOutlined,
-  'action-type': ThunderboltOutlined,
-  'object-type-group': AppstoreOutlined,
-  'agent-management': ClusterOutlined,
-  'data-cleaning': ClearOutlined,
-  'knowledge-base': ToolOutlined,
-};
-
-const resourceKeys: WorkbenchResourceType[] = ['object-type', 'link-type', 'action-type', 'object-type-group'];
-const managementKeys: WorkbenchResourceType[] = ['agent-management', 'data-cleaning', 'knowledge-base'];
-
-const activeKey = computed<WorkbenchResourceType>(() => {
-  if (route.path === '/object-types' || route.path === '/object-types/create') {
-    return 'object-type';
-  }
-
-  return 'workbench';
-});
-
-const resourceMenus = computed(() => {
-  return filterMenus(resourceKeys);
-});
-
-const managementMenus = computed(() => {
-  if (summary.value?.permissions.canManageAgent === false) {
-    return [];
-  }
-
-  return filterMenus(managementKeys);
-});
-
-const filterMenus = (keys: WorkbenchResourceType[]) => {
-  return (summary.value?.menus ?? []).filter((item) => keys.includes(item.key));
-};
-
-const getMenuIcon = (key: WorkbenchResourceMenu['key']) => {
-  return menuIconMap[key] ?? AppstoreOutlined;
-};
-
-onMounted(async () => {
-  summary.value = await getWorkbenchSummary();
+withDefaults(defineProps<AppShellProps>(), {
+  showManage: true,
 });
 </script>
 
@@ -131,112 +93,118 @@ onMounted(async () => {
 .app-shell {
   display: flex;
   min-height: 100vh;
-  background: var(--matrix-color-page-bg);
+  background: var(--matrix-bg-page);
 }
 
-.sidebar {
+.app-shell__sidebar {
   position: fixed;
   inset: 0 auto 0 0;
-  z-index: 3;
+  z-index: 10;
   display: flex;
-  width: var(--matrix-sidebar-width);
   flex-direction: column;
-  background: var(--matrix-color-panel-bg);
-  border-right: 1px solid var(--matrix-color-divider);
+  width: var(--matrix-sidebar-width);
+  background: var(--matrix-bg-container);
+  border-right: 1px solid var(--matrix-divider);
 }
 
-.brand {
+.app-shell__brand {
   display: flex;
-  height: 42px;
   align-items: center;
+  height: 42px;
   padding: 0 20px;
-  color: var(--matrix-color-primary);
-  font-weight: 500;
-  text-decoration: none;
-  border-bottom: 1px solid var(--matrix-color-divider);
+  color: var(--matrix-primary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--matrix-divider);
 }
 
-.agent-name {
+.app-shell__agent {
+  display: flex;
+  align-items: center;
   height: 48px;
-  padding: 18px 22px 0;
-  color: var(--matrix-color-text);
+  padding: 0 22px;
+  color: var(--matrix-text);
 }
 
-.sidebar-menu {
+.app-shell__nav {
   flex: 1;
   padding: 0 6px;
 }
 
-.menu-group-title {
-  padding: 16px 18px 8px;
-  color: var(--matrix-color-text);
+.app-shell__section {
+  margin: 14px 16px 8px;
+  color: var(--matrix-text-secondary);
   font-size: 13px;
 }
 
-.menu-item {
+.app-shell__item {
   display: grid;
-  height: 36px;
   grid-template-columns: 18px 1fr auto;
   align-items: center;
-  gap: 8px;
+  column-gap: 8px;
+  height: 36px;
+  margin-bottom: 3px;
   padding: 0 16px;
-  color: var(--matrix-color-text);
-  text-decoration: none;
-  border-radius: var(--matrix-radius-md);
-
-  &:hover {
-    color: var(--matrix-color-primary);
-    background: var(--matrix-color-primary-soft);
-  }
-
-  &.active {
-    color: var(--matrix-color-primary);
-    background: var(--matrix-color-primary-soft);
-  }
+  color: var(--matrix-text);
+  border-radius: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.sidebar-footer {
-  padding: 0 16px 20px;
+.app-shell__item:hover,
+.app-shell__item--active {
+  color: var(--matrix-primary);
+  background: var(--matrix-primary-bg);
 }
 
-.edited-row {
+.app-shell__badge {
+  min-width: 28px;
+  padding: 0 6px;
+  color: var(--matrix-text-secondary);
+  text-align: center;
+  background: var(--matrix-bg-subtle);
+  border: 1px solid var(--matrix-border);
+  border-radius: 3px;
+}
+
+.app-shell__footer {
+  padding: 14px 16px 18px;
+}
+
+.app-shell__edited {
   display: flex;
-  align-items: center;
   gap: 8px;
-  margin-bottom: 16px;
-  color: var(--matrix-color-text-secondary);
+  align-items: center;
+  margin: 0 0 18px 26px;
+  color: var(--matrix-text-secondary);
+  font-size: 13px;
 
-  strong {
-    color: var(--matrix-color-primary);
+  b {
+    color: var(--matrix-primary);
     font-weight: 500;
   }
 }
 
-.footer-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
+.app-shell__actions {
+  display: flex;
+  gap: 32px;
+  align-items: center;
 }
 
-.shell-main {
+.app-shell__main {
   position: relative;
-  min-height: 100vh;
   flex: 1;
+  min-height: 100vh;
   margin-left: var(--matrix-sidebar-width);
-  padding: 18px 16px 32px 14px;
   overflow: hidden;
 }
 
-.top-illustration {
+.app-shell__hero {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 420px;
-  height: 86px;
+  inset: 0 0 auto 0;
+  height: 110px;
   pointer-events: none;
   background:
-    linear-gradient(150deg, rgba(11, 102, 253, 0.08), rgba(255, 255, 255, 0) 72%),
-    linear-gradient(20deg, rgba(255, 255, 255, 0.9), rgba(230, 244, 255, 0.28));
-  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
+    radial-gradient(circle at 78% 16%, rgb(11 102 253 / 16%) 0, transparent 46px),
+    linear-gradient(160deg, transparent 58%, rgb(255 255 255 / 62%) 58%),
+    linear-gradient(90deg, rgb(245 245 245 / 0%) 0, rgb(232 242 255 / 78%) 78%, rgb(245 245 245 / 0%) 100%);
 }
 </style>

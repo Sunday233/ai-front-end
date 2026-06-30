@@ -22,8 +22,10 @@ docs/样式还原/<名称>-UI问题清单.md
 > **设计稿**：`docs/设计稿/<路径>/<文件名>.pen`、Figma 链接或 Stitch 链接  
 > **设计源定位**：页面/画板/Frame/节点 ID（如有）  
 > **实现页与视口**：URL、viewport
-> **浏览器工具**：Codex in-app Browser (`iab`) / Browser / Playwright MCP / 其它；若未用 Browser 完成验收，写明失败阶段和降级依据
+> **浏览器工具**：Codex in-app Browser (`iab`) / Browser / Playwright CLI/MCP / 其它；若未用 Browser 完成验收，写明失败阶段和降级依据
 > **验收证据**：实现页截图/快照、设计稿截图/节点信息或结构化清单
+> **证据保留策略**：仅保留最终引用截图；中间截图/快照位于临时目录或已清理
+> **轻量流程度量**：设计源类型、最终证据数量、Browser 是否降级、P0/P1/P2 数量、验证命令结果
 > **创建/更新日期**：YYYY-MM-DD
 
 ## 一、按区域列问题（区域按从上到下、从左到右顺序排列）

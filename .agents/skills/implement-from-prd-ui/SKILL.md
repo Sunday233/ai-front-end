@@ -39,6 +39,16 @@ description: 当用户输入 docs/prd/*.md 并希望基于 PRD 与 UI 设计稿�
 | `figma` | Figma MCP |
 | `stitch` | Stitch MCP |
 
+### 3. Token 节流原则
+
+在不降低 UI 还原度的前提下，默认采用轻量执行：
+
+- **先建证据索引，再消费证据**：把 Stitch / Figma / `.pen` / `docs-ui` / 普通截图 / 纯 PRD 统一归一为 `UI 证据索引`，后续分析、组件拆分、实现与验收都引用该索引，避免反复回源读取。
+- **分层读取**：先读 PRD/设计源索引和必要规则，再按页面精读；已读过的大文件后续用 `rg` / 小范围 `sed` 定位，不重复整文件输出。
+- **Browser 一次探测**：Codex 中仍优先尝试 in-app Browser；若 DOM 成功但截图失败，记录“截图阶段失败”并立即降级 Playwright CLI/MCP，不做多轮截图重试。
+- **截图批处理**：多页面/多状态验收用串行脚本一次性打开、交互、截图、抽取 DOM；中间截图放临时目录，只保留问题清单引用的最终证据图。
+- **质量命令顺序**：`test/typecheck/lint/openspec validate` 可并行；`build` 单独跑；若 build 可能生成临时文件，build 后补跑一次 lint。
+
 ---
 
 ## 工作流程
@@ -51,6 +61,12 @@ description: 当用户输入 docs/prd/*.md 并希望基于 PRD 与 UI 设计稿�
 - Figma：用 Figma MCP 读取截图与设计上下文。
 - Stitch：先读取 `design-analysis/rules/tools-stitch-mcp-analysis.md`，再用 Stitch MCP 按 `get_project`、`list_screens`、逐目标 `get_screen`、`list_design_systems` 的顺序读取项目、screen、状态、截图/结构化上下文与设计系统信息。
 - `docs/ui`：按截图模式读取图片尺寸、可见元素、布局与状态。
+
+无论设计源类型如何，分析清单必须包含统一的 `UI 证据索引`：
+
+| 页面/状态 | 设计源类型 | 设计源定位 | 本地证据 | 必验区域 | 关系型核对 |
+|-----------|------------|------------|----------|----------|------------|
+|  | Stitch / Figma / Pencil / docs-ui / screenshot / UI_PENDING | project+screen / fileKey+nodeId / filePath+nodeId / 图片路径 | 截图或快照路径 |  | 表格/列表/字段映射等 |
 
 产出：
 
@@ -115,13 +131,16 @@ openspec/changes/<change-id>/
 
 - 读取并遵守相关 Rules 与 Skills。
 - 依据 UI 分析清单实现布局与样式。
+- 引用 `UI 证据索引` 中的设计源定位、最终证据与必验区域，不在 apply 阶段反复重新发现设计源。
 - 对表格、列表、左右映射、字段属性映射等关系型 UI，按 UI 分析清单的行级映射表实现；不得将源字段与目标属性拆成无显式对应关系的并列列表。
 - 读取并遵守 `docs/组件拆分/<prd_slug>-组件拆分清单.md`。
 - 若 PRD 包含 `CHAPTER-06`，读取接口契约并按 axios client、页面级 service、页面级 mock 文件、类型定义、mock 替换点和 API 汇总文档实施。
 - 按顺序完成页面、组件、接口、样式和质量门禁。
 - 涉及接口时，使用 `api-doc-summary` 更新 `docs/api/接口汇总.md`。
 - 实现后执行 `ui-verification` 并产出 UI 问题清单。
-- 修复 P0/P1/P2 问题后再次用 Browser 或 Playwright 验证。
+- 修复 P0/P1/P2 问题后再次用 Browser 或 Playwright 验证；多状态页面优先用批处理脚本串行截图和 DOM 抽取。
+- 质量门禁顺序：`test/typecheck/lint/openspec validate` 可并行，`build` 单独执行，必要时 build 后补跑 lint。
+- UI 验收证据只保留最终截图/快照；中间探索截图放临时目录并在收尾时清理。
 
 `design.md` 必须引用：
 
@@ -175,13 +194,14 @@ UI 类 change 在 apply 前必须检查：
 
 执行 `.agents/skills/ui-verification/SKILL.md`：
 
-1. 在 Codex 中优先按 `browser:control-in-app-browser` 连接 in-app Browser (`iab`) 打开实现页；Cursor 中优先使用 `@Browser`；Browser 运行时或目标 URL 导航失败时才使用 Playwright MCP。
-2. 获取实现页截图或快照。
+1. 在 Codex 中优先按 `browser:control-in-app-browser` 连接 in-app Browser (`iab`) 打开实现页；Cursor 中优先使用 `@Browser`；Browser 运行时、目标 URL 导航失败或 Browser 截图阶段失败时才使用 Playwright CLI/MCP。
+2. 先做一次 Browser 可用性探测：导航、DOM 快照、小范围截图。若截图阶段失败但 DOM 可用，记录失败阶段并降级 Playwright 进行截图。
 3. 获取设计稿侧截图或节点信息，或读取 UI 分析清单。
 4. 按从上到下、从左到右、从外到里比对。
 5. 对关系型 UI 逐行比对名称、顺序、状态、操作按钮和对齐关系。
-6. 按 P0/P1/P2 产出问题清单；若未使用 Browser 完成验收，必须记录失败阶段、替代工具、视口和证据。
-7. 修复后再次用 Browser 或 Playwright 验证。
+6. 多页面/多状态验收优先用串行批处理一次完成截图、交互和 DOM 抽取。
+7. 按 P0/P1/P2 产出问题清单；若未使用 Browser 完成截图，必须记录失败阶段、替代工具、视口和证据。
+8. 修复后再次用 Browser 或 Playwright 验证。
 
 产出：
 
@@ -200,3 +220,4 @@ docs/样式还原/<prd_slug>-UI问题清单.md
 - 涉及接口时，`src/services/client.ts`、页面 service、页面 mock 文件、类型定义、mock 替换点与 `docs/api/接口汇总.md` 已完成。
 - 类型/lint/测试/构建门禁按项目要求通过。
 - UI 问题清单已产出，P0 已修复并完成回归验证。
+- 轻量流程度量已记录：设计源类型、最终证据截图数量、Browser 是否降级、P0/P1/P2 数量、验证命令结果。

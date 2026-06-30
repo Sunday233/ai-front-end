@@ -1,5 +1,6 @@
-export type ObjectTypeStatus = "正常" | "草稿";
-export type ObjectTypeVisibility = "可见";
+export type ObjectTypeStatus = "normal" | "draft" | "deprecated";
+
+export type ObjectTypeVisibility = "visible" | "hidden";
 
 export interface ObjectTypeListItem {
   id: string;
@@ -12,7 +13,7 @@ export interface ObjectTypeListItem {
   operatorPermissions: string[];
 }
 
-export interface ObjectTypeListPermissions {
+export interface ObjectTypeListPermission {
   canCreate: boolean;
   canViewDetail: boolean;
 }

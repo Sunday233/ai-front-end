@@ -1,8 +1,10 @@
 /// <reference types="vite/client" />
 
-declare module "*.vue" {
-  import type { DefineComponent } from "vue";
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL?: string;
+  readonly VITE_API_MODE?: "mock" | "real";
+}
 
-  const component: DefineComponent<Record<string, unknown>, Record<string, unknown>, unknown>;
-  export default component;
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }

@@ -55,6 +55,11 @@ Implement tasks from an OpenSpec change.
    - **spec-driven**: proposal, specs, design, tasks
    - Other schemas: follow the contextFiles from CLI output
 
+   Token-efficient reading:
+   - Read each required context file once at the start.
+   - For later lookups, use targeted `rg` / `sed` snippets instead of re-dumping full files.
+   - If a UI analysis checklist contains `UI 证据索引`, consume that index as the source map for design source, required states, final evidence, and relation checks.
+
 5. **UI component plan gate**
 
    Before implementing any UI class change, check whether this change is UI related. Treat it as UI related if proposal, design, tasks, specs, or context files mention any of:
@@ -113,8 +118,15 @@ Implement tasks from an OpenSpec change.
    - For API tasks, verify `src/services/client.ts` exists, page service uses `httpClient`, page mock lives in `src/services/<page-slug>.mock.ts`, `src/services/mock.ts` only registers handlers, API metadata is exported, and `docs/api/接口汇总.md` is updated before marking the task complete
    - For API tasks, run a static check such as `rg "import axios|axios\\." src` and confirm only `src/services/client.ts` or approved mock adapter files match
    - For API tasks, if existing mock handlers are concentrated in a single business ts file, pause and split them by page before marking the task complete
+   - For UI verification tasks, prefer one serial browser automation script per page group to capture screenshots, perform interactions, and extract DOM relation checks; avoid parallel commands that share one browser session
+   - For UI verification artifacts, keep only final referenced screenshots/quick snapshots in `docs/样式还原/验收截图/`; temporary exploration files should be created outside tracked docs or cleaned before completion
    - Mark task complete in the tasks file: `- [ ]` → `- [x]`
    - Continue to next task
+
+   Quality command order:
+   - Run `test/typecheck/lint/openspec validate` in parallel when independent.
+   - Run `build` separately because Vite and similar tools can create transient config files.
+   - If build may create lint-visible temporary files, run lint once again after build or ignore the generated pattern.
 
    **Pause if:**
    - Task is unclear → ask for clarification

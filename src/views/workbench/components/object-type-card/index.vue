@@ -1,150 +1,171 @@
 <template>
   <article class="object-card">
-    <button class="favorite" type="button" :aria-pressed="card.favorite">
-      <StarFilled v-if="card.favorite" />
-      <StarOutlined v-else />
+    <button class="object-card__star" type="button" :aria-label="card.favorite ? '已收藏' : '收藏'">
+      <StarFilled />
     </button>
-    <div class="card-main">
-      <span class="matrix-icon-tile"><TeamOutlined /></span>
+    <div class="object-card__main">
+      <span class="object-card__icon">
+        <TeamOutlined />
+      </span>
       <div>
         <h3>{{ card.name }}</h3>
-        <p class="metrics"><strong>{{ card.instanceCount }}</strong>条实例 <span>|</span> {{ card.appText }}</p>
-        <p v-if="card.description" class="description">{{ card.description }}</p>
+        <p>
+          <a>{{ card.instanceCount }}条实例</a>
+          <span>|</span>
+          <span>{{ card.appName }}</span>
+        </p>
       </div>
     </div>
-    <div class="tag-row">
-      <span v-for="tag in card.tags" :key="tag.id" class="card-tag">
-        <AppstoreOutlined />
-        <span class="tag-label">{{ tag.label }}</span>
-        <span class="tag-count">{{ tag.count }}</span>
+    <div class="object-card__description">{{ card.description || '\u00A0' }}</div>
+    <footer class="object-card__footer">
+      <span v-for="group in card.groups" :key="group.id" class="object-card__group">
+        <ApartmentOutlined />
+        <span>{{ group.name }}</span>
+        <em>{{ group.count }}</em>
       </span>
-      <button class="more" type="button" aria-label="更多操作">
+      <button class="object-card__more" type="button" aria-label="更多操作">
         <EllipsisOutlined />
       </button>
-    </div>
+    </footer>
   </article>
 </template>
 
 <script setup lang="ts">
-import {AppstoreOutlined, EllipsisOutlined, StarFilled, StarOutlined, TeamOutlined} from '@ant-design/icons-vue';
-import type {WorkbenchObjectTypeCard} from '@/types/workbench/model';
+import type { WorkbenchObjectTypeCard } from "@/types/workbench/model";
+import {
+  ApartmentOutlined,
+  EllipsisOutlined,
+  StarFilled,
+  TeamOutlined,
+} from "@ant-design/icons-vue";
 
-defineProps<{
+interface ObjectTypeCardProps {
   card: WorkbenchObjectTypeCard;
-}>();
+}
+
+defineProps<ObjectTypeCardProps>();
 </script>
 
 <style scoped lang="scss">
 .object-card {
   position: relative;
-  display: grid;
-  min-height: 184px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 182px;
   overflow: hidden;
-  background: var(--matrix-color-panel-bg);
-  border: 1px solid var(--matrix-color-divider);
-  border-radius: var(--matrix-radius-lg);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  background: var(--matrix-bg-container);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
 }
 
-.favorite {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 1;
-  display: inline-flex;
-  width: 22px;
-  height: 22px;
-  align-items: center;
-  justify-content: center;
-  color: var(--matrix-color-warning);
-  cursor: pointer;
-  background: var(--matrix-color-row-alt);
-  border: 0;
-  border-radius: var(--matrix-radius-sm);
-}
-
-.card-main {
+.object-card__main {
   display: grid;
   grid-template-columns: 48px 1fr;
   gap: 12px;
-  padding: 14px 14px 10px;
-}
+  padding: 18px 14px 0;
 
-h3 {
-  margin: 2px 0 8px;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.metrics {
-  margin: 0;
-  color: var(--matrix-color-text-secondary);
-
-  strong {
-    color: var(--matrix-color-primary);
+  h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
     font-weight: 500;
+    line-height: 24px;
   }
 
-  span {
-    margin: 0 12px;
-    color: var(--matrix-color-text-muted);
+  p {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    color: var(--matrix-text-secondary);
+  }
+
+  a {
+    color: var(--matrix-primary);
   }
 }
 
-.description {
-  margin: 14px 0 0;
-  color: var(--matrix-color-text-secondary);
+.object-card__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: #fff;
+  font-size: 22px;
+  background: var(--matrix-primary);
+  border-radius: 3px;
 }
 
-.tag-row {
-  display: flex;
+.object-card__description {
   min-height: 48px;
-  align-items: center;
+  padding: 10px 14px 0;
+  color: var(--matrix-text-secondary);
+}
+
+.object-card__footer {
+  display: flex;
   gap: 8px;
-  align-self: end;
-  padding: 8px 14px;
-  border-top: 1px solid var(--matrix-color-divider);
+  align-items: center;
+  min-height: 48px;
+  margin-top: auto;
+  padding: 0 14px;
+  border-top: 1px solid var(--matrix-divider);
 }
 
-.card-tag {
+.object-card__group {
   display: inline-flex;
-  min-width: 0;
-  align-items: center;
   gap: 4px;
-  color: var(--matrix-color-text-secondary);
-  white-space: nowrap;
-}
-
-.card-tag :deep(.anticon) {
-  color: var(--matrix-color-primary);
-}
-
-.tag-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.tag-count {
-  display: inline-flex;
-  min-width: 20px;
-  height: 20px;
   align-items: center;
-  justify-content: center;
-  color: var(--matrix-color-text-muted);
+  min-width: 0;
+  color: var(--matrix-text-secondary);
   font-size: 12px;
-  background: var(--matrix-color-table-head);
-  border-radius: var(--matrix-radius-sm);
+
+  > span {
+    max-width: 116px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :deep(.anticon) {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    color: #fff;
+    background: var(--matrix-primary);
+    border-radius: 2px;
+  }
+
+  em {
+    min-width: 20px;
+    padding: 0 5px;
+    color: var(--matrix-text-muted);
+    font-style: normal;
+    text-align: center;
+    background: var(--matrix-bg-subtle);
+    border-radius: 2px;
+  }
 }
 
-.more {
-  display: inline-flex;
-  width: 24px;
-  height: 24px;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
+.object-card__more,
+.object-card__star {
+  display: grid;
+  place-items: center;
+  padding: 0;
   cursor: pointer;
   background: transparent;
   border: 0;
+}
+
+.object-card__more {
+  margin-left: auto;
+  color: var(--matrix-text-secondary);
+}
+
+.object-card__star {
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  color: var(--matrix-warning);
 }
 </style>

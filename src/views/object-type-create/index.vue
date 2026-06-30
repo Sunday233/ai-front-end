@@ -1,163 +1,216 @@
 <template>
-  <AppShell>
-    <div class="create-page">
-      <div class="breadcrumb">返回首页&nbsp;&nbsp;|&nbsp;&nbsp;<ApartmentOutlined /> 对象类型&nbsp;&nbsp;>&nbsp;&nbsp;创建对象类型</div>
+  <AppShell active-key="object-types">
+    <section class="create-page">
+      <div class="create-page__breadcrumb">返回首页 <span>|</span> <ApartmentOutlined /> 对象类型 <span>></span> 创建对象类型</div>
       <CreateStepHeader :current="currentStep" />
 
-      <section class="content-panel" :class="`step-${currentStep}`">
-        <a-spin :spinning="loading">
-          <DatasourceStep
-            v-if="currentStep === 1 && draft"
-            :selected-dataset="selectedDataset"
-            @open-dataset-modal="datasetModalOpen = true"
-          />
-          <MetadataStep
-            v-if="currentStep === 2 && draft"
-            v-model="metadata"
-            :groups="draft.objectGroups"
-            :selected-group="selectedGroup"
-            @select-group="selectedGroup = $event"
-          />
-          <AttributeStep
-            v-if="currentStep === 3 && draft"
-            :mapping-rows="draft.mappingRows"
-            @change-primary-key="primaryKeyModalOpen = true"
-          />
-          <ActionStep
-            v-if="currentStep === 4 && draft"
-            v-model:selected-action-ids="selectedActionIds"
-            v-model:selected-executors="selectedExecutors"
-            :action-rows="draft.actionRows"
-            :executor-type="draft.executorType"
-            :executor-options="draft.executorOptions"
-          />
-          <WizardFooter
-            :current="currentStep"
-            :can-next="canNext"
-            :submitting="submitting"
-            @prev="currentStep -= 1"
-            @next="onNext"
-            @finish="onFinish"
-          />
-        </a-spin>
+      <section class="create-page__panel">
+        <DatasourceStep v-if="currentStep === 0" :selected-dataset="selectedDataset" @open-dataset="datasetModalOpen = true" />
+        <MetadataStep v-else-if="currentStep === 1" :model="metadata" @update="onMetadataUpdate" />
+        <AttributeStep v-else-if="currentStep === 2" :rows="mappingRows" @update="mappingRows = $event" @primary-change="onPrimaryChange" />
+        <ActionStep v-else :actions="actions" :selected-ids="selectedActionIds" @update="selectedActionIds = $event" />
+
+        <footer class="create-page__footer">
+          <Button v-if="currentStep > 0" @click="currentStep -= 1">上一步</Button>
+          <Button v-if="currentStep < 3" type="primary" :disabled="nextDisabled" @click="currentStep += 1">下一步</Button>
+          <Button v-else type="primary" :loading="submitting" @click="onSubmit">完成</Button>
+        </footer>
       </section>
 
-      <DatasetSelectModal
-        v-if="draft"
-        :open="datasetModalOpen"
-        :draft="draft"
-        @cancel="datasetModalOpen = false"
-        @select="onSelectDataset"
-      />
-      <PrimaryKeyConfirmModal
-        :open="primaryKeyModalOpen"
-        @cancel="primaryKeyModalOpen = false"
-        @confirm="primaryKeyModalOpen = false"
-      />
-    </div>
+      <Modal v-model:open="datasetModalOpen" title="选择数据集" width="720px" @ok="selectDataset">
+        <Table :columns="datasetColumns" :data-source="datasets" row-key="id" :pagination="false" size="middle" />
+      </Modal>
+
+      <Modal v-model:open="primaryConfirmOpen" title="修改主键确认" @ok="confirmPrimaryKey">
+        <p>修改主键可能影响对象实例的唯一识别。确认将主键切换为「{{ pendingPrimaryRow?.sourceField.name }}」吗？</p>
+      </Modal>
+    </section>
   </AppShell>
 </template>
 
 <script setup lang="ts">
-import {ApartmentOutlined} from '@ant-design/icons-vue';
-import {message} from 'ant-design-vue';
-import {computed, onMounted, ref} from 'vue';
-import {useRouter} from 'vue-router';
-import AppShell from '@/layout/app-shell/index.vue';
-import {createObjectType, getObjectTypeCreateDraft} from '@/services/object-type-create';
-import ActionStep from '@/views/object-type-create/components/action-step/index.vue';
-import AttributeStep from '@/views/object-type-create/components/attribute-step/index.vue';
-import CreateStepHeader from '@/views/object-type-create/components/create-step-header/index.vue';
-import DatasetSelectModal from '@/views/object-type-create/components/dataset-select-modal/index.vue';
-import DatasourceStep from '@/views/object-type-create/components/datasource-step/index.vue';
-import MetadataStep from '@/views/object-type-create/components/metadata-step/index.vue';
-import PrimaryKeyConfirmModal from '@/views/object-type-create/components/primary-key-confirm-modal/index.vue';
-import WizardFooter from '@/views/object-type-create/components/wizard-footer/index.vue';
-import type {ActionType, DatasetRow, ExecutorOption, ObjectGroupOption, ObjectTypeCreateDraft} from '@/types/object-type-create/model';
-
-interface MetadataForm {
-  displayName: string;
-  synonyms: string;
-  objectTypeId: string;
-  description: string;
-}
+import AppShell from "@/layout/app-shell/index.vue";
+import {
+  createObjectType,
+  getAvailableDatasets,
+} from "@/services/object-type-create";
+import type {
+  ActionOption,
+  AttributeMappingRow,
+  DatasetOption,
+} from "@/types/object-type-create/model";
+import { ApartmentOutlined } from "@ant-design/icons-vue";
+import { Button, Modal, Table, message } from "ant-design-vue";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+import ActionStep from "./components/action-step/index.vue";
+import AttributeStep from "./components/attribute-step/index.vue";
+import CreateStepHeader from "./components/create-step-header/index.vue";
+import DatasourceStep from "./components/datasource-step/index.vue";
+import MetadataStep, {
+  type MetadataStepModel,
+} from "./components/metadata-step/index.vue";
 
 const router = useRouter();
-const loading = ref(false);
-const submitting = ref(false);
-const currentStep = ref(1);
-const draft = ref<ObjectTypeCreateDraft | null>(null);
+const currentStep = ref(0);
+const datasets = ref<DatasetOption[]>([]);
+const selectedDataset = ref<DatasetOption>();
 const datasetModalOpen = ref(false);
-const primaryKeyModalOpen = ref(false);
-const selectedDataset = ref<DatasetRow | null>(null);
-const selectedGroup = ref<ObjectGroupOption | null>(null);
-const selectedActionIds = ref<ActionType[]>([]);
-const selectedExecutors = ref<ExecutorOption[]>([]);
-const metadata = ref<MetadataForm>({
-  displayName: '',
-  synonyms: '',
-  objectTypeId: '',
-  description: '',
+const primaryConfirmOpen = ref(false);
+const pendingPrimaryRow = ref<AttributeMappingRow>();
+const submitting = ref(false);
+const selectedActionIds = ref<string[]>([]);
+
+const metadata = ref<MetadataStepModel>({
+  objectTypeName: "",
+  synonyms: "",
+  objectTypeId: "",
+  description: "",
 });
 
-const canNext = computed(() => {
+const mappingRows = ref<AttributeMappingRow[]>([]);
+
+const actions = ref<ActionOption[]>([
+  {
+    id: "create",
+    actionType: "create",
+    name: "创建测试",
+    description: "设置emp_no、birth_date、first_name和更多2项其他属性",
+    executableUsers: [],
+    executableGroups: [],
+  },
+  {
+    id: "update",
+    actionType: "update",
+    name: "修改测试",
+    description: "修改hight、birth_date、first_name和更多2项其他属性",
+    executableUsers: [],
+    executableGroups: [],
+  },
+  {
+    id: "delete",
+    actionType: "delete",
+    name: "删除测试",
+    description: "允许删除对象实例及其所有属性",
+    executableUsers: [],
+    executableGroups: [],
+  },
+]);
+
+const datasetColumns = [
+  { title: "数据集名称", dataIndex: "name", key: "name" },
+  { title: "存储路径", dataIndex: "path", key: "path" },
+];
+
+const nextDisabled = computed(() => {
+  if (currentStep.value === 0) {
+    return !selectedDataset.value;
+  }
+
   if (currentStep.value === 1) {
-    return Boolean(selectedDataset.value);
+    return (
+      !metadata.value.objectTypeName.trim() ||
+      !metadata.value.objectTypeId.trim()
+    );
   }
 
   if (currentStep.value === 2) {
-    return Boolean(metadata.value.displayName.trim() && metadata.value.objectTypeId.trim());
+    return mappingRows.value.length === 0;
   }
 
-  if (currentStep.value === 3) {
-    return Boolean(draft.value?.mappingRows.length);
-  }
-
-  return true;
+  return false;
 });
 
-const onSelectDataset = (dataset: DatasetRow) => {
-  selectedDataset.value = dataset;
+const buildRows = (dataset: DatasetOption): AttributeMappingRow[] => {
+  return dataset.fields.map((field, index) => ({
+    id: field.id,
+    sourceField: field,
+    attributeName: field.name,
+    attributeType: field.type,
+    titleKey: index === 0,
+    primaryKey: Boolean(field.primary),
+    removable: !field.primary,
+  }));
+};
+
+const loadDatasets = async () => {
+  const payload = await getAvailableDatasets();
+  datasets.value = payload.datasets;
+  selectedDataset.value = payload.datasets[0];
+
+  if (selectedDataset.value) {
+    mappingRows.value = buildRows(selectedDataset.value);
+  }
+};
+
+const selectDataset = () => {
+  selectedDataset.value = datasets.value[0];
+
+  if (selectedDataset.value) {
+    mappingRows.value = buildRows(selectedDataset.value);
+  }
+
   datasetModalOpen.value = false;
 };
 
-const onNext = () => {
-  if (!canNext.value) {
-    message.warning('请先完成当前步骤必填项');
+const onMetadataUpdate = (nextModel: Partial<MetadataStepModel>) => {
+  metadata.value = { ...metadata.value, ...nextModel };
+};
+
+const onPrimaryChange = (row: AttributeMappingRow) => {
+  if (row.primaryKey) {
     return;
   }
 
-  currentStep.value += 1;
+  pendingPrimaryRow.value = row;
+  primaryConfirmOpen.value = true;
 };
 
-const onFinish = async () => {
+const confirmPrimaryKey = () => {
+  const nextPrimaryId = pendingPrimaryRow.value?.id;
+
+  if (!nextPrimaryId) {
+    primaryConfirmOpen.value = false;
+    return;
+  }
+
+  mappingRows.value = mappingRows.value.map((row) => ({
+    ...row,
+    primaryKey: row.id === nextPrimaryId,
+  }));
+  primaryConfirmOpen.value = false;
+};
+
+const onSubmit = async () => {
   submitting.value = true;
 
   try {
     await createObjectType({
-      existingDatasetId: selectedDataset.value?.datasetId,
-      objectTypeName: metadata.value.displayName || '测试',
-      objectTypeId: metadata.value.objectTypeId || 'ot_id_999999',
-      description: metadata.value.description,
-      objectGroupId: selectedGroup.value?.id,
+      draft: {
+        datasourceMode: "existing",
+        datasetName: selectedDataset.value?.name ?? "",
+        datasetPath: selectedDataset.value?.path ?? "",
+        existingDatasetId: selectedDataset.value?.id,
+        objectTypeIcon: "team",
+        objectTypeName: metadata.value.objectTypeName || "回归测试1",
+        objectTypeEnglishName: metadata.value.objectTypeId || "regression-test",
+        description: metadata.value.description,
+        objectTypeId: metadata.value.objectTypeId || "regression-test",
+        attributes: mappingRows.value,
+        actions: actions.value.filter((action) =>
+          selectedActionIds.value.includes(action.id),
+        ),
+      },
     });
-    message.success('创建成功');
-    router.push('/object-types');
+    message.success("对象类型创建成功");
+    await router.push("/object-types");
   } finally {
     submitting.value = false;
   }
 };
 
-onMounted(async () => {
-  loading.value = true;
-  try {
-    draft.value = await getObjectTypeCreateDraft();
-    selectedDataset.value = null;
-    selectedGroup.value = draft.value.objectGroups[0] ?? null;
-    selectedExecutors.value = draft.value.selectedExecutors;
-  } finally {
-    loading.value = false;
-  }
+onMounted(() => {
+  void loadDatasets();
 });
 </script>
 
@@ -165,43 +218,32 @@ onMounted(async () => {
 .create-page {
   position: relative;
   z-index: 1;
+  min-height: 100vh;
+  padding: 16px 16px 40px;
 }
 
-.breadcrumb {
+.create-page__breadcrumb {
   display: flex;
-  height: 28px;
+  gap: 6px;
   align-items: center;
-  gap: 4px;
-  color: var(--matrix-color-text-secondary);
+  height: 24px;
+  margin-bottom: 8px;
+  color: var(--matrix-text-muted);
 }
 
-.content-panel {
+.create-page__panel {
   position: relative;
-  min-height: 455px;
+  min-height: 456px;
   margin-top: 16px;
-  background: var(--matrix-color-panel-bg);
-  border-radius: var(--matrix-radius-lg);
+  background: var(--matrix-bg-container);
+  border-radius: 6px;
+}
 
-  &.step-1 {
-    min-height: 304px;
-  }
-
-  &.step-3 {
-    min-height: 507px;
-  }
-
-  &.step-4 {
-    min-height: 402px;
-  }
-
-  :deep(.ant-spin),
-  :deep(.ant-spin-nested-loading),
-  :deep(.ant-spin-container) {
-    min-height: inherit;
-  }
-
-  :deep(.ant-spin-container) {
-    position: relative;
-  }
+.create-page__footer {
+  position: absolute;
+  right: 106px;
+  bottom: 34px;
+  display: flex;
+  gap: 12px;
 }
 </style>

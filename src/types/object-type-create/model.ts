@@ -1,89 +1,57 @@
-export type DatasetSourceType = "手工" | "接入";
-export type DatasetTableType = "表格";
-export type FieldType = "Int" | "Float" | "Date" | "String";
 export type DatasourceMode = "existing" | "new";
-export type ActionType = "create" | "update" | "delete";
 
-export interface DatasetRow {
-  datasetId: string;
-  name: string;
-  path: string;
-  sourceType: DatasetSourceType;
-  tableType: DatasetTableType;
-  selected?: boolean;
-}
+export type AttributeType =
+  | "int"
+  | "float"
+  | "string"
+  | "boolean"
+  | "datetime"
+  | "date";
 
-export interface DatasetColumn {
-  fieldName: string;
-  fieldType: FieldType;
-  displayName: string;
-}
-
-export interface DatasetPreviewRow {
-  empNo: string;
-  birthDate: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  hight: string;
-}
-
-export interface DatasetDetail {
-  dataset: DatasetRow;
-  version: string;
-  updateTime: string;
-  columns: DatasetColumn[];
-  previewRows: DatasetPreviewRow[];
-}
-
-export interface ObjectGroupOption {
+export interface DatasetOption {
   id: string;
   name: string;
-  count: number;
+  path: string;
+  fields: DatasetField[];
 }
 
-export interface MappingSourceField {
+export interface DatasetField {
+  id: string;
   name: string;
-  type: FieldType;
-  isPrimary?: boolean;
-}
-
-export interface MappingTargetAttribute {
-  name: string;
-  type: FieldType;
-  countText: string;
-  readonly: boolean;
-  isPrimary?: boolean;
+  type: AttributeType;
+  primary?: boolean;
 }
 
 export interface AttributeMappingRow {
   id: string;
-  sourceField: MappingSourceField;
-  targetAttribute: MappingTargetAttribute;
+  sourceField: DatasetField;
+  attributeName: string;
+  attributeType: AttributeType;
+  titleKey: boolean;
+  primaryKey: boolean;
   removable: boolean;
 }
 
-export interface ActionConfigRow {
-  id: ActionType;
-  title: string;
-  description: string;
-  selected: boolean;
-}
-
-export interface ExecutorOption {
+export interface ActionOption {
   id: string;
+  actionType: "create" | "update" | "delete";
   name: string;
+  description: string;
+  executableUsers: string[];
+  executableGroups: string[];
 }
 
 export interface ObjectTypeCreateDraft {
   datasourceMode: DatasourceMode;
-  selectedDataset: DatasetRow | null;
-  datasets: DatasetRow[];
-  datasetDetail: DatasetDetail;
-  objectGroups: ObjectGroupOption[];
-  mappingRows: AttributeMappingRow[];
-  actionRows: ActionConfigRow[];
-  executorType: "用户" | "用户组";
-  executorOptions: ExecutorOption[];
-  selectedExecutors: ExecutorOption[];
+  datasetName: string;
+  datasetPath: string;
+  existingDatasetId?: string;
+  objectTypeIcon: string;
+  objectTypeName: string;
+  objectTypeEnglishName: string;
+  description: string;
+  objectGroupId?: string;
+  objectTypeId: string;
+  attributes: AttributeMappingRow[];
+  actions: ActionOption[];
 }

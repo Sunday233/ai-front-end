@@ -21,6 +21,11 @@ tags: tools, browser, navigation, playwright, codex, cursor
 5. 使用 `tab.goto(<目标 URL>)` 打开页面，等待加载完成。
 6. 使用 `tab.screenshot(...)` 和/或 `tab.playwright.domSnapshot()` 获取截图/快照，作为实际页面与设计稿/分析清单比对依据。
 
+**一次探测建议**：
+- 一次探测包含：目标 URL 导航、DOM 快照、小范围截图。
+- 若导航和 DOM 快照成功但 `tab.screenshot(...)` 超时或失败，记录“Browser 截图阶段失败”，不要反复重试同一路径。
+- 可保留 Browser DOM 快照作为辅助证据，同时降级 Playwright CLI/MCP 完成截图。
+
 ### 在 Cursor 中优先使用 `@Browser`
 
 **操作步骤（Cursor）**：
@@ -35,35 +40,36 @@ tags: tools, browser, navigation, playwright, codex, cursor
 - 若 JavaScript 执行工具不可用，记录“Browser runtime 无法初始化”。
 - 若 `iab` 连接失败，记录“Codex in-app Browser 连接失败”。
 - 若 `iab` 已连接但目标 URL 打开失败（如 `ERR_BLOCKED_BY_CLIENT`、安全策略拦截、路由 404、服务未启动），记录为“Browser 导航目标失败”，而不是“Browser 不可用”。
-- 降级到 Playwright MCP 或其它浏览器自动化工具时，必须记录替代工具名称、视口尺寸、截图/快照路径或证据来源。
+- 降级到 Playwright CLI、Playwright MCP 或其它浏览器自动化工具时，必须记录替代工具名称、视口尺寸、截图/快照路径或证据来源。
 - UI 问题清单不能只写“工具：Playwright”，必须说明为什么没有使用 Browser 完成验收。
 
 **工具说明**：
 - **Codex in-app Browser**（`browser:control-in-app-browser`，Codex 优先）：用于打开目标页面、截取页面截图、获取页面快照（DOM/元素）等；在 Codex 中必须优先使用。
 - **Browser**（`@Browser`，Cursor 优先）：在 Cursor 中用于打开目标页面、截取页面截图、获取页面快照等。
 
-### 仅当 Browser 无法完成验收时，使用 Playwright MCP
+### 仅当 Browser 无法完成验收时，使用 Playwright CLI/MCP
 
 在 Codex 中，这里的“Browser 不可用”必须指 `browser:control-in-app-browser` 无法按上方流程完成验收，而不是“看不到 Browser namespace”。
 
 **操作步骤**：
-1. 调用 Playwright MCP 提供的导航工具（如 `browser_navigate`）前往目标 URL
-2. 等待页面加载完成
-3. 获取截图或快照后，在问题清单中写明降级原因与证据位置
+1. 优先用仓库或技能提供的 Playwright CLI/脚本串行打开目标 URL、交互、截图和 DOM 抽取；无 CLI 时使用 Playwright MCP。
+2. 多页面/多状态验收用单个串行脚本完成，不并行操作同一个浏览器会话。
+3. 中间截图写入临时目录；只把最终问题清单引用的截图/快照保存到 `docs/样式还原/验收截图/`。
+4. 获取截图或快照后，在问题清单中写明降级原因与证据位置。
 
 **工具说明**：
-- **Playwright MCP**：用于在 Browser skill/运行时不可用、`iab` 连接失败、目标 URL 导航被拦截、或 Cursor `@Browser` 不可用时打开目标页面、截图、获取页面快照和执行交互；也可在需要时配合设置 cookies/localStorage 或模拟登录来访问受保护页面。**仅作为 Browser 无法完成验收后的降级工具使用**。
+- **Playwright CLI/MCP**：用于在 Browser skill/运行时不可用、`iab` 连接失败、目标 URL 导航被拦截、Browser 截图阶段失败、或 Cursor `@Browser` 不可用时打开目标页面、截图、获取页面快照和执行交互；也可在需要时配合设置 cookies/localStorage 或模拟登录来访问受保护页面。**仅作为 Browser 无法完成验收后的降级工具使用**。
 
 ### 获取实际页面的可比对信息
 
 **截图比对**：
 - 在 Codex 中优先用 in-app Browser 对目标页面（或关键区域）截图；在 Cursor 中优先用 `@Browser`
-- 无 Browser 时用 Playwright MCP 的截图工具
+- 无 Browser 时用 Playwright CLI/MCP 的截图工具
 - 用途：与设计稿同区域截图并排对比
 
 **元素/快照比对**：
 - 在 Codex 中优先用 in-app Browser 获取页面结构、元素位置与尺寸；在 Cursor 中优先用 `@Browser`
-- 无 Browser 时用 Playwright MCP 的快照/可访问性树工具
+- 无 Browser 时用 Playwright CLI/MCP 的快照/可访问性树工具
 - 用途：与设计稿（.pen/Figma）中对应节点坐标、尺寸、样式逐项对比
 
 **建议**：先做**整体或分区域截图**，与设计稿截图对比，发现差异后再用**元素快照**精确定位（如某块 padding、某字体大小）。

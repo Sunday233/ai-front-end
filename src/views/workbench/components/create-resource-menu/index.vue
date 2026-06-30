@@ -1,121 +1,108 @@
 <template>
-  <div class="create-menu" role="menu">
+  <div class="create-resource-menu">
     <button
-      v-for="option in visibleOptions"
-      :key="option.key"
-      class="create-menu-item"
+      v-for="item in items"
+      :key="item.key"
+      class="create-resource-menu__item"
       type="button"
-      @click="$emit('select', option.routePath)"
+      @click="$emit('select', item.key)"
     >
-      <span class="menu-icon">
-        <component :is="getOptionIcon(option.key)" />
+      <span class="create-resource-menu__icon">
+        <component :is="item.icon" />
       </span>
-      <span class="option-copy">
-        <span class="option-title">{{ option.title }}</span>
-        <span class="option-description">{{ option.description }}</span>
+      <span>
+        <strong>{{ item.title }}</strong>
+        <small>{{ item.description }}</small>
       </span>
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ApartmentOutlined, AppstoreOutlined, LinkOutlined, ThunderboltOutlined} from '@ant-design/icons-vue';
-import type {Component} from 'vue';
-import {computed} from 'vue';
-import type {WorkbenchCreateOption, WorkbenchCreatePermissions} from '@/types/workbench/model';
-
-const props = defineProps<{
-  options: WorkbenchCreateOption[];
-  permissions: WorkbenchCreatePermissions;
-}>();
+import {
+  ApartmentOutlined,
+  ApiOutlined,
+  BlockOutlined,
+  EditOutlined,
+} from "@ant-design/icons-vue";
 
 defineEmits<{
-  select: [routePath: string];
+  select: [key: string];
 }>();
 
-const iconMap: Record<WorkbenchCreateOption['key'], Component> = {
-  'object-type': ApartmentOutlined,
-  'link-type': LinkOutlined,
-  'action-type': ThunderboltOutlined,
-  'object-type-group': AppstoreOutlined,
-};
-
-const visibleOptions = computed(() => {
-  return props.options.filter((option) => props.permissions[option.permissionKey]);
-});
-
-const getOptionIcon = (key: WorkbenchCreateOption['key']) => {
-  return iconMap[key];
-};
+const items = [
+  {
+    key: "objectType",
+    title: "对象类型",
+    description: "对象类型可以是实体或者是事件",
+    icon: ApartmentOutlined,
+  },
+  {
+    key: "linkType",
+    title: "链接类型",
+    description: "链接类型可以链接两个对象类型",
+    icon: ApiOutlined,
+  },
+  {
+    key: "actionType",
+    title: "动作类型",
+    description: "允许用户将数据写入动态智能体",
+    icon: EditOutlined,
+  },
+  {
+    key: "objectGroup",
+    title: "对象类型组",
+    description: "对象类型组可以包含多个对象类型",
+    icon: BlockOutlined,
+  },
+];
 </script>
 
 <style scoped lang="scss">
-.create-menu {
-  position: absolute;
-  top: 40px;
-  right: 0;
-  z-index: 8;
+.create-resource-menu {
   width: 260px;
-  padding: 14px 12px;
-  background: var(--matrix-color-panel-bg);
-  border: 1px solid var(--matrix-color-divider);
-  border-radius: var(--matrix-radius-lg);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
-
-  &::before {
-    position: absolute;
-    top: -7px;
-    right: 10px;
-    width: 14px;
-    height: 14px;
-    content: '';
-    background: var(--matrix-color-panel-bg);
-    border-top: 1px solid var(--matrix-color-divider);
-    border-left: 1px solid var(--matrix-color-divider);
-    transform: rotate(45deg);
-  }
+  padding: 12px 0;
 }
 
-.create-menu-item {
+.create-resource-menu__item {
   display: grid;
-  width: 100%;
-  grid-template-columns: 30px 1fr;
+  grid-template-columns: 36px 1fr;
   gap: 10px;
-  align-items: center;
-  padding: 9px 6px;
+  width: 100%;
+  padding: 10px 18px;
   text-align: left;
   cursor: pointer;
   background: transparent;
   border: 0;
-  border-radius: var(--matrix-radius-sm);
 
   &:hover {
-    background: var(--matrix-color-row-alt);
+    background: var(--matrix-bg-subtle);
+  }
+
+  strong,
+  small {
+    display: block;
+  }
+
+  strong {
+    color: var(--matrix-text);
+    font-weight: 500;
+  }
+
+  small {
+    margin-top: 3px;
+    color: var(--matrix-text-muted);
+    font-size: 12px;
+    line-height: 18px;
   }
 }
 
-.menu-icon {
-  display: inline-flex;
-  width: 30px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  color: var(--matrix-color-text);
-  background: var(--matrix-color-row-alt);
-}
-
-.option-copy {
+.create-resource-menu__icon {
   display: grid;
-  gap: 2px;
-}
-
-.option-title {
-  color: var(--matrix-color-text);
-  font-weight: 500;
-}
-
-.option-description {
-  color: var(--matrix-color-text-muted);
-  font-size: 12px;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--matrix-text-secondary);
+  background: var(--matrix-bg-subtle);
 }
 </style>

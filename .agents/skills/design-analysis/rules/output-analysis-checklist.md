@@ -18,6 +18,12 @@ tags: output, checklist, template, analysis
 > **分析日期**：YYYY-MM-DD
 > **设计源定位**：页面/画板/Frame/节点 ID（如有）
 
+## UI 证据索引（所有模式必填）
+
+| 页面/状态 | 设计源类型 | 设计源定位 | 本地证据 | 必验区域 | 关系型核对 |
+|-----------|------------|------------|----------|----------|------------|
+| 默认态 | Stitch / Figma / Pencil / docs-ui / screenshot / PRD-only | project+screen / fileKey+nodeId / filePath+nodeId / 图片路径 / PRD 章节 | 截图、快照、节点信息或 UI_PENDING | 导航、表格、表单等 | 表格行、字段映射、权限矩阵等 |
+
 ## 输入资产清单（截图模式必填）
 
 | 文件 | 状态 | 用途 |

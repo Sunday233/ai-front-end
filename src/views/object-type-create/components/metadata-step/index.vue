@@ -1,82 +1,97 @@
 <template>
   <div class="metadata-step">
-    <div class="form-row">
-      <label>图标：</label>
-      <span class="matrix-icon-tile"><TeamOutlined /></span>
-    </div>
-    <div class="form-row">
-      <label><span>*</span> 对象类型显示名称：</label>
-      <a-input v-model:value="model.displayName" placeholder="请输入对象类型显示名称" show-count :maxlength="64" />
-    </div>
-    <div class="form-row">
-      <label>对象类型名称同义词：</label>
-      <a-textarea v-model:value="model.synonyms" placeholder="使用逗号分隔多个值" show-count :maxlength="1000" />
-    </div>
-    <div class="form-row">
-      <label><span>*</span> ID：</label>
-      <a-input v-model:value="model.objectTypeId" placeholder="请输入" show-count :maxlength="64" />
-    </div>
-    <div class="form-row">
-      <label>描述：</label>
-      <a-textarea v-model:value="model.description" show-count :maxlength="256" />
-    </div>
-    <div class="form-row">
-      <label>所在对象组：</label>
-      <ObjectGroupSelect
-        :groups="groups"
-        :selected-group="selectedGroup"
-        @select="$emit('selectGroup', $event)"
-      />
-    </div>
+    <Form layout="horizontal" :label-col="{style: {width: '124px'}}" :wrapper-col="{style: {width: '584px'}}">
+      <FormItem label="图标">
+        <button class="metadata-step__icon" type="button" aria-label="对象类型图标">
+          <TeamOutlined />
+        </button>
+      </FormItem>
+      <FormItem required label="对象类型显示名称">
+        <Input
+          :value="model.objectTypeName"
+          placeholder="请输入对象类型显示名称"
+          :maxlength="64"
+          show-count
+          @change="update('objectTypeName', $event)"
+        />
+      </FormItem>
+      <FormItem label="对象类型名称同义词">
+        <Textarea
+          :value="model.synonyms"
+          placeholder="使用逗号分隔多个值"
+          :maxlength="1000"
+          show-count
+          :auto-size="{minRows: 2, maxRows: 2}"
+          @change="update('synonyms', $event)"
+        />
+      </FormItem>
+      <FormItem required label="ID">
+        <Input :value="model.objectTypeId" placeholder="请输入" :maxlength="64" show-count @change="update('objectTypeId', $event)" />
+      </FormItem>
+      <FormItem label="描述">
+        <Textarea
+          :value="model.description"
+          placeholder="请输入"
+          :maxlength="256"
+          show-count
+          :auto-size="{minRows: 2, maxRows: 2}"
+          @change="update('description', $event)"
+        />
+      </FormItem>
+      <FormItem label="所在对象组">
+        <Button type="link" class="metadata-step__group">添加对象组 <DownOutlined /></Button>
+      </FormItem>
+    </Form>
   </div>
 </template>
 
 <script setup lang="ts">
-import {TeamOutlined} from '@ant-design/icons-vue';
-import ObjectGroupSelect from '@/views/object-type-create/components/object-group-select/index.vue';
-import type {ObjectGroupOption} from '@/types/object-type-create/model';
+import { DownOutlined, TeamOutlined } from "@ant-design/icons-vue";
+import { Button, Form, FormItem, Input, Textarea } from "ant-design-vue";
 
-interface MetadataForm {
-  displayName: string;
+export interface MetadataStepModel {
+  objectTypeName: string;
   synonyms: string;
   objectTypeId: string;
   description: string;
 }
 
-defineProps<{
-  groups: ObjectGroupOption[];
-  selectedGroup: ObjectGroupOption | null;
+interface MetadataStepProps {
+  model: MetadataStepModel;
+}
+
+defineProps<MetadataStepProps>();
+
+const emit = defineEmits<{
+  update: [model: Partial<MetadataStepModel>];
 }>();
 
-defineEmits<{
-  selectGroup: [group: ObjectGroupOption | null];
-}>();
-
-const model = defineModel<MetadataForm>({required: true});
+const update = (key: keyof MetadataStepModel, event: Event) => {
+  emit("update", {
+    [key]: (event.target as HTMLInputElement | HTMLTextAreaElement).value,
+  });
+};
 </script>
 
 <style scoped lang="scss">
 .metadata-step {
-  width: 700px;
-  padding-top: 54px;
-  margin-left: 96px;
+  width: 720px;
+  margin: 54px auto 0;
 }
 
-.form-row {
+.metadata-step__icon {
   display: grid;
-  grid-template-columns: 170px 1fr;
-  align-items: start;
-  gap: 10px;
-  margin-bottom: 10px;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  cursor: pointer;
+  background: var(--matrix-primary);
+  border: 0;
+  border-radius: 2px;
+}
 
-  label {
-    padding-top: 6px;
-    color: var(--matrix-color-text-secondary);
-    text-align: right;
-
-    span {
-      color: var(--matrix-color-error);
-    }
-  }
+.metadata-step__group {
+  padding-left: 0;
 }
 </style>

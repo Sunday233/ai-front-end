@@ -13,6 +13,19 @@ tags: tools, design, pencil, figma, stitch
 
 ## 设计稿类型与工具选择
 
+### 统一 UI 证据索引（所有设计源必填）
+
+先识别设计源，再把证据归一成同一张索引，后续分析、组件拆分、实现和验收都引用它，避免重复回源读取。
+
+| 页面/状态 | 设计源类型 | 设计源定位 | 本地证据 | 必验区域 | 关系型核对 |
+|-----------|------------|------------|----------|----------|------------|
+|  | Stitch / Figma / Pencil / docs-ui / screenshot / PRD-only | project+screen / fileKey+nodeId / filePath+nodeId / 图片路径 / PRD 章节 | 截图、快照、节点信息或 UI_PENDING |  | 表格/列表/字段映射等 |
+
+**原则**：
+- Stitch、Figma、Pencil 只影响“证据采集方式”，不影响后续输出结构。
+- 如果结构化节点不足，用截图补充并标注证据等级。
+- 若只有 PRD 无设计图，记录 `UI_PENDING`、假设和风险，不伪造设计证据。
+
 ### .pen（Pencil 设计稿）
 
 **工具**：Pencil MCP
